@@ -3,7 +3,6 @@ import UserModel from "../models/user.model";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 
-
 export const getAuthenticatedUser: RequestHandler = async (req,res) =>{
     const authenticatedUserId = req.session.userId
 
@@ -11,6 +10,7 @@ export const getAuthenticatedUser: RequestHandler = async (req,res) =>{
 
         if(!authenticatedUserId) {
             res.json({})
+            return;
         }
 
         const user = await UserModel.findById(authenticatedUserId).exec()
