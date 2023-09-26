@@ -1,9 +1,36 @@
-export const getNotes = async () => {
-    // try {
+import { RequestHandler } from "express"
+import Note from "../models/note.model"
+
+export const getNotes: RequestHandler = async (req,res) => {
+    try {
+        const notes = await Note.find().exec()
+        res.status(200).json(notes)
+    } catch (error) {
+        alert(error)
+        alert("Couldn't fetch notes (error in not controller 'getNotes')")
+    }
+}
+
+export const createNote: RequestHandler = async (req,res) => {
+    const title = req.body.title;
+    const content = req.body.content;
+    try {
         
-    // } catch (error) {
-    //     alert(error)
-    //     alert("Couldn't fetch notes (error in not controller 'getNotes')")
-    // }
+        if(!title){
+            alert("Note must have a title!")
+            return
+        }
+
+        const newNote = Note.create({
+            title: title,
+            content: content,
+        })
+
+        res.status(200).json(newNote)
+
+    } catch (error) {
+        alert(error)
+        alert("Couldn't create note (createNote handler) ")
+    }
 }
 
