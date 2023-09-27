@@ -1,10 +1,11 @@
 import { Container } from 'react-bootstrap';
-import './App.css';
+import './global.css';
 import { NotesDisplay } from './components/NotesDisplay';
 import { useEffect, useState } from 'react';
 import NoteModel from './models/note.model';
 import axios from 'axios';
 import { Button } from '@mui/material';
+import NoteModuleStyles from './styles/NotesPage.module.css'
 
 
 function App() {
@@ -14,12 +15,10 @@ function App() {
     try {
       const newNote = await axios.post('/notes/createNote', {
         title: "trial note",
-        content: "My note content"
+        content: "My note content  \n HEIEI \n   "
       })
       
-      const newNoteArray = [...notes, newNote.data]
-      alert(JSON.stringify(newNote))
-      
+      const newNoteArray = [...notes, newNote.data]      
       setNotes(newNoteArray)
     } catch (error) {
       alert(error)
@@ -47,7 +46,7 @@ function App() {
         <Button onClick={createNote}>
           Create note
         </Button>
-        <NotesDisplay notes={notes} />
+        <NotesDisplay notes={notes} className={NoteModuleStyles.note} />
       </Container>
     </div >
   );

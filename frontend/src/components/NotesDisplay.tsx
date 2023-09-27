@@ -1,33 +1,21 @@
-import { Card, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import Note from '../models/note.model';
-import Typography from '@mui/material/Typography';
+import { NoteCard } from './NoteCard';
+import NoteModuleStyles from '../styles/NotesPage.module.css'
 
+interface NotesDisplayProps{
+    notes: Note[],
+    className?: string
+}
 
-
-export const NotesDisplay = ({ notes }: { notes: Note[] }) => {
+export const NotesDisplay = ({notes, className} : NotesDisplayProps) => {
 
     return (
         <div>
-            <Row>
+            <Row xs={1} md={2} xl={4} className='g-3'>
                 {notes.map((note) => (
-                    <Col sm={12} md={3} lg={3} >
-                        <Card style={{ marginTop: '5%' }}>
-                            <Card.Header>
-                                <Card.Title>
-                                    <Typography variant='h4'>
-                                        {note.title}
-                                    </Typography>
-                                </Card.Title>
-                            </Card.Header>
-
-                            <Card.Body>
-                                <Card.Text>
-                                    <Typography variant='h6'>
-                                        {note.content}
-                                    </Typography>
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
+                    <Col >
+                        <NoteCard note={note} className={NoteModuleStyles.note} />
                     </Col>
                 ))}
             </Row>
