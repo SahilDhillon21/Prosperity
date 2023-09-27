@@ -5,8 +5,11 @@ import session from "express-session"
 import noteRoutes from './routes/note.routes'
 import env from "./util/validateEnv"
 import MongoStore from "connect-mongo"
+import morgan from 'morgan'
 
 const app = express()
+
+app.use(morgan("dev"))
 
 app.use(express.json())
 

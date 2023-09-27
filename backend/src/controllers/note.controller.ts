@@ -21,11 +21,13 @@ export const createNote: RequestHandler = async (req,res) => {
             return
         }
 
-        const newNote = Note.create({
+        const newNote = await Note.create({
             title: title,
             content: content,
-        })
+        } ) 
 
+        console.log(JSON.stringify(newNote));
+        
         res.status(200).json(newNote)
 
     } catch (error) {

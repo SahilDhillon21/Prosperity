@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import './App.css';
+import { NotesDisplay } from './components/NotesDisplay';
+import { useEffect, useState } from 'react';
 import NoteModel from './models/note.model';
 import axios from 'axios';
+import { Button } from '@mui/material';
+
 
 function App() {
-
   const [notes, setNotes] = useState<NoteModel[]>([])
 
   const createNote = async () => {
@@ -14,9 +16,11 @@ function App() {
         title: "trial note",
         content: "My note content"
       })
-
-      console.log(newNote.data);
-
+      
+      const newNoteArray = [...notes, newNote.data]
+      alert(JSON.stringify(newNote))
+      
+      setNotes(newNoteArray)
     } catch (error) {
       alert(error)
     }
@@ -35,14 +39,17 @@ function App() {
     }
     loadNotes()
   }, [])
+  
 
   return (
     <div>
-      <Button onClick={createNote}>
-        create note
-      </Button>
-      {JSON.stringify(notes)}
-    </div>
+      <Container>
+        <Button onClick={createNote}>
+          Create note
+        </Button>
+        <NotesDisplay notes={notes} />
+      </Container>
+    </div >
   );
 }
 
