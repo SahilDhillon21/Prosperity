@@ -36,6 +36,35 @@ export const createNote: RequestHandler = async (req, res) => {
     }
 }
 
+export const updateNote: RequestHandler = async (req, res) => {
+    const noteId = req.params.noteId
+    const title = req.body.title
+    const content = req.body.content
+
+    try {
+        if (!title) {
+            alert("Note must have a title!")
+            return
+        }
+
+        const oldNote = await Note.findById(noteId).exec()
+
+        if (!oldNote) {
+            alert("such a note doesn't exist")
+            return
+        }
+
+        oldNote.title = title
+        oldNote.content = content
+
+        const updatedNote = await oldNote.save()
+
+        res.status(200).json(updatedNote)
+    } catch (error) {
+        alert("error at updateNote controller")
+    }
+}
+
 export const deleteNote: RequestHandler = async (req, res) => {
     const noteId = req.params.noteId
 
