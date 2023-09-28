@@ -7,4 +7,6 @@ router.get('/',NotesController.getNotes)
 
 router.post('/createNote',NotesController.createNote)
 
+router.post('/deleteNote/:noteId', NotesController.deleteNote)
+
 export default router

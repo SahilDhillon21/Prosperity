@@ -3,22 +3,25 @@ import { Card } from 'react-bootstrap';
 import Note from '../models/note.model';
 import styles from '../styles/note.module.css';
 import { formatDate } from '../utils/formateDate';
+import { MdDelete } from 'react-icons/md'
+import styleUtils from '../styles/utils.module.css'
 
 interface NoteCardProps {
     note: Note,
+    onNoteDelete: (note: Note) => void,
     className: string,
 }
 
-export const NoteCard = ({ note, className }: NoteCardProps) => {
+export const NoteCard = ({ note, className, onNoteDelete }: NoteCardProps) => {
 
-    const {title, content, createdAt, updatedAt} = note
+    const { title, content, createdAt, updatedAt } = note
 
     var createdUpdatedAt: string
 
-    if(updatedAt > createdAt){
-        createdUpdatedAt = "Updated: "+ formatDate(updatedAt)
+    if (updatedAt > createdAt) {
+        createdUpdatedAt = "Updated: " + formatDate(updatedAt)
     } else {
-        createdUpdatedAt = "Created: "+ formatDate(createdAt)
+        createdUpdatedAt = "Created: " + formatDate(createdAt)
     }
 
 
@@ -26,10 +29,17 @@ export const NoteCard = ({ note, className }: NoteCardProps) => {
         <>
             <Card className={`${styles.noteCard} ${className}`}>
                 <Card.Header>
-                    <Card.Title>
-                        <Typography variant='h4' fontFamily={"Segoe UI"}>
+                    <Card.Title className={styleUtils.flexCenter}>
+                        <Typography variant='h5' fontFamily={"Segoe UI"}>
                             {title}
                         </Typography>
+                        <MdDelete
+                            className='text-muted ms-auto'
+                            onClick={(e) => {
+                                onNoteDelete(note)
+                                e.stopPropagation()
+                            }}
+                        />
                     </Card.Title>
                 </Card.Header>
 

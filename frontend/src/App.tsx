@@ -13,6 +13,15 @@ function App() {
 
   const [showCreateNoteModal, setShowCreateNoteModal] = useState(false)
 
+  const handleDeleteNoteFromGrid = async (note: NoteModel) => {
+    try {
+      await NoteNetwork.deleteNote(note._id)
+      setNotes(notes.filter(existingNote => existingNote._id !== note._id))
+    } catch (error) {
+      alert(error)
+    }
+  }
+
   useEffect(() => {
     async function loadNotes() {
       try {
@@ -34,14 +43,18 @@ function App() {
           Create note
         </Button>
 
-        <NotesDisplay notes={notes} className={NoteModuleStyles.note} />
+        <NotesDisplay
+          notes={notes}
+          className={NoteModuleStyles.note}
+          deleteNoteFromGrid={(note) => handleDeleteNoteFromGrid(note)}
+        />
 
         {showCreateNoteModal &&
-          <AddNoteDialog 
-          onDismiss={() => setShowCreateNoteModal(false)} 
-          onNoteSaved={(newNote) => {
-            setNotes([...notes, newNote])
-          }}
+          <AddNoteDialog
+            onDismiss={() => setShowCreateNoteModal(false)}
+            onNoteSaved={(newNote) => {
+              setNotes([...notes, newNote])
+            }}
           />
         }
 
