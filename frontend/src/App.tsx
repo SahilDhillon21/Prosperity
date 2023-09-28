@@ -6,30 +6,18 @@ import NoteModel from './models/note.model';
 import axios from 'axios';
 import { Button } from '@mui/material';
 import NoteModuleStyles from './styles/NotesPage.module.css'
-
+import * as NoteNetwork from './network/note.network'
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
 
-  const createNote = async () => {
-    try {
-      const newNote = await axios.post('/notes/createNote', {
-        title: "trial note",
-        content: "My note content  \n HEIEI \n   "
-      })
-      
-      const newNoteArray = [...notes, newNote.data]      
-      setNotes(newNoteArray)
-    } catch (error) {
-      alert(error)
-    }
-  }
-
   useEffect(() => {
     async function loadNotes() {
       try {
-        const response = await axios.get('/notes')
-        const notes = response.data
+        // const response = await axios.get('/notes')
+        // const notes = response.data
+
+        const notes = await NoteNetwork.fetchNotes()
         setNotes(notes)
 
       } catch (error) {
@@ -39,11 +27,14 @@ function App() {
     loadNotes()
   }, [])
   
+  const handleCreateNote = () => {
+    // const newNote = createNote()
+  }
 
   return (
     <div>
       <Container>
-        <Button onClick={createNote}>
+        <Button onClick={handleCreateNote}>
           Create note
         </Button>
         <NotesDisplay notes={notes} className={NoteModuleStyles.note} />
