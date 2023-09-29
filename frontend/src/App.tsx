@@ -7,6 +7,7 @@ import './global.css';
 import NoteModel from './models/note.model';
 import * as NoteNetwork from './network/note.network';
 import NoteModuleStyles from './styles/NotesPage.module.css';
+import { SignupDialog } from './components/SignupDialog';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -16,6 +17,8 @@ function App() {
 
   const [notesLoading, setNotesLoading] = useState(false)
   const [showNotesLoadingError, setShowNotesLoadingError] = useState(false)
+
+  const [showSignUpModal, setShowSignupModal] = useState(false)
 
 
   const handleDeleteNoteFromGrid = async (note: NoteModel) => {
@@ -52,6 +55,12 @@ function App() {
           Create note
         </Button>
 
+        <Button onClick={() => setShowSignupModal(true)} >
+          Sign up
+        </Button>
+
+
+
         {notesLoading && <Spinner animation='border' variant='primary' />}
         {showNotesLoadingError && <p>Something went wrong. Please try again.</p>}
 
@@ -76,6 +85,12 @@ function App() {
               setNotes([...notes, newNote])
               setShowCreateNoteModal(false)
             }}
+          />
+        }
+
+        {showSignUpModal && 
+          <SignupDialog 
+          onDismiss={() => setShowSignupModal(false)}
           />
         }
 
