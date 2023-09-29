@@ -41,6 +41,9 @@ export const updateNote: RequestHandler = async (req, res) => {
     const title = req.body.title
     const content = req.body.content
 
+    console.log("new title: "+ title);
+     
+
     try {
         if (!title) {
             alert("Note must have a title!")
@@ -58,6 +61,8 @@ export const updateNote: RequestHandler = async (req, res) => {
         oldNote.content = content
 
         const updatedNote = await oldNote.save()
+
+        
 
         res.status(200).json(updatedNote)
     } catch (error) {

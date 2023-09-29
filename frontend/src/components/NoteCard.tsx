@@ -8,11 +8,12 @@ import styleUtils from '../styles/utils.module.css'
 
 interface NoteCardProps {
     note: Note,
+    onNoteClicked: (note: Note) => void,
     onNoteDelete: (note: Note) => void,
     className: string,
 }
 
-export const NoteCard = ({ note, className, onNoteDelete }: NoteCardProps) => {
+export const NoteCard = ({ note, className, onNoteDelete, onNoteClicked }: NoteCardProps) => {
 
     const { title, content, createdAt, updatedAt } = note
 
@@ -27,7 +28,7 @@ export const NoteCard = ({ note, className, onNoteDelete }: NoteCardProps) => {
 
     return (
         <>
-            <Card className={`${styles.noteCard} ${className}`}>
+            <Card className={`${styles.noteCard} ${className}`} onClick={() => onNoteClicked(note)}>
                 <Card.Header>
                     <Card.Title className={styleUtils.flexCenter}>
                         <Typography variant='h5' fontFamily={"Segoe UI"}>

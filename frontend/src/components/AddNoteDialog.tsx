@@ -7,12 +7,18 @@ import * as NoteNetwork from '../network/note.network';
 
 
 interface AddNoteDialogProps {
+  noteToEdit?: Note,
   onDismiss: () => void,
   onNoteSaved: (note: Note) => void,
 }
 
-export const AddNoteDialog = ({ onDismiss, onNoteSaved }: AddNoteDialogProps) => {
-  const form = useForm()
+export const AddNoteDialog = ({ onDismiss, onNoteSaved, noteToEdit }: AddNoteDialogProps) => {
+  const form = useForm({
+    defaultValues: {
+      title: noteToEdit?.title || "",
+      content: noteToEdit?.content || ""
+    }
+  })
 
   const { register, handleSubmit, formState: { isSubmitting } } = form
 
@@ -27,9 +33,13 @@ export const AddNoteDialog = ({ onDismiss, onNoteSaved }: AddNoteDialogProps) =>
     }
 
     try {
-      const newNote = await NoteNetwork.createNote(data)
+      var newNote
+      if (noteToEdit) {
+        newNote = await NoteNetwork.updateNote(noteToEdit._id, data)
+      } else {
+        newNote = await NoteNetwork.createNote(data)
+      }
       onNoteSaved(newNote)
-      onDismiss()
     } catch (error) {
       alert("handleNoteSubmit error (while submitting form)")
     }
@@ -41,7 +51,9 @@ export const AddNoteDialog = ({ onDismiss, onNoteSaved }: AddNoteDialogProps) =>
       <Modal.Header closeButton>
 
         <Modal.Title>
-          Create note
+          {noteToEdit
+            ? "Edit note"
+            : "Create note"}
         </Modal.Title>
 
       </Modal.Header>
@@ -59,7 +71,12 @@ export const AddNoteDialog = ({ onDismiss, onNoteSaved }: AddNoteDialogProps) =>
               helperText={titleError && "Title must be at least 3 characters long"}
             />
 
-            <TextField label="Note" minRows={5} multiline {...register("content")} />
+            <TextField
+              label="Note"
+              minRows={5}
+              multiline
+              {...register("content")}
+            />
 
             <Button variant="contained" color="primary" type="submit" disabled={isSubmitting}>
               Save

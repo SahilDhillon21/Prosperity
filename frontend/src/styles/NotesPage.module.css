@@ -9,3 +9,10 @@
 .note:hover{
     transform: scale(1.05);
 }
+
+.notesPage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}

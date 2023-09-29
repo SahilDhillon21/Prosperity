@@ -17,6 +17,15 @@ export const createNote = async (note: any) => {
     }
 }
 
+export const updateNote = async (noteId: any, note: any) => {
+    try {
+        const response = await axios.patch(`/notes/updateNote/${noteId}`, note)
+        return response.data
+    } catch (error) {
+        alert("error in updateNote (frontend network)")
+    }
+}
+
 export const deleteNote = async (noteId: any) => {
     try {
         await axios.post(`/notes/deleteNote/${noteId}`)
