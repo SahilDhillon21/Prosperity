@@ -34,6 +34,7 @@ export const SignupDialog = ({ onDismiss, onUserSignup }: SignupModalProps) => {
         let hasError = false
 
         if (!username || username.length < 3) {
+            setUsernameError(true)
             hasError = true
         } 
 
