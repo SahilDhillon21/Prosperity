@@ -1,13 +1,15 @@
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Container, Spinner } from 'react-bootstrap';
+import { Col, Container, Spinner } from 'react-bootstrap';
 import { AddNoteDialog } from './components/AddNoteDialog';
 import { NotesDisplay } from './components/NotesDisplay';
 import './global.css';
 import NoteModel from './models/note.model';
 import * as NoteNetwork from './network/note.network';
+import * as UserNetwork from './network/user.network';
 import NoteModuleStyles from './styles/NotesPage.module.css';
 import { SignupDialog } from './components/SignupDialog';
+import User from './models/user.model';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -20,12 +22,23 @@ function App() {
 
   const [showSignUpModal, setShowSignupModal] = useState(false)
 
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null)
+
 
   const handleDeleteNoteFromGrid = async (note: NoteModel) => {
     try {
       await NoteNetwork.deleteNote(note._id)
       setNotes(notes.filter(existingNote => existingNote._id !== note._id))
     } catch (error) {
+      alert(error)
+    }
+  }
+
+  const handleUserLogout = async () => {
+    try {
+      await UserNetwork.callUserLogout()
+      setLoggedInUser(null)
+    } catch (error) { 
       alert(error)
     }
   }
@@ -47,6 +60,20 @@ function App() {
     loadNotes()
   }, [])
 
+  useEffect(() => {
+    async function getLoggedInUser() {
+      try {
+        const user = await UserNetwork.callAuthenticatedUser()
+        setLoggedInUser(user)
+      } catch (error) {
+        alert("cant fetch logged in user (useffect error)")
+      }
+    }
+
+    getLoggedInUser()
+
+  }, [])
+
   return (
     <div>
       <Container className={NoteModuleStyles.notesPage}>
@@ -59,7 +86,9 @@ function App() {
           Sign up
         </Button>
 
-
+        <Button variant='contained' color='error' onClick={() => handleUserLogout()} >
+          Log out
+        </Button>
 
         {notesLoading && <Spinner animation='border' variant='primary' />}
         {showNotesLoadingError && <p>Something went wrong. Please try again.</p>}
@@ -78,6 +107,15 @@ function App() {
           </>
         }
 
+        {loggedInUser ?
+          <Col>
+            {JSON.stringify(loggedInUser)}
+          </Col>
+          : <Col>
+            <h3>User not logged in</h3>
+          </Col>
+        }
+
         {showCreateNoteModal &&
           <AddNoteDialog
             onDismiss={() => setShowCreateNoteModal(false)}
@@ -88,9 +126,10 @@ function App() {
           />
         }
 
-        {showSignUpModal && 
-          <SignupDialog 
-          onDismiss={() => setShowSignupModal(false)}
+        {showSignUpModal &&
+          <SignupDialog
+            onDismiss={() => setShowSignupModal(false)}
+            onUserSignup={(newUser) => setLoggedInUser(newUser)}
           />
         }
 

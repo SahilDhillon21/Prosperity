@@ -9,7 +9,7 @@ export const getAuthenticatedUser: RequestHandler = async (req,res) =>{
     try {
 
         if(!authenticatedUserId) {
-            res.json({})
+            res.json(null)
             return;
         }
 

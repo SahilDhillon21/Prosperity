@@ -3,19 +3,22 @@ import { Button, Stack, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { validateEmail } from "../utils/validateEmail";
+import * as UserNetwork from '../network/user.network'
+import User from "../models/user.model";
 
 
 interface SignupModalProps {
     onDismiss: () => void,
+    onUserSignup: (newUser: User) => void,
 }
 
-interface SignupFormProps {
+export interface SignupFormProps {
     username?: string,
     email?: string,
     password?: string,
 }
 
-export const SignupDialog = ({ onDismiss }: SignupModalProps) => {
+export const SignupDialog = ({ onDismiss, onUserSignup }: SignupModalProps) => {
 
     const form = useForm()
 
@@ -25,32 +28,36 @@ export const SignupDialog = ({ onDismiss }: SignupModalProps) => {
     const [emailError, setEmailError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
 
-    const handleSignupSubmit = (data: SignupFormProps) => {
+    const handleSignupSubmit = async (data: SignupFormProps) => {
         const { username, email, password } = data
 
-        setUsernameError(false)
-        setEmailError(false)
-        setPasswordError(false)
-        
-        if(!username || username.length < 3){
-            setUsernameError(true)
-        }
-        
-        if(!email || !validateEmail(email)){
+        let hasError = false
+
+        if (!username || username.length < 3) {
+            hasError = true
+        } 
+
+        if (!email || !validateEmail(email)) {
             setEmailError(true)
+            hasError = true
         }
 
-        if(!password || password.length < 4){
+        if (!password || password.length < 4) {
             setPasswordError(true)
+            hasError = true
         }
 
-        if(usernameError || emailError || passwordError){
+        if (hasError) {
             return
+        } else {
+            try {
+                const signedUpUser = await UserNetwork.callUserSignup(data)
+                onUserSignup(signedUpUser)
+                
+            } catch (error) {
+                alert("Coudln't sign up (signup dialog error)")
+            }
         }
-
-        // submit the data 
-        return
-
     }
 
     return (
@@ -67,23 +74,26 @@ export const SignupDialog = ({ onDismiss }: SignupModalProps) => {
 
                         <TextField
                             label="Username"
+                            type="text"
                             {...register("username")}
                             error={usernameError}
-                            helperText = {usernameError && "Username must be at least 3 characters long"}
+                            helperText={usernameError && "Username must be at least 3 characters long"}
                         />
 
                         <TextField
                             label="Email"
+                            type="email"
                             {...register("email")}
                             error={emailError}
-                            helperText = {emailError && "Please enter a valid email address"}
+                            helperText={emailError && "Please enter a valid email address"}
                         />
 
                         <TextField
                             label="Password"
+                            type="password"
                             {...register("password")}
                             error={passwordError}
-                            helperText = {passwordError && "Password must be at least 4 characters"}
+                            helperText={passwordError && "Password must be at least 4 characters"}
                         />
 
                     </Stack>
