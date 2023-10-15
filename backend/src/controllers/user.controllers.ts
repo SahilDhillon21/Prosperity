@@ -93,7 +93,8 @@ export const handleUserLogin: RequestHandler<unknown, unknown, LoginBody, unknow
         const user = await UserModel.findOne({username: username}).select("+password").exec()
 
         if(!user){
-            throw createHttpError(401,"Invalid credentials")
+            res.status(200).json({})
+            return 401
         }
 
         const passwordMatch = await bcrypt.compare(password,user.password)  

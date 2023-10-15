@@ -1,4 +1,4 @@
-import { Modal } from "react-bootstrap"
+import { Alert, Modal } from "react-bootstrap"
 import { Button, Stack, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -29,7 +29,7 @@ export const LoginDialog = ({ onDismiss, onUserLogin }: LoginDialogProps) => {
 
 
     const handleLoginSubmit = async (data: LoginFormProps) => {
-        const { username , password } = data
+        const { username, password } = data
 
         let hasError = false
 
@@ -46,21 +46,14 @@ export const LoginDialog = ({ onDismiss, onUserLogin }: LoginDialogProps) => {
         if (hasError) {
             return
         } else {
-            try {
-                const response = await UserNetwork.callUserLogin(data)
-                alert("response: "+response)
+            const user = await UserNetwork.callUserLogin(data)
 
-                if (response?.status === 401) {
-                    setInvalidCredentials(true)
-                    return
-                } else {
-                    const user = response?.data
-                    onUserLogin(user)
-                }
-
-            } catch (error) {
-                alert("Coudln't login (login dialog error)")
+            if(JSON.stringify(user) === "{}"){
+                setInvalidCredentials(true)
+            } else {
+                onUserLogin(user)
             }
+
         }
     }
 
@@ -75,7 +68,13 @@ export const LoginDialog = ({ onDismiss, onUserLogin }: LoginDialogProps) => {
             </Modal.Header>
 
             <Modal.Body>
-                {invalidCredentials && "Invalid Credentials"}
+                {invalidCredentials && 
+                
+                <Alert variant="danger">
+                    Invalid Credentials
+                </Alert>
+                
+                }
                 <form noValidate onSubmit={handleSubmit(handleLoginSubmit)} id="login_form">
                     <Stack gap={3} className="m-3">
 
