@@ -1,5 +1,6 @@
 import axios from "axios"
 import { SignupFormProps } from "../components/SignupDialog"
+import { LoginFormProps } from "../components/LoginDialog"
 
 export const callUserSignup = async (newUser: SignupFormProps) => {
     try {
@@ -25,5 +26,15 @@ export const callUserLogout = async () => {
         await axios.post('/users/logout')
     } catch (error) {
         alert(error)
+    }
+}
+
+export const callUserLogin = async (credentials : LoginFormProps) => {
+    try {
+        const response = await axios.post("/users/login", credentials)
+        return response;
+
+    } catch (error) {
+        alert("error in network (call user login)")
     }
 }

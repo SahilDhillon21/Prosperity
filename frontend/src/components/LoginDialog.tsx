@@ -2,48 +2,43 @@ import { Modal } from "react-bootstrap"
 import { Button, Stack, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { validateEmail } from "../utils/validateEmail";
 import * as UserNetwork from '../network/user.network'
 import User from "../models/user.model";
 
-
-interface SignupModalProps {
+interface LoginDialogProps {
     onDismiss: () => void,
-    onUserSignup: (newUser: User) => void,
+    onUserLogin: (user: User) => void,
 }
 
-export interface SignupFormProps {
+export interface LoginFormProps {
     username?: string,
-    email?: string,
     password?: string,
 }
 
-export const SignupDialog = ({ onDismiss, onUserSignup }: SignupModalProps) => {
+export const LoginDialog = ({ onDismiss, onUserLogin }: LoginDialogProps) => {
 
     const form = useForm()
 
     const { register, handleSubmit, formState: { isSubmitting } } = form
 
     const [usernameError, setUsernameError] = useState(false)
-    const [emailError, setEmailError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
 
-    const handleSignupSubmit = async (data: SignupFormProps) => {
-        const { username, email, password } = data
+    const [invalidCredentials, setInvalidCredentials] = useState(false)
+
+
+
+    const handleLoginSubmit = async (data: LoginFormProps) => {
+        const { username , password } = data
 
         let hasError = false
 
-        if (!username || username.length < 3) {
+        if (!username) {
             setUsernameError(true)
-            hasError = true
-        } 
-
-        if (!email || !validateEmail(email)) {
-            setEmailError(true)
             hasError = true
         }
 
-        if (!password || password.length < 4) {
+        if (!password) {
             setPasswordError(true)
             hasError = true
         }
@@ -52,24 +47,36 @@ export const SignupDialog = ({ onDismiss, onUserSignup }: SignupModalProps) => {
             return
         } else {
             try {
-                const signedUpUser = await UserNetwork.callUserSignup(data)
-                onUserSignup(signedUpUser)
+                const response = await UserNetwork.callUserLogin(data)
+                alert("response: "+response)
+
+                if (response?.status === 401) {
+                    setInvalidCredentials(true)
+                    return
+                } else {
+                    const user = response?.data
+                    onUserLogin(user)
+                }
+
             } catch (error) {
-                alert("Coudln't sign up (signup dialog error)")
+                alert("Coudln't login (login dialog error)")
             }
         }
     }
 
+
     return (
         <Modal show onHide={onDismiss}>
+
             <Modal.Header closeButton>
                 <Modal.Title>
-                    Sign up
+                    Log in
                 </Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
-                <form noValidate onSubmit={handleSubmit(handleSignupSubmit)} id="signup_form">
+                {invalidCredentials && "Invalid Credentials"}
+                <form noValidate onSubmit={handleSubmit(handleLoginSubmit)} id="login_form">
                     <Stack gap={3} className="m-3">
 
                         <TextField
@@ -77,15 +84,7 @@ export const SignupDialog = ({ onDismiss, onUserSignup }: SignupModalProps) => {
                             type="text"
                             {...register("username")}
                             error={usernameError}
-                            helperText={usernameError && "Username must be at least 3 characters long"}
-                        />
-
-                        <TextField
-                            label="Email"
-                            type="email"
-                            {...register("email")}
-                            error={emailError}
-                            helperText={emailError && "Please enter a valid email address"}
+                            helperText={usernameError && "Username field can't be empty"}
                         />
 
                         <TextField
@@ -93,7 +92,7 @@ export const SignupDialog = ({ onDismiss, onUserSignup }: SignupModalProps) => {
                             type="password"
                             {...register("password")}
                             error={passwordError}
-                            helperText={passwordError && "Password must be at least 4 characters"}
+                            helperText={passwordError && "Password field can't be empty"}
                         />
 
                     </Stack>
@@ -105,10 +104,10 @@ export const SignupDialog = ({ onDismiss, onUserSignup }: SignupModalProps) => {
                     className="w-100"
                     variant="contained"
                     type="submit"
-                    form="signup_form"
+                    form="login_form"
                     disabled={isSubmitting}
                 >
-                    Sign up
+                    Login
                 </Button>
             </Modal.Footer>
 

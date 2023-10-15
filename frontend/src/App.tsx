@@ -10,6 +10,8 @@ import * as UserNetwork from './network/user.network';
 import NoteModuleStyles from './styles/NotesPage.module.css';
 import { SignupDialog } from './components/SignupDialog';
 import User from './models/user.model';
+import MainNavbar from './components/MainNavbar';
+import { LoginDialog } from './components/LoginDialog';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -21,6 +23,7 @@ function App() {
   const [showNotesLoadingError, setShowNotesLoadingError] = useState(false)
 
   const [showSignUpModal, setShowSignupModal] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null)
 
@@ -38,7 +41,7 @@ function App() {
     try {
       await UserNetwork.callUserLogout()
       setLoggedInUser(null)
-    } catch (error) { 
+    } catch (error) {
       alert(error)
     }
   }
@@ -77,6 +80,7 @@ function App() {
   return (
     <div>
       <Container className={NoteModuleStyles.notesPage}>
+        <MainNavbar />
 
         <Button onClick={() => setShowCreateNoteModal(true)} >
           Create note
@@ -88,6 +92,10 @@ function App() {
 
         <Button variant='contained' color='error' onClick={() => handleUserLogout()} >
           Log out
+        </Button>
+
+        <Button variant='contained' color='success' onClick={() => setShowLoginModal(true)} >
+          Log in
         </Button>
 
         {notesLoading && <Spinner animation='border' variant='primary' />}
@@ -130,6 +138,13 @@ function App() {
           <SignupDialog
             onDismiss={() => setShowSignupModal(false)}
             onUserSignup={(newUser) => setLoggedInUser(newUser)}
+          />
+        }
+
+        {showLoginModal &&
+          <LoginDialog
+            onDismiss={() => setShowLoginModal(false)}
+            onUserLogin={(user) => { setLoggedInUser(user) }}
           />
         }
 
