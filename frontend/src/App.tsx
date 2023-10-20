@@ -89,7 +89,7 @@ function App() {
       <Container className={NoteModuleStyles.notesPage}>
 
 
-        <Button onClick={() => setShowCreateNoteModal(true)} style={{margin: "1%"}}>
+        <Button onClick={() => setShowCreateNoteModal(true)} style={{ margin: "1%" }}>
           Create note
         </Button>
 
@@ -160,13 +160,19 @@ function App() {
 
       </Container>
 
-      <Container className='mt-5'>
+      {loggedInUser ?
+        <Container className='mt-5 mb-5'>
 
-        <h3>TODO</h3>
+          <h3>TODO</h3>
 
-        <Todo />
+          <Todo
+            userId={loggedInUser._id}
+          />
 
-      </Container>
+        </Container>
+        : 
+        <h3>Log in to view your todo list.</h3>
+      }
 
     </div >
   );
