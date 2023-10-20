@@ -41,6 +41,7 @@ function App() {
     try {
       await UserNetwork.callUserLogout()
       setLoggedInUser(null)
+      setNotes([])
     } catch (error) {
       alert(error)
     }
@@ -53,7 +54,6 @@ function App() {
         setNotesLoading(true)
         const notes = await NoteNetwork.fetchNotes()
         setNotes(notes)
-
       } catch (error) {
         setShowNotesLoadingError(true)
       } finally {
@@ -61,7 +61,7 @@ function App() {
       }
     }
     loadNotes()
-  }, [])
+  }, [loggedInUser])
 
   useEffect(() => {
     async function getLoggedInUser() {
@@ -101,26 +101,27 @@ function App() {
         {notesLoading && <Spinner animation='border' variant='primary' />}
         {showNotesLoadingError && <p>Something went wrong. Please try again.</p>}
 
-        {!notesLoading && !showNotesLoadingError &&
-          <>
-            {notes.length > 0
-              ? <NotesDisplay
-                notes={notes}
-                className={NoteModuleStyles.note}
-                deleteNoteFromGrid={(note) => handleDeleteNoteFromGrid(note)}
-                handleNoteClicked={(note) => setNoteToEdit(note)}
-              />
-              : <h3>You currently don't have any notes. Create one and they'll show up here</h3>
-            }
-          </>
-        }
-
         {loggedInUser ?
           <Col>
-            {JSON.stringify(loggedInUser)}
+            {!notesLoading && !showNotesLoadingError &&
+              <>
+                {notes.length > 0
+                  ? <NotesDisplay
+                    notes={notes}
+                    className={NoteModuleStyles.note}
+                    deleteNoteFromGrid={(note) => handleDeleteNoteFromGrid(note)}
+                    handleNoteClicked={(note) => setNoteToEdit(note)}
+                  />
+                  : <h3>You currently don't have any notes. Create one and they'll show up here</h3>
+                }
+              </>
+            }
           </Col>
-          : <Col>
-            <h3>User not logged in</h3>
+
+          :
+
+          <Col>
+            <h3>Kindly log in to view your notes</h3>
           </Col>
         }
 
@@ -144,7 +145,10 @@ function App() {
         {showLoginModal &&
           <LoginDialog
             onDismiss={() => setShowLoginModal(false)}
-            onUserLogin={(user) => { setLoggedInUser(user) }}
+            onUserLogin={(user) => {
+              setLoggedInUser(user)
+              setShowLoginModal(false)
+            }}
           />
         }
 

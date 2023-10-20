@@ -1,10 +1,27 @@
 import { RequestHandler } from "express"
 import Note from "../models/note.model"
+import createHttpError from "http-errors"
+import User from "../models/user.model"
 
 export const getNotes: RequestHandler = async (req, res) => {
     try {
-        const notes = await Note.find().exec()
-        res.status(200).json(notes)
+        const userId = req.session.userId
+
+        if (!userId) {
+            res.status(200).json({ message: "User not authenticated" })
+            return
+        }
+
+        const user = await User.findById(userId).populate('notes')
+
+        if (!user) {
+            res.status(200).json({ message: "This user doesn't have an account" })
+            return
+        }
+
+
+        res.status(200).json(user.notes)
+
     } catch (error) {
         alert(error)
         alert("Couldn't fetch notes (error in not controller 'getNotes')")
@@ -14,6 +31,9 @@ export const getNotes: RequestHandler = async (req, res) => {
 export const createNote: RequestHandler = async (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
+    const userId = req.session.userId
+
+
     try {
 
         if (!title) {
@@ -21,12 +41,28 @@ export const createNote: RequestHandler = async (req, res) => {
             return
         }
 
+        if (!userId) {
+            throw createHttpError(401, "User not authenticated")
+        }
+
+
+
         const newNote = await Note.create({
             title: title,
             content: content,
         })
 
-        console.log(JSON.stringify(newNote));
+        const user = await User.findById(userId).exec()
+
+        if (!user) {
+            throw createHttpError(401, "This user doesn't have an account")
+        }
+
+        user.notes.push(newNote._id)
+
+        await user.save()
+
+        await newNote.save()
 
         res.status(200).json(newNote)
 
@@ -41,8 +77,8 @@ export const updateNote: RequestHandler = async (req, res) => {
     const title = req.body.title
     const content = req.body.content
 
-    console.log("new title: "+ title);
-     
+    console.log("new title: " + title);
+
 
     try {
         if (!title) {
@@ -62,7 +98,7 @@ export const updateNote: RequestHandler = async (req, res) => {
 
         const updatedNote = await oldNote.save()
 
-        
+
 
         res.status(200).json(updatedNote)
     } catch (error) {
