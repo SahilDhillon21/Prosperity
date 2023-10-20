@@ -1,6 +1,6 @@
 .note{
     height: 250px;
-    min-width: 200px;
+    min-width: 250px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     transition: transform 0.2s ease-in-out;
     cursor: pointer;
@@ -14,5 +14,4 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 }

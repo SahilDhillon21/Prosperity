@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Col, Container, Spinner } from 'react-bootstrap';
+import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import { AddNoteDialog } from './components/AddNoteDialog';
 import { NotesDisplay } from './components/NotesDisplay';
 import './global.css';
@@ -79,30 +79,24 @@ function App() {
 
   return (
     <div>
+      <MainNavbar
+        loggedInUser={loggedInUser}
+        onLoginClicked={() => setShowLoginModal(true)}
+        onSignupClicked={() => setShowSignupModal(true)}
+        onLogoutClicked={() => handleUserLogout()}
+      />
       <Container className={NoteModuleStyles.notesPage}>
-        <MainNavbar />
 
-        <Button onClick={() => setShowCreateNoteModal(true)} >
+
+        <Button onClick={() => setShowCreateNoteModal(true)} style={{margin: "1%"}}>
           Create note
-        </Button>
-
-        <Button onClick={() => setShowSignupModal(true)} >
-          Sign up
-        </Button>
-
-        <Button variant='contained' color='error' onClick={() => handleUserLogout()} >
-          Log out
-        </Button>
-
-        <Button variant='contained' color='success' onClick={() => setShowLoginModal(true)} >
-          Log in
         </Button>
 
         {notesLoading && <Spinner animation='border' variant='primary' />}
         {showNotesLoadingError && <p>Something went wrong. Please try again.</p>}
 
         {loggedInUser ?
-          <Col>
+          <Row>
             {!notesLoading && !showNotesLoadingError &&
               <>
                 {notes.length > 0
@@ -112,11 +106,11 @@ function App() {
                     deleteNoteFromGrid={(note) => handleDeleteNoteFromGrid(note)}
                     handleNoteClicked={(note) => setNoteToEdit(note)}
                   />
-                  : <h3>You currently don't have any notes. Create one and they'll show up here</h3>
+                  : <h3>You currently don't have any notes. Create one and they'll show up here.</h3>
                 }
               </>
             }
-          </Col>
+          </Row>
 
           :
 

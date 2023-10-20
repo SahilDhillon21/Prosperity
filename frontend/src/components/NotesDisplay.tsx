@@ -14,9 +14,9 @@ export const NotesDisplay = ({notes, className, deleteNoteFromGrid, handleNoteCl
 
     return (
         <div className='w-100'>
-            <Row xs={1} md={2} xl={4} className='g-3' >
+            <Row xs={1} md={2} xl={3} className='g-3' >
                 {notes.map((note) => (
-                    <Col key={note._id}>
+                    <Col lg={true}  key={note._id}>
                         <NoteCard 
                         note={note} 
                         className={NoteModuleStyles.note} 
