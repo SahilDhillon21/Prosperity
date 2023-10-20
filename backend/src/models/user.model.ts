@@ -23,7 +23,14 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'Note'
         }
-    ]
+    ],
+
+    todo: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Task'
+        }
+    ],
 
 }, {timestamps: true})
 
