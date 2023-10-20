@@ -12,6 +12,7 @@ import { SignupDialog } from './components/SignupDialog';
 import User from './models/user.model';
 import MainNavbar from './components/MainNavbar';
 import { LoginDialog } from './components/LoginDialog';
+import Todo from "./components/Todo"
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -158,6 +159,15 @@ function App() {
         }
 
       </Container>
+
+      <Container>
+
+        <h3>TODO</h3>
+
+        <Todo />
+
+      </Container>
+
     </div >
   );
 }
