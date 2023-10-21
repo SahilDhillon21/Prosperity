@@ -163,7 +163,7 @@ function App() {
       {loggedInUser ?
         <Container className='mt-5 mb-5'>
 
-          <h3>TODO</h3>
+          <h3>TODO list</h3>
 
           <Todo
             userId={loggedInUser._id}
