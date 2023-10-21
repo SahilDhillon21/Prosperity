@@ -19,3 +19,22 @@ export const callCreateTask = async (data: {title: string, description: string},
         console.log(error);
     }
 }
+
+export const callCompleteTask = async (taskId: any) => {
+    try {
+        const response = await axios.post('/todo/deleteTask',{taskId: taskId})
+        return response.data
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+export const callUpdateTask = async (data: {title: string, description: string, taskId: string}, datevalue: Dayjs | null) => {
+    try {
+        const response = await axios.post('/todo/updateTask', { title: data.title, description: data.description, target: datevalue, taskId: data.taskId })
+        return response.data
+    } catch (error) {
+        console.log(error);
+    }
+}
