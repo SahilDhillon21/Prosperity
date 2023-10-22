@@ -15,6 +15,7 @@ import { LoginDialog } from './components/LoginDialog';
 import Todo from "./components/Todo"
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { Habits } from './components/Habits';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -201,7 +202,7 @@ function App() {
 
         <Route path='/' element={home}> </Route>
 
-        <Route path='/habits' element={(<h1>HABITS</h1>)}>
+        <Route path='/habits' element={<Habits />}>
 
         </Route>
 
