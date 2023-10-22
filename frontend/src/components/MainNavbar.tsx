@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import { Container, Nav, Navbar } from "react-bootstrap"
+import { Container, Nav, Navbar, Row } from "react-bootstrap"
 import User from "../models/user.model"
 import ButtonStyles from "../styles/button.module.css"
 

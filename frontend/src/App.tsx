@@ -1,5 +1,5 @@
-import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Routes, Route, NavLink } from 'react-router-dom'
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import { AddNoteDialog } from './components/AddNoteDialog';
 import { NotesDisplay } from './components/NotesDisplay';
@@ -13,6 +13,8 @@ import User from './models/user.model';
 import MainNavbar from './components/MainNavbar';
 import { LoginDialog } from './components/LoginDialog';
 import Todo from "./components/Todo"
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -78,14 +80,8 @@ function App() {
 
   }, [])
 
-  return (
-    <div>
-      <MainNavbar
-        loggedInUser={loggedInUser}
-        onLoginClicked={() => setShowLoginModal(true)}
-        onSignupClicked={() => setShowSignupModal(true)}
-        onLogoutClicked={() => handleUserLogout()}
-      />
+  const home = (
+    <>
       <Container className={NoteModuleStyles.notesPage}>
 
 
@@ -130,23 +126,6 @@ function App() {
           />
         }
 
-        {showSignUpModal &&
-          <SignupDialog
-            onDismiss={() => setShowSignupModal(false)}
-            onUserSignup={(newUser) => setLoggedInUser(newUser)}
-          />
-        }
-
-        {showLoginModal &&
-          <LoginDialog
-            onDismiss={() => setShowLoginModal(false)}
-            onUserLogin={(user) => {
-              setLoggedInUser(user)
-              setShowLoginModal(false)
-            }}
-          />
-        }
-
         {noteToEdit &&
           <AddNoteDialog
             noteToEdit={noteToEdit}
@@ -160,21 +139,75 @@ function App() {
 
       </Container>
 
-      {loggedInUser ?
-        <Container className='mt-5 mb-5'>
+      {
+        loggedInUser ?
+          <Container className='mt-5 mb-5'>
 
-          <h3>TODO list</h3>
+            <h3>TODO list</h3>
 
-          <Todo
-            userId={loggedInUser._id}
-          />
+            <Todo
+              userId={loggedInUser._id}
+            />
 
-        </Container>
-        : 
-        <h3>Log in to view your todo list.</h3>
+          </Container>
+          :
+          <h3>Log in to view your todo list.</h3>
+      }
+    </>
+  )
+
+  return (
+    <div>
+      <MainNavbar
+        loggedInUser={loggedInUser}
+        onLoginClicked={() => setShowLoginModal(true)}
+        onSignupClicked={() => setShowSignupModal(true)}
+        onLogoutClicked={() => handleUserLogout()}
+      />
+
+      {showLoginModal &&
+        <LoginDialog
+          onDismiss={() => setShowLoginModal(false)}
+          onUserLogin={(user) => {
+            setLoggedInUser(user)
+            setShowLoginModal(false)
+          }}
+        />
       }
 
-    </div >
+      {showSignUpModal &&
+        <SignupDialog
+          onDismiss={() => setShowSignupModal(false)}
+          onUserSignup={(newUser) => setLoggedInUser(newUser)}
+        />
+      }
+
+      <Container className='mt-3'>
+        <Row >
+          <Col className='text-center'>
+            <ButtonGroup variant="contained" color='success'>
+              <Button><NavLink to='/'>Home</NavLink></Button>
+              <Button><NavLink to='/habits'>Habits</NavLink></Button>
+              <Button>Productivity</Button>
+              <Button>Journal</Button>
+              <Button>Finances</Button>
+            </ButtonGroup>
+          </Col>
+        </Row>
+      </Container>
+
+
+      <Routes>
+
+        <Route path='/' element={home}> </Route>
+
+        <Route path='/habits' element={(<h1>HABITS</h1>)}>
+
+        </Route>
+
+      </Routes>
+
+    </div>
   );
 }
 
