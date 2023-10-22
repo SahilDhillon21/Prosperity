@@ -105,9 +105,14 @@ const Todo = ({ userId }: TodoProps) => {
                 <TaskCreatorEditor
                     onDismiss={() => setShowCreateTaskModal(false)}
                     taskToEdit={taskToEdit}
-                    onTaskSaved={(newTask) => {
+                    onTaskSaved={(newTask, createTask) => {
                         setShowCreateTaskModal(false)
-                        setTodo([...todo, newTask])
+                        if (createTask) {
+                            setTodo([...todo, newTask])
+
+                        } else {
+                            setTodo(todo.map(exisitingTask => exisitingTask._id === newTask._id ? newTask : exisitingTask))
+                        }
                     }}
                 />
             }

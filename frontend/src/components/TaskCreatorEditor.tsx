@@ -14,7 +14,7 @@ import { useState } from 'react';
 interface TaskCreatorEditorProps {
     onDismiss: () => void,
     taskToEdit: Task | null,
-    onTaskSaved: (newTask : Task) => void,
+    onTaskSaved: (newTask: Task, createTask: boolean) => void,
 }
 
 export const TaskCreatorEditor = ({ onDismiss, taskToEdit, onTaskSaved }: TaskCreatorEditorProps) => {
@@ -29,8 +29,8 @@ export const TaskCreatorEditor = ({ onDismiss, taskToEdit, onTaskSaved }: TaskCr
 
     // 2022-04-17T15:30
 
-    if(taskToEdit){
-        oldDate = taskToEdit.target.toString().substring(0,16)
+    if (taskToEdit) {
+        oldDate = taskToEdit.target.toString().substring(0, 16)
     } else {
         oldDate = ''
     }
@@ -47,11 +47,13 @@ export const TaskCreatorEditor = ({ onDismiss, taskToEdit, onTaskSaved }: TaskCr
             var newTask
             if (taskToEdit) {
                 newTask = await TodoNetwork.callUpdateTask(data, datevalue)
+                onTaskSaved(newTask, false)
             } else {
                 newTask = await TodoNetwork.callCreateTask(data, datevalue)
+                onTaskSaved(newTask, true)
+
             }
             setDateValue(null)
-            onTaskSaved(newTask)
             return
         } catch (error) {
             console.log(error);
