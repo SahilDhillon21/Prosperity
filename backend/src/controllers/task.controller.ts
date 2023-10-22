@@ -47,25 +47,38 @@ export const updateTask: RequestHandler = async (req, res) => {
     const target = req.body.target
     const taskId = req.body.taskId
 
+    
+
     const userId = req.session.userId
 
     try {
 
         const user = await User.findById(userId).exec()
 
+
+
         if (!user) {
+            console.log("no user found: " + user);
+
             res.status(200).json({ message: "This user doesn't exist" })
+            alert("user doesn't exist")
             return
         }
 
         if (!title) {
+            console.log("no title " + title);
+
             res.status(200).json({ messaege: "Task must have a title" })
+            alert("message must have a title")
         }
 
         const existingTask = await Task.findById(taskId).exec()
 
-        if(!existingTask) return
-        
+        if (!existingTask) {
+            
+            return
+        }
+
         existingTask.title = title
         existingTask.description = description
         existingTask.target = target

@@ -30,9 +30,9 @@ export const callCompleteTask = async (taskId: any) => {
     }
 }
 
-export const callUpdateTask = async (data: {title: string, description: string, taskId: string}, datevalue: Dayjs | null) => {
+export const callUpdateTask = async (data: {title: string, description: string}, datevalue: Dayjs | null, taskId: string) => {
     try {
-        const response = await axios.post('/todo/updateTask', { title: data.title, description: data.description, target: datevalue, taskId: data.taskId })
+        const response = await axios.post('/todo/updateTask', { title: data.title, description: data.description, target: datevalue, taskId: taskId })
         return response.data
     } catch (error) {
         console.log(error);

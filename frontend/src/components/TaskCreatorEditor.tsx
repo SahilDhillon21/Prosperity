@@ -29,7 +29,7 @@ export const TaskCreatorEditor = ({ onDismiss, taskToEdit, onTaskSaved }: TaskCr
 
     // 2022-04-17T15:30
 
-    if (taskToEdit) {
+    if (taskToEdit && taskToEdit.target) {
         oldDate = taskToEdit.target.toString().substring(0, 16)
     } else {
         oldDate = ''
@@ -39,14 +39,39 @@ export const TaskCreatorEditor = ({ onDismiss, taskToEdit, onTaskSaved }: TaskCr
 
     const [datevalue, setDateValue] = useState<Dayjs | null>(initialDate);
 
+    const [titleError, setTitleError] = useState(false)
+    const [dateError, setDateError] = useState(false)
+
 
     const { register, handleSubmit, formState: { isSubmitting } } = form
 
     const createEditTask = async (data: any) => {
+
+        var hasError = false
+
+        if (!data.title || data.title.length < 1) {
+            hasError = true
+            setTitleError(true)
+        }
+
+
+        if (datevalue) {
+            let today = new Date()
+            let pickedDate = new Date(datevalue.toString())
+
+            if(pickedDate < today){
+                hasError = true
+                setDateError(true)
+            }
+        }
+
+        if(hasError) return
+
+
         try {
             var newTask
             if (taskToEdit) {
-                newTask = await TodoNetwork.callUpdateTask(data, datevalue)
+                newTask = await TodoNetwork.callUpdateTask(data, datevalue, taskToEdit._id)
                 onTaskSaved(newTask, false)
             } else {
                 newTask = await TodoNetwork.callCreateTask(data, datevalue)
@@ -74,6 +99,8 @@ export const TaskCreatorEditor = ({ onDismiss, taskToEdit, onTaskSaved }: TaskCr
                         <TextField
                             label="Title"
                             required
+                            error={titleError}
+                            helperText={titleError && "Title cannot be empty"}
                             defaultValue={taskToEdit?.title || ''}
                             {...register("title")}
                         />
@@ -92,6 +119,7 @@ export const TaskCreatorEditor = ({ onDismiss, taskToEdit, onTaskSaved }: TaskCr
                                 defaultValue={dayjs(oldDate)}
                                 value={datevalue} onChange={(newValue) => setDateValue(newValue)}
                             />
+                            <p style={{color: 'red'}}> {dateError && "Date cannot be older than today"} </p>
                         </LocalizationProvider>
 
                         <Button style={{ background: 'green' }} type="submit" disabled={isSubmitting}>
