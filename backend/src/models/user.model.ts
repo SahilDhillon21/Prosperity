@@ -32,6 +32,13 @@ const userSchema = new mongoose.Schema({
         }
     ],
 
+    habits: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Habit'
+        }
+    ],
+
 }, {timestamps: true})
 
 const User = mongoose.model("User",userSchema)
