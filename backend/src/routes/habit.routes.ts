@@ -5,4 +5,8 @@ const router = express.Router()
 
 router.get('/', HabitControllers.getHabits)
 
+router.post('/createHabit', HabitControllers.createHabit)
+
+router.post('/updateHabit', HabitControllers.updateHabit)
+
 export default router

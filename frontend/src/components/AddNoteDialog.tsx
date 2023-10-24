@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import Note from "../models/note.model";
 import * as NoteNetwork from '../network/note.network';
 
-
 interface AddNoteDialogProps {
   noteToEdit?: Note,
   onDismiss: () => void,

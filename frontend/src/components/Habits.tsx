@@ -1,24 +1,34 @@
-import { Button, CssBaseline } from "@mui/material"
-import { useState, useEffect } from "react"
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Col, Container, Offcanvas, Row } from "react-bootstrap";
-import accordionStyle from '../styles/accordion.module.css'
+import { Button, CssBaseline } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Container, Offcanvas, Stack } from "react-bootstrap";
+import Habit from "../models/habit.model";
+import { CreateEditHabit } from "./CreateEditHabit";
+import * as HabitNetwork from '../network/habit.network' 
+
+
 
 export const Habits = () => {
 
-  const [habits, setHabits] = useState([])
+  const [habits, setHabits] = useState<Habit[]>([])
+
+  const [habitToEdit, setHabitToEdit] = useState<Habit|null>(null)  
 
   useEffect(() => {
+
     const getHabits = async () => {
-
+      try {
+        const allHabits = await HabitNetwork.fetchHabits()
+        setHabits(allHabits)
+      } catch (error) {
+        console.log(error)
+      }
     }
-  })
 
-  const [showCreateHabitCanvas, setShowCreateHabitCanvas] = useState(false)
+    getHabits()
+
+  }, [])
+
+  const [showCreateEditHabitModal, setShowCreateEditHabitModal] = useState(false)
 
 
   return (
@@ -29,38 +39,22 @@ export const Habits = () => {
 
           {habits.map((habit => {
             return (
-              <h1>{habit}</h1>
+              <h1>{habit.name}</h1>
             )
           }))}
 
-          <Button onClick={() => setShowCreateHabitCanvas(true)}>SHow </Button>
+          <Button onClick={() => setShowCreateEditHabitModal(true)}> + Add </Button>
 
-          {showCreateHabitCanvas &&
-            <Offcanvas show
-
-              onHide={() => setShowCreateHabitCanvas(false)}
-              placement="bottom"
-            >
-
-              <Offcanvas.Header closeButton>
-                <Offcanvas.Title> <h3>Create new habit</h3> </Offcanvas.Title>
-              </Offcanvas.Header>
-
-              <Offcanvas.Body>
-
-                
-
-              </Offcanvas.Body>
-
-            </Offcanvas>
+          {showCreateEditHabitModal &&
+            <CreateEditHabit 
+            habitToEdit={habitToEdit} 
+            onDismiss={() => setShowCreateEditHabitModal(false)}
+            onHabitSaved={() => {}}
+            />
           }
 
 
         </Container>
-
-
-
-
       </CssBaseline>
 
     </>
