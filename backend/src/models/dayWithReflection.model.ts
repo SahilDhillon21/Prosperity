@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const dayWithReflectionSchema = new mongoose.Schema({
     date: {
-        type: Date,
+        type: String,
         require: true,
     },
 
