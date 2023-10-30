@@ -1,4 +1,5 @@
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Button, CssBaseline } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
@@ -54,9 +55,18 @@ export const Habits = () => {
   const [showCreateEditHabitModal, setShowCreateEditHabitModal] = useState(false)
 
 
-  const handleHabitButtonClicked = async (habitId: string, reflection: string) => {
+  const handleHabitDoneToday = async (habitId: string, reflection: string) => {
     try {
       const completedHabit = await HabitNetwork.callCompleteHabit(habitId, reflection)
+      // add some functionality to show tick mark in the ui
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleHabitUndoneToday = async (habitId: string) => {
+    try {
+      await HabitNetwork.callUndoHabit(habitId)
       // add some functionality to show tick mark in the ui
     } catch (error) {
       console.log(error)
@@ -83,18 +93,32 @@ export const Habits = () => {
                         <Col xs={10} md={10} lg={10}>
                           <h1>{habit.name}</h1>
                         </Col >
-                        <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
-                          onClick={() => handleHabitButtonClicked(habit._id, "my reflection")}
-                        >
-                          <CheckBoxOutlineBlankIcon
-                            fontSize="large"
-                            style={{ cursor: "pointer" }}
+                          {habitDoneToday
 
-                          />
+                            && habitDoneToday[index] === true ?
+                            <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
+                              onClick={() => handleHabitUndoneToday(habit._id)}
+                            >
+                              <CheckBoxIcon
+                                fontSize='large'
+                                style={{ cursor: "pointer" }}
+                                color='success'
+                              />
 
-                          {habitDoneToday && habitDoneToday[index] === true ? "Done" : "Not done"}
+                            </Col>
+                            :
+                            <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
+                              onClick={() =>handleHabitDoneToday(habit._id, "my reflection") }
+                            >
+                              <CheckBoxOutlineBlankIcon
+                                fontSize="large"
+                                style={{ cursor: "pointer" }}
 
-                        </Col>
+                              />
+
+                            </Col>
+
+                          }
 
                       </>
                     )

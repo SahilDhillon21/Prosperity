@@ -3,6 +3,7 @@ import User from "../models/user.model";
 import Habit from "../models/habit.model";
 import DayWithReflection from "../models/dayWithReflection.model";
 import dayjs from "dayjs";
+import mongoose from "mongoose";
 
 export const getHabits: RequestHandler = async (req, res) => {
     const userId = req.session.userId
@@ -13,8 +14,8 @@ export const getHabits: RequestHandler = async (req, res) => {
             return
         }
 
-        const data = await User.findOne({_id: userId}).populate({
-            path: 'habits', 
+        const data = await User.findOne({ _id: userId }).populate({
+            path: 'habits',
             populate: {
                 path: 'completedDays'
             }
@@ -155,11 +156,57 @@ export const completeHabit: RequestHandler = async (req, res) => {
 
         await habit.save()
 
-        console.log(JSON.stringify(habit));
+        // console.log(JSON.stringify(habit));
 
         res.status(200).json(habit)
     } catch (error) {
         console.log(error)
     }
 
+}
+
+export const undoHabit: RequestHandler = async (req, res) => {
+    const habitId = req.body.habitId
+    console.log("haibt id: " + habitId);
+
+    try {
+
+        if (!habitId) {
+            console.log("No habit id sent")
+        }
+
+        if (!mongoose.isValidObjectId(habitId)) {
+            console.log("not a valid object id");
+            return
+        }
+
+        // Improvement: remove only those objects with current today, to prevent accidentally 
+        // removing entrires of previous days
+
+        // const today = dayjs(new Date()).format('DD/MM/YYYY').toString()
+
+        // const habit = await Habit.updateOne({ _id: habitId }, {
+        //     $pull: {
+        //         completedDays: { date: today }
+        //     }
+        // })
+
+        const habit = await Habit.findById(habitId).populate('completedDays').updateOne({}, {
+            $pop: {
+                completedDays: 1
+            }
+        })
+
+        if (!habit) {
+            console.log("habit not found with this id");
+            return
+        }
+
+        
+
+        res.status(200).json({ "message": "deleted successfully" })
+
+    } catch (error) {
+        console.log(error)
+    }
 }

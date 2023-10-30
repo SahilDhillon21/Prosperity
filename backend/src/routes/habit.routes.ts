@@ -11,4 +11,6 @@ router.post('/updateHabit', HabitControllers.updateHabit)
 
 router.post('/completeHabit', HabitControllers.completeHabit)
 
+router.post('/undoHabit', HabitControllers.undoHabit)
+
 export default router

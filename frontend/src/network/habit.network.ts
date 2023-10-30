@@ -20,10 +20,18 @@ export const callUpdateHabit = async (data: CreateEditHabitFormProps) => {
 }
 
 export const callCompleteHabit = async (habitId: string, reflection: string) => {
-    const data = {"habitId": habitId, "reflection": reflection}
+    const data = { "habitId": habitId, "reflection": reflection }
     try {
         const response = await axios.post('/habits/completeHabit', data)
         return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const callUndoHabit = async (habitId: string) => {
+    try {
+        await axios.post('/habits/undoHabit', { "habitId": habitId })
     } catch (error) {
         console.log(error)
     }
@@ -37,4 +45,6 @@ export const fetchHabits = async () => {
         console.log(error);
     }
 }
+
+
 
