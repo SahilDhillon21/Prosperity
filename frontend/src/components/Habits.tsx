@@ -1,15 +1,14 @@
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { Button, CssBaseline } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Habit from "../models/habit.model";
 import * as HabitNetwork from '../network/habit.network';
-import { CreateEditHabit } from "./CreateEditHabit";
 import { wasDoneToday } from '../utils/wasDoneToday';
-
-
+import { CreateEditHabit } from "./CreateEditHabit";
+import { ReflectionModal } from './ReflectionModal';
 
 export const Habits = () => {
 
@@ -20,6 +19,8 @@ export const Habits = () => {
   const [habitDoneToday, setHabitDoneToday] = useState<Boolean[]>([])
 
   const [rerender, setRerender] = useState(false)
+
+  const [showReflectionModal, setShowReflectionModal] = useState(false)
 
   useEffect(() => {
 
@@ -55,15 +56,7 @@ export const Habits = () => {
 
   const [showCreateEditHabitModal, setShowCreateEditHabitModal] = useState(false)
 
-
-  const handleHabitDoneToday = async (habitId: string, reflection: string) => {
-    try {
-      const completedHabit = await HabitNetwork.callCompleteHabit(habitId, reflection)
-      // add some functionality to show tick mark in the ui
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const [habitReflectionModalId, setHabitReflectionModalId] = useState('')
 
   const handleHabitUndoneToday = async (habitId: string) => {
     try {
@@ -92,40 +85,42 @@ export const Habits = () => {
                     return (
                       <>
                         <Col xs={10} md={10} lg={10}>
-                          <h1>{habit.name}</h1>
+                          <h3 style={{ color: 'black' }}>{habit.name}</h3>
                         </Col >
-                          {habitDoneToday
+                        {habitDoneToday
 
-                            && habitDoneToday[index] === true ?
-                            <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
-                              onClick={() => {
-                                handleHabitUndoneToday(habit._id)
-                                setRerender(!rerender)
-                              }}
-                            >
-                              <CheckBoxIcon
-                                fontSize='large'
-                                style={{ cursor: "pointer" }}
-                                color='success'
-                              />
+                          && habitDoneToday[index] === true ?
+                          <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
+                            onClick={() => {
+                              handleHabitUndoneToday(habit._id)
+                              setRerender(!rerender)
+                            }}
+                          >
+                            <CheckBoxIcon
+                              fontSize='large'
+                              style={{ cursor: "pointer" }}
+                              color='success'
+                            />
 
-                            </Col>
-                            :
-                            <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
-                              onClick={() => {
-                                handleHabitDoneToday(habit._id, "my reflection")
-                                setRerender(!rerender)
-                              } }
-                            >
-                              <CheckBoxOutlineBlankIcon
-                                fontSize="large"
-                                style={{ cursor: "pointer" }}
+                          </Col>
+                          :
+                          <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
+                            onClick={() => {
+                              setShowReflectionModal(true)
+                              setHabitReflectionModalId(habit._id)
+                              // handleHabitDoneToday(habit._id, "my reflection")
+                              setRerender(!rerender)
+                            }}
+                          >
+                            <CheckBoxOutlineBlankIcon
+                              fontSize="large"
+                              style={{ cursor: "pointer" }}
 
-                              />
+                            />
 
-                            </Col>
+                          </Col>
 
-                          }
+                        }
 
                       </>
                     )
@@ -151,6 +146,14 @@ export const Habits = () => {
 
         </Container>
       </CssBaseline>
+
+      {showReflectionModal &&
+        <ReflectionModal
+          onDismiss={() => setShowReflectionModal(false)}
+          habitId={habitReflectionModalId}
+          onReflectionSaved={() => setShowReflectionModal(false)}
+        />
+      }
 
     </>
 
