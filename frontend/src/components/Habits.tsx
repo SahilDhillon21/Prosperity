@@ -19,6 +19,8 @@ export const Habits = () => {
 
   const [habitDoneToday, setHabitDoneToday] = useState<Boolean[]>([])
 
+  const [rerender, setRerender] = useState(false)
+
   useEffect(() => {
 
     const getHabits = async () => {
@@ -29,9 +31,8 @@ export const Habits = () => {
         console.log(error)
       }
     }
-
     getHabits()
-  }, [])
+  }, [rerender])
 
   useEffect(() => {
     const setTodaysHabitDoneArray = () => {
@@ -97,7 +98,10 @@ export const Habits = () => {
 
                             && habitDoneToday[index] === true ?
                             <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
-                              onClick={() => handleHabitUndoneToday(habit._id)}
+                              onClick={() => {
+                                handleHabitUndoneToday(habit._id)
+                                setRerender(!rerender)
+                              }}
                             >
                               <CheckBoxIcon
                                 fontSize='large'
@@ -108,7 +112,10 @@ export const Habits = () => {
                             </Col>
                             :
                             <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
-                              onClick={() =>handleHabitDoneToday(habit._id, "my reflection") }
+                              onClick={() => {
+                                handleHabitDoneToday(habit._id, "my reflection")
+                                setRerender(!rerender)
+                              } }
                             >
                               <CheckBoxOutlineBlankIcon
                                 fontSize="large"
