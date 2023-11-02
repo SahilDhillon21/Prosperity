@@ -9,6 +9,9 @@ import * as HabitNetwork from '../network/habit.network';
 import { wasDoneToday } from '../utils/wasDoneToday';
 import { CreateEditHabit } from "./CreateEditHabit";
 import { ReflectionModal } from './ReflectionModal';
+import getMondayToSunday from '../utils/getMondayToSunday';
+import dayjs from 'dayjs';
+import Table from 'react-bootstrap/Table';
 
 export const Habits = () => {
 
@@ -21,6 +24,31 @@ export const Habits = () => {
   const [rerender, setRerender] = useState(false)
 
   const [showReflectionModal, setShowReflectionModal] = useState(false)
+
+  const [weekDates, setWeekDates] = useState<String[]>([])
+
+  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+  useEffect(() => {
+    const setWeeklyTable = () => {
+      const mondaySunday = getMondayToSunday()
+
+      const monday = mondaySunday[0]
+      const sunday = mondaySunday[1]
+
+      var dates = []
+
+      for (var day = monday; day <= sunday; day.setDate(day.getDate() + 1)) {
+        const dj = dayjs(day)
+        dates.push(dj.format('DD/MM/YYYY') + " " + daysOfWeek[dj.day()])
+      }
+
+      setWeekDates(dates)
+    }
+
+    setWeeklyTable()
+
+  })
 
   useEffect(() => {
 
@@ -76,6 +104,70 @@ export const Habits = () => {
 
           <h5>{habitDoneToday.toString()}</h5>
           <h5>{habits.toString()}</h5>
+          {weekDates && weekDates.map((date) => {
+            return (
+              <h1>{date}</h1>
+            )
+          })}
+
+          <Table striped hover variant="dark" responsive>
+            <thead>
+              <tr>
+                <th ></th>
+                {daysOfWeek.map((d) => (
+                  <th className='text-center'>{d.substring(0, 3)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tick1</td>
+                <td className='text-center'>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+              </tr>
+              <tr>
+                <td>Tick2</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+              </tr>
+              <tr>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+              </tr>
+              <tr>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+              </tr>
+              <tr>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+              </tr>
+            </tbody>
+          </Table>
           <Row className="justify-content-center d-flex">
             <Col xs={6} md={6} >
               <Paper elevation={3} className="px-3 py-2">
