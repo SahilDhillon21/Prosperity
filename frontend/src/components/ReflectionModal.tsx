@@ -21,6 +21,7 @@ export const ReflectionModal = ({ onDismiss, onReflectionSaved, habitId }: Refle
         try {
             await HabitNetwork.callCompleteHabit(habitId, reflection)
             // add some functionality to show tick mark in the ui
+            onReflectionSaved(reflection)
         } catch (error) {
             console.log(error)
         }
