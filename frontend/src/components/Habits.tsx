@@ -51,7 +51,7 @@ export const Habits = () => {
 
     setWeeklyTable()
 
-  })
+  }, [])
 
   useEffect(() => {
     const createWeeklyHabitBooleanArray = (habits: Habit[]) => {
@@ -72,7 +72,7 @@ export const Habits = () => {
     }
 
     createWeeklyHabitBooleanArray(habits)
-  }, [habits])
+  }, [habits, weekDates])
 
   useEffect(() => {
 
@@ -85,7 +85,7 @@ export const Habits = () => {
       }
     }
     getHabits()
-  }, [rerender])
+  }, [])
 
   useEffect(() => {
     const setTodaysHabitDoneArray = () => {
@@ -130,7 +130,7 @@ export const Habits = () => {
           <h5>{habits.toString()}</h5>
           {weekDates && weekDates.map((date) => {
             return (
-              <h1>{date}</h1>
+              <h1 key={date}>{date}</h1>
             )
           })}
 
@@ -142,7 +142,7 @@ export const Habits = () => {
                   {habits.map((habit, index) => {
                     return (
                       <>
-                        <Col xs={10} md={10} lg={10}>
+                        <Col xs={10} md={10} lg={10} key={index}>
                           <h3 style={{ color: 'black' }}>{habit.name}</h3>
                         </Col >
                         {habitDoneToday
@@ -196,8 +196,8 @@ export const Habits = () => {
             <thead>
               <tr>
                 <th ></th>
-                {daysOfWeek.map((d) => (
-                  <th className='text-center'>{d.substring(0, 3)}</th>
+                {daysOfWeek.map((d, index) => (
+                  <th key={index} className='text-center'>{d.substring(0, 3)}</th>
                 ))}
               </tr>
             </thead>
