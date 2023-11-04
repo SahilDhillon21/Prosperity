@@ -12,6 +12,7 @@ import { ReflectionModal } from './ReflectionModal';
 import getMondayToSunday from '../utils/getMondayToSunday';
 import dayjs from 'dayjs';
 import Table from 'react-bootstrap/Table';
+import getWeeklyRecordOfHabit from '../utils/getWeeklyRecordOfHabit';
 
 export const Habits = () => {
 
@@ -25,9 +26,11 @@ export const Habits = () => {
 
   const [showReflectionModal, setShowReflectionModal] = useState(false)
 
-  const [weekDates, setWeekDates] = useState<String[]>([])
+  const [weekDates, setWeekDates] = useState<string[]>([])
 
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+  const [weeklyHabitTableRecord, setWeeklyHabitTableRecord] = useState<Boolean[][]>([])
 
   useEffect(() => {
     const setWeeklyTable = () => {
@@ -40,7 +43,7 @@ export const Habits = () => {
 
       for (var day = monday; day <= sunday; day.setDate(day.getDate() + 1)) {
         const dj = dayjs(day)
-        dates.push(dj.format('DD/MM/YYYY') + " " + daysOfWeek[dj.day()])
+        dates.push(dj.format('DD/MM/YYYY'))
       }
 
       setWeekDates(dates)
@@ -49,6 +52,27 @@ export const Habits = () => {
     setWeeklyTable()
 
   })
+
+  useEffect(() => {
+    const createWeeklyHabitBooleanArray = (habits: Habit[]) => {
+      var mainArray: any = []
+
+      for(let i = 0; i<habits.length; i++){
+        mainArray[i] = []
+        mainArray[i].push(habits[i].name)
+
+        const habitRecord = getWeeklyRecordOfHabit(weekDates, habits[i].completedDays)
+
+        for(let j=1; j<=7; j++){
+          mainArray[i][j] = habitRecord[j-1]
+        }
+      }
+
+      setWeeklyHabitTableRecord(mainArray)
+    }
+
+    createWeeklyHabitBooleanArray(habits)
+  }, [habits, weekDates])
 
   useEffect(() => {
 
@@ -110,64 +134,6 @@ export const Habits = () => {
             )
           })}
 
-          <Table striped hover variant="dark" responsive>
-            <thead>
-              <tr>
-                <th ></th>
-                {daysOfWeek.map((d) => (
-                  <th className='text-center'>{d.substring(0, 3)}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Tick1</td>
-                <td className='text-center'>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-              </tr>
-              <tr>
-                <td>Tick2</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-              </tr>
-              <tr>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-              </tr>
-              <tr>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-              </tr>
-              <tr>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-              </tr>
-            </tbody>
-          </Table>
           <Row className="justify-content-center d-flex">
             <Col xs={6} md={6} >
               <Paper elevation={3} className="px-3 py-2">
@@ -224,6 +190,42 @@ export const Habits = () => {
               </Paper>
             </Col>
           </Row>
+
+          <Table striped hover variant="dark" responsive style={{ tableLayout: 'fixed' }} className='mt-3'>
+
+            <thead>
+              <tr>
+                <th ></th>
+                {daysOfWeek.map((d) => (
+                  <th className='text-center'>{d.substring(0, 3)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className='text-center align-middle' style={{ wordWrap: 'break-word' }}>Habit nameeeeeeeeeeeeeeeeee</td>
+                <td className='text-center align-middle'>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+              </tr>
+              <tr>
+                <td className='text-center'>Habit</td>
+                <td className='text-center'>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+                <td>Tick</td>
+              </tr>
+            </tbody>
+
+          </Table>
+
 
           <Button onClick={() => setShowCreateEditHabitModal(true)}> + Add </Button>
 
