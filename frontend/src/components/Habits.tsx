@@ -72,7 +72,7 @@ export const Habits = () => {
     }
 
     createWeeklyHabitBooleanArray(habits)
-  }, [habits, weekDates])
+  }, [habits])
 
   useEffect(() => {
 
