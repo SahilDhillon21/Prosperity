@@ -1,69 +1,42 @@
 import dayjs from "dayjs"
 import Habit from "../models/habit.model"
+import checkForDay from "./checkForDay"
 var customParseFormat = require('dayjs/plugin/customParseFormat')
 dayjs.extend(customParseFormat)
 
-const getWeeklyRecordOfHabit = (weekDates: string[], completedDaysOfHabit: Habit["completedDays"]) => {
-    
+const getWeeklyRecordOfHabit = (weekDates: string[], completedDaysOfHabit: Habit["completedDays"], createdAt: string) => {
 
-    const monday = dayjs(weekDates[0], "DD/MM/YYYY")
+    /*
+        week dates array will give the dates of monday and sunday of the week for which the data is to be filled.
+        It's sure that while sending, it will only be the current week or some past week
+    */
 
-    const sunday = dayjs(weekDates[6], "DD/MM/YYYY")
-    
+    const weekDateObjects = []
+
+    for (let d = 0; d < 7; d++) {
+        weekDateObjects[d] = dayjs(weekDates[d], 'DD/MM/YYYY')
+    }
+
+    const habitCreationDay = dayjs(createdAt)
+
     const today = dayjs(new Date())
 
-    const recordArray = []
+    const recordArray: any = []
 
-    var i = completedDaysOfHabit.length - 1
 
-    console.log(JSON.stringify(completedDaysOfHabit))
-
-    while(i > 0 && dayjs(completedDaysOfHabit[i].date, "DD/MM/YYYY") > monday) i--
-
-    if(i<completedDaysOfHabit.length && dayjs(completedDaysOfHabit[i].date, "DD/MM/YYYY") < monday && completedDaysOfHabit.length > 1){
-        i++
-    }
-
-    console.log("i : "+i+" length of completedDaysOfHabit "+completedDaysOfHabit.length)
-
-    console.log(completedDaysOfHabit[i].date)
-    
-    // i -> traverses the string containing dates where the habit was done
-    // Now, i could be pointing to monday or some day before it.
-    // Fill the record array 
-
-    var r = 0
-
-    while(r < 7 && i < completedDaysOfHabit.length){
-        
-        if(completedDaysOfHabit[i].date === weekDates[r] ){
-            recordArray[r] = true
-            i++
+    for (let d = 0; d < 7; d++) {
+        if (weekDateObjects[d] < habitCreationDay) {
+            recordArray[d] = "NA"
+        } else if (weekDateObjects[d] >= today) {
+            recordArray[d] = "F"
+        } else if (checkForDay(weekDates[d], completedDaysOfHabit)) {
+            recordArray[d] = true
         } else {
-            recordArray[r] = false
+            recordArray[d] = false
         }
-        r++
     }
 
-    console.log(recordArray.toString());
-    
-
-    // const lastHabitCompletionDay = new Date(completedDaysOfHabit[i].date)
-
-    // var daysFromLastHabitCompletionDayToToday = today.day() - lastHabitCompletionDay.getDay()
-
-    // while(daysFromLastHabitCompletionDayToToday > 0){
-    //     recordArray[r++] = false
-    //     daysFromLastHabitCompletionDayToToday--
-    // }
-
-    // while(r < 7){
-    //     recordArray[r++] = "FutureDate"
-    // }
-
-
-    // return recordArray
-    return []
+    return recordArray
 }
 
 export default getWeeklyRecordOfHabit

@@ -13,6 +13,10 @@ import getMondayToSunday from '../utils/getMondayToSunday';
 import dayjs from 'dayjs';
 import Table from 'react-bootstrap/Table';
 import getWeeklyRecordOfHabit from '../utils/getWeeklyRecordOfHabit';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import HorizontalRuleOutlinedIcon from '@mui/icons-material/HorizontalRuleOutlined';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 export const Habits = () => {
 
@@ -30,7 +34,7 @@ export const Habits = () => {
 
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-  const [weeklyHabitTableRecord, setWeeklyHabitTableRecord] = useState<Boolean[][]>([])
+  const [weeklyHabitTableRecord, setWeeklyHabitTableRecord] = useState<any[][]>([])
 
   useEffect(() => {
     const setWeeklyTable = () => {
@@ -51,20 +55,20 @@ export const Habits = () => {
 
     setWeeklyTable()
 
-  }, [])
+  }, [habits])
 
   useEffect(() => {
     const createWeeklyHabitBooleanArray = (habits: Habit[]) => {
       var mainArray: any = []
 
-      for(let i = 0; i<habits.length; i++){
+      for (let i = 0; i < habits.length; i++) {
         mainArray[i] = []
         mainArray[i].push(habits[i].name)
 
-        const habitRecord = getWeeklyRecordOfHabit(weekDates, habits[i].completedDays)
+        const habitRecord = getWeeklyRecordOfHabit(weekDates, habits[i].completedDays, habits[i].createdAt)
 
-        for(let j=1; j<=7; j++){
-          mainArray[i][j] = habitRecord[j-1]
+        for (let j = 1; j <= 7; j++) {
+          mainArray[i][j] = habitRecord[j - 1]
         }
       }
 
@@ -72,7 +76,7 @@ export const Habits = () => {
     }
 
     createWeeklyHabitBooleanArray(habits)
-  }, [habits, weekDates])
+  }, [habits, weekDates, rerender])
 
   useEffect(() => {
 
@@ -85,7 +89,7 @@ export const Habits = () => {
       }
     }
     getHabits()
-  }, [])
+  }, [rerender])
 
   useEffect(() => {
     const setTodaysHabitDoneArray = () => {
@@ -191,40 +195,51 @@ export const Habits = () => {
             </Col>
           </Row>
 
-          <Table striped hover variant="dark" responsive style={{ tableLayout: 'fixed' }} className='mt-3'>
+          {habits.length < 1 ? "Start a new habit to view your weekly progress"
+            :
+            <Table striped hover variant="dark" responsive style={{ tableLayout: 'fixed' }} className='mt-3'>
 
-            <thead>
-              <tr>
-                <th ></th>
-                {daysOfWeek.map((d, index) => (
-                  <th key={index} className='text-center'>{d.substring(0, 3)}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className='text-center align-middle' style={{ wordWrap: 'break-word' }}>Habit nameeeeeeeeeeeeeeeeee</td>
-                <td className='text-center align-middle'>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-              </tr>
-              <tr>
-                <td className='text-center'>Habit</td>
-                <td className='text-center'>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-                <td>Tick</td>
-              </tr>
-            </tbody>
+              <thead>
+                <tr>
+                  <th className='text-center'>My habits</th>
+                  {daysOfWeek.map((d, index) => (
+                    <th key={index} className='text-center'>{d.substring(0, 3)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
 
-          </Table>
+                {weeklyHabitTableRecord.map((habit,ind) => {
+                  return (
+                    <tr key={ind}>
+                      {habit.map((item, index) => {
+                        var object
+
+                        if (index === 0) object = <h5 className='text-center align-middle' style={{ wordWrap: 'break-word' }}><b>{item}</b></h5>
+                        else if (item === "F") object = <CircleOutlinedIcon />
+                        else if (item === "NA") object = <HorizontalRuleOutlinedIcon />
+                        else if (item === true) object = <CheckCircleOutlinedIcon color='success'/>
+                        else object = <CancelOutlinedIcon color='error'/>
+                        return (
+                          <td key={index} className='text-center align-middle'>
+                            {object}
+                          </td>
+                          
+                        )
+                      })}
+                    </tr>
+                  )
+                })}
+
+                <h5 style={{color: 'black'}}>{weeklyHabitTableRecord.toString()}</h5>
+
+
+              </tbody>
+
+            </Table>
+          }
+
+
 
 
           <Button onClick={() => setShowCreateEditHabitModal(true)}> + Add </Button>
@@ -245,7 +260,10 @@ export const Habits = () => {
         <ReflectionModal
           onDismiss={() => setShowReflectionModal(false)}
           habitId={habitReflectionModalId}
-          onReflectionSaved={() => setShowReflectionModal(false)}
+          onReflectionSaved={() => 
+            {setShowReflectionModal(false)
+              setRerender(!rerender)
+            }}
         />
       }
 
