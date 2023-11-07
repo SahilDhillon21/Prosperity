@@ -17,6 +17,8 @@ import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import HorizontalRuleOutlinedIcon from '@mui/icons-material/HorizontalRuleOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 export const Habits = () => {
 
@@ -130,14 +132,6 @@ export const Habits = () => {
 
         <Container className="mt-5">
 
-          <h5>{habitDoneToday.toString()}</h5>
-          <h5>{habits.toString()}</h5>
-          {weekDates && weekDates.map((date) => {
-            return (
-              <h1 key={date}>{date}</h1>
-            )
-          })}
-
           <Row className="justify-content-center d-flex">
             <Col xs={6} md={6} >
               <Paper elevation={3} className="px-3 py-2">
@@ -146,13 +140,13 @@ export const Habits = () => {
                   {habits.map((habit, index) => {
                     return (
                       <>
-                        <Col xs={10} md={10} lg={10} key={index}>
-                          <h3 style={{ color: 'black' }}>{habit.name}</h3>
+                        <Col className='align-middle' xs={10} md={10} lg={10} key={index}>
+                          <h3 className='align-middle' style={{ color: 'black' }}>{habit.name}</h3>
                         </Col >
                         {habitDoneToday
 
                           && habitDoneToday[index] === true ?
-                          <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
+                          <Col xs={2} md={2} lg={2} className=" align-middle"
                             onClick={() => {
                               handleHabitUndoneToday(habit._id)
                               setRerender(!rerender)
@@ -166,7 +160,7 @@ export const Habits = () => {
 
                           </Col>
                           :
-                          <Col xs={2} md={2} lg={2} className="mt-2 mb-0"
+                          <Col xs={2} md={2} lg={2} className="align-middle"
                             onClick={() => {
                               setShowReflectionModal(true)
                               setHabitReflectionModalId(habit._id)
@@ -195,52 +189,61 @@ export const Habits = () => {
             </Col>
           </Row>
 
-          {habits.length < 1 ? "Start a new habit to view your weekly progress"
-            :
-            <Table striped hover variant="dark" responsive style={{ tableLayout: 'fixed' }} className='mt-3'>
+          <Row className='mt-5 mb-5'>
+            <Col xs={6} sm={1} md={1} lg={1} className='text-center align-middle my-auto'>
+              <ArrowLeftIcon sx={{ fontSize: 60, backgroundColor: 'lightGrey' }} />
+            </Col>
 
-              <thead>
-                <tr>
-                  <th className='text-center'>My habits</th>
-                  {daysOfWeek.map((d, index) => (
-                    <th key={index} className='text-center'>{d.substring(0, 3)}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
+            <Col xs={12} sm={12} md={10} lg={10}>
+              {habits.length < 1 ? "Start a new habit to view your weekly progress"
+                :
+                <Table striped hover variant="dark" responsive style={{ tableLayout: 'fixed' }} >
 
-                {weeklyHabitTableRecord.map((habit,ind) => {
-                  return (
-                    <tr key={ind}>
-                      {habit.map((item, index) => {
-                        var object
-
-                        if (index === 0) object = <h5 className='text-center align-middle' style={{ wordWrap: 'break-word' }}><b>{item}</b></h5>
-                        else if (item === "F") object = <CircleOutlinedIcon />
-                        else if (item === "NA") object = <HorizontalRuleOutlinedIcon />
-                        else if (item === true) object = <CheckCircleOutlinedIcon color='success'/>
-                        else object = <CancelOutlinedIcon color='error'/>
-                        return (
-                          <td key={index} className='text-center align-middle'>
-                            {object}
-                          </td>
-                          
-                        )
-                      })}
+                  <thead>
+                    <tr>
+                      <th className='text-center'>My habits</th>
+                      {daysOfWeek.map((d, index) => (
+                        <th key={index} className='text-center'>{d.substring(0, 3)}</th>
+                      ))}
                     </tr>
-                  )
-                })}
+                  </thead>
+                  <tbody>
 
-                <h5 style={{color: 'black'}}>{weeklyHabitTableRecord.toString()}</h5>
+                    {weeklyHabitTableRecord.map((habit, ind) => {
+                      return (
+                        <tr key={ind}>
+                          {habit.map((item, index) => {
+                            var object
+
+                            if (index === 0) object = <h5 className='text-center align-middle' style={{ wordWrap: 'break-word' }}>{item}</h5>
+                            else if (item === "F") object = <CircleOutlinedIcon />
+                            else if (item === "NA") object = <HorizontalRuleOutlinedIcon />
+                            else if (item === true) object = <CheckCircleOutlinedIcon color='success' />
+                            else object = <CancelOutlinedIcon color='error' />
+                            return (
+                              <td key={index} className='text-center align-middle'>
+                                {object}
+                              </td>
+
+                            )
+                          })}
+                        </tr>
+                      )
+                    })}
+
+                  </tbody>
+
+                </Table>
+              }
 
 
-              </tbody>
+            </Col>
 
-            </Table>
-          }
+            <Col xs={6} sm={1} md={1} lg={1} className='text-center align-middle my-auto'>
+              <ArrowRightIcon sx={{ fontSize: 60, backgroundColor: 'lightGrey' }} />
+            </Col>
 
-
-
+          </Row>
 
           <Button onClick={() => setShowCreateEditHabitModal(true)}> + Add </Button>
 
@@ -248,10 +251,9 @@ export const Habits = () => {
             <CreateEditHabit
               habitToEdit={habitToEdit}
               onDismiss={() => setShowCreateEditHabitModal(false)}
-              onHabitSaved={() => {setShowCreateEditHabitModal(false) }}
+              onHabitSaved={() => { setShowCreateEditHabitModal(false) }}
             />
           }
-
 
         </Container>
       </CssBaseline>
@@ -260,10 +262,10 @@ export const Habits = () => {
         <ReflectionModal
           onDismiss={() => setShowReflectionModal(false)}
           habitId={habitReflectionModalId}
-          onReflectionSaved={() => 
-            {setShowReflectionModal(false)
-              setRerender(!rerender)
-            }}
+          onReflectionSaved={() => {
+            setShowReflectionModal(false)
+            setRerender(!rerender)
+          }}
         />
       }
 
