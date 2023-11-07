@@ -2,6 +2,7 @@ import dayjs from "dayjs"
 import Habit from "../models/habit.model"
 import checkForDay from "./checkForDay"
 var customParseFormat = require('dayjs/plugin/customParseFormat')
+
 dayjs.extend(customParseFormat)
 
 const getWeeklyRecordOfHabit = (weekDates: string[], completedDaysOfHabit: Habit["completedDays"], createdAt: string) => {
@@ -23,9 +24,15 @@ const getWeeklyRecordOfHabit = (weekDates: string[], completedDaysOfHabit: Habit
 
     const recordArray: any = []
 
-
     for (let d = 0; d < 7; d++) {
-        if (weekDateObjects[d] < habitCreationDay) {
+        if (weekDates[d] === habitCreationDay.format('DD/MM/YYYY')){
+            if(checkForDay(weekDates[d], completedDaysOfHabit)){
+                recordArray[d] = true
+            } else {
+                recordArray[d] = "F"
+            }
+        }
+        else if (weekDateObjects[d] < habitCreationDay) {
             recordArray[d] = "NA"
         } else if (weekDateObjects[d] >= today) {
             recordArray[d] = "F"

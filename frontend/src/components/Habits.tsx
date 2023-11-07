@@ -248,7 +248,7 @@ export const Habits = () => {
             <CreateEditHabit
               habitToEdit={habitToEdit}
               onDismiss={() => setShowCreateEditHabitModal(false)}
-              onHabitSaved={() => { }}
+              onHabitSaved={() => {setShowCreateEditHabitModal(false) }}
             />
           }
 
