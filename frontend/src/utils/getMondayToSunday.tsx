@@ -1,6 +1,6 @@
-const getMondayToSunday = () => {
+const getMondayToSunday = (displacement: number) => {
     const currentDate = new Date()
-    const currentDay = currentDate.getDay()
+    const currentDay = currentDate.getDay() - 7*displacement
 
     const backwardDaysToMonday = currentDay === 0 ? 6 : currentDay - 1
     const mondayDate = new Date(currentDate)

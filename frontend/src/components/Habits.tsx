@@ -36,11 +36,14 @@ export const Habits = () => {
 
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
+  const [weekDisplacement, setWeekDisplacement] = useState(0)
+
+
   const [weeklyHabitTableRecord, setWeeklyHabitTableRecord] = useState<any[][]>([])
 
   useEffect(() => {
     const setWeeklyTable = () => {
-      const mondaySunday = getMondayToSunday()
+      const mondaySunday = getMondayToSunday(weekDisplacement)
 
       const monday = mondaySunday[0]
       const sunday = mondaySunday[1]
@@ -57,7 +60,7 @@ export const Habits = () => {
 
     setWeeklyTable()
 
-  }, [habits])
+  }, [habits, weekDisplacement])
 
   useEffect(() => {
     const createWeeklyHabitBooleanArray = (habits: Habit[]) => {
@@ -132,6 +135,12 @@ export const Habits = () => {
 
         <Container className="mt-5">
 
+          {weekDates.map((D) => {
+            return(
+              <h4>{D}</h4>
+            )
+          })}
+
           <Row className="justify-content-center d-flex">
             <Col xs={6} md={6} >
               <Paper elevation={3} className="px-3 py-2">
@@ -190,8 +199,11 @@ export const Habits = () => {
           </Row>
 
           <Row className='mt-5 mb-5'>
-            <Col xs={6} sm={1} md={1} lg={1} className='text-center align-middle my-auto'>
-              <ArrowLeftIcon sx={{ fontSize: 60, backgroundColor: 'lightGrey' }} />
+            <Col xs={6} sm={1} md={1} lg={1} className='text-center align-middle my-auto' onClick={() => {
+              setWeekDisplacement(weekDisplacement-1)
+              setRerender(!rerender)
+            }}>
+              <ArrowLeftIcon sx={{ fontSize: 60, backgroundColor: 'lightGrey', cursor: "pointer" }} />
             </Col>
 
             <Col xs={12} sm={12} md={10} lg={10}>
@@ -239,8 +251,15 @@ export const Habits = () => {
 
             </Col>
 
-            <Col xs={6} sm={1} md={1} lg={1} className='text-center align-middle my-auto'>
-              <ArrowRightIcon sx={{ fontSize: 60, backgroundColor: 'lightGrey' }} />
+            <Col xs={6} sm={1} md={1} lg={1} className='text-center align-middle my-auto' onClick={() =>{
+              setWeekDisplacement(weekDisplacement+1)
+              setRerender(!rerender)
+            }}>
+              {weekDisplacement !== 0 &&
+
+                <ArrowRightIcon sx={{ fontSize: 60, backgroundColor: 'lightGrey', cursor: "pointer" }} />
+
+              }
             </Col>
 
           </Row>
