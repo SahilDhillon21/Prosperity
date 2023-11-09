@@ -25,7 +25,7 @@ const getWeeklyRecordOfHabit = (weekDates: string[], completedDaysOfHabit: Habit
     const recordArray: any = []
 
     for (let d = 0; d < 7; d++) {
-        if (weekDates[d] === habitCreationDay.format('DD/MM/YYYY') || weekDates[d] === today.format('DD/MM/YYYY')){
+        if (weekDates[d] === today.format('DD/MM/YYYY')){
             if(checkForDay(weekDates[d], completedDaysOfHabit)){
                 recordArray[d] = true
             } else {

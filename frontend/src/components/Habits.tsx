@@ -135,11 +135,11 @@ export const Habits = () => {
 
         <Container className="mt-5">
 
-          {weekDates.map((D) => {
+          {/* {weekDates.map((D) => {
             return(
               <h4>{D}</h4>
             )
-          })}
+          })} */}
 
           <Row className="justify-content-center d-flex">
             <Col xs={6} md={6} >
@@ -270,7 +270,10 @@ export const Habits = () => {
             <CreateEditHabit
               habitToEdit={habitToEdit}
               onDismiss={() => setShowCreateEditHabitModal(false)}
-              onHabitSaved={() => { setShowCreateEditHabitModal(false) }}
+              onHabitSaved={() => { 
+                setShowCreateEditHabitModal(false) 
+                setRerender(!rerender)
+              }}
             />
           }
 

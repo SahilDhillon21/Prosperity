@@ -16,6 +16,7 @@ import Todo from "./components/Todo"
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { Habits } from './components/Habits';
+import Finances from './components/Finances';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -191,7 +192,7 @@ function App() {
               <Button><NavLink to='/habits'>Habits</NavLink></Button>
               <Button>Productivity</Button>
               <Button>Journal</Button>
-              <Button>Finances</Button>
+              <Button><NavLink to='/finances'>Finances</NavLink></Button>
             </ButtonGroup>
           </Col>
         </Row>
@@ -200,11 +201,11 @@ function App() {
 
       <Routes>
 
-        <Route path='/' element={home}> </Route>
+        <Route path='/' element={home}/>
 
-        <Route path='/habits' element={<Habits />}>
+        <Route path='/habits' element={<Habits />} />
 
-        </Route>
+        <Route path='/finances' element = {<Finances />} />
 
       </Routes>
 
