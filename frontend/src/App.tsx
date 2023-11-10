@@ -17,6 +17,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { Habits } from './components/Habits';
 import Finances from './components/Finances';
+import Productivity from './components/Productivity';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -31,6 +32,14 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false)
 
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null)
+
+  // background color
+  const [bgcolor, setBgcolor] = useState("white")
+  const [buttonGroupBg, setButtonGroupBg] = useState("black")
+
+  useEffect(() => {
+    document.body.style.backgroundColor = bgcolor
+  }, [bgcolor])
 
 
   const handleDeleteNoteFromGrid = async (note: NoteModel) => {
@@ -188,11 +197,23 @@ function App() {
         <Row >
           <Col className='text-center'>
             <ButtonGroup variant="contained" color='success'>
-              <Button><NavLink to='/'>Home</NavLink></Button>
-              <Button><NavLink to='/habits'>Habits</NavLink></Button>
-              <Button>Productivity</Button>
-              <Button>Journal</Button>
-              <Button><NavLink to='/finances'>Finances</NavLink></Button>
+
+              <Button onClick={() => setBgcolor("white")}><NavLink to='/'>Home</NavLink></Button>
+
+              <Button onClick={() => setBgcolor("white")}><NavLink to='/habits'>Habits</NavLink></Button>
+
+              <Button onClick={() => setBgcolor("white")}><NavLink to='/productivity'>Productivity</NavLink></Button>
+
+              <Button onClick={() => setBgcolor("white")}><NavLink to='/journal'>Journal</NavLink></Button>
+
+              <Button className='text-light bg-dark' onClick={() => {
+                setBgcolor("#13005A")
+                setButtonGroupBg("white")
+              }
+              }>
+                <NavLink to='/finances'>Finances</NavLink>
+              </Button>
+
             </ButtonGroup>
           </Col>
         </Row>
@@ -201,11 +222,13 @@ function App() {
 
       <Routes>
 
-        <Route path='/' element={home}/>
+        <Route path='/' element={home} />
 
         <Route path='/habits' element={<Habits />} />
 
-        <Route path='/finances' element = {<Finances />} />
+        <Route path='/finances' element={<Finances />} />
+
+        <Route path='productivity' element={<Productivity />} />
 
       </Routes>
 

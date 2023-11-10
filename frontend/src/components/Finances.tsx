@@ -1,8 +1,15 @@
-import React from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
+
 
 function Finances() {
   return (
-    <div>Finances</div>
+    <Container>
+      <Row>
+        <Col>
+        FINANCE
+        </Col>
+      </Row>
+    </Container>
   )
 }
 

@@ -23,3 +23,14 @@ a.active{
   color: inherit;
   text-shadow: 1.5px 1px #000000;
 }
+
+:root{
+  --blue1: #13005A;
+  --blue2: #00337C;
+  --blue3: #1C82AD;
+  --light-green: #03C988;
+}
+
+.bg-blue1{
+  background-color: var(--blue1);
+}
