@@ -207,7 +207,7 @@ function App() {
               <Button onClick={() => setBgcolor("white")}><NavLink to='/journal'>Journal</NavLink></Button>
 
               <Button className='text-light bg-dark' onClick={() => {
-                setBgcolor("#13005A")
+                setBgcolor("#00337C")
                 setButtonGroupBg("white")
               }
               }>
@@ -224,9 +224,9 @@ function App() {
 
         <Route path='/' element={home} />
 
-        <Route path='/habits' element={<Habits />} />
+        <Route path='habits' element={<Habits />} />
 
-        <Route path='/finances' element={<Finances />} />
+        <Route path='finances' element={<Finances user={loggedInUser} />} />
 
         <Route path='productivity' element={<Productivity />} />
 

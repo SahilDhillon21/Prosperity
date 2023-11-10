@@ -34,3 +34,20 @@ a.active{
 .bg-blue1{
   background-color: var(--blue1);
 }
+
+.bg-blue2{
+  background-color: var(--blue2);
+}
+
+.bg-blue3{
+  background-color: var(--blue3);
+}
+
+.finance{
+  color: white;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+.finance span{
+  color: #03C988;
+}
