@@ -5,4 +5,5 @@ export default interface User{
     password: string,
     notes: string[],
     habits: string[],
+    accountId: string,
 }

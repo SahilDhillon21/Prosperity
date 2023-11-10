@@ -3,6 +3,7 @@ import express from "express"
 import userRoutes from "./routes/user.routes"
 import todoRoutes from "./routes/todo.routes"
 import habitRoutes from "./routes/habit.routes"
+import financeRoutes from "./routes/finance.routes"
 import session from "express-session"
 import noteRoutes from './routes/note.routes'
 import env from "./util/validateEnv"
@@ -36,6 +37,8 @@ app.use('/notes', noteRoutes)
 app.use('/todo', todoRoutes)
 
 app.use('/habits', habitRoutes)
+
+app.use('/finances', financeRoutes)
 
 app.get("/", (req, res) => {
     res.send("Hellooo")

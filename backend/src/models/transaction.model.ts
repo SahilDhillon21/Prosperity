@@ -23,6 +23,8 @@ const transactionSchema = new mongoose.Schema({
 
     secondAccount: String,
 
+    category: String,
+
 }, { timestamps: true })
 
 const Transaction = mongoose.model("Transaction", transactionSchema)

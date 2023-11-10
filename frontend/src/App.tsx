@@ -206,7 +206,7 @@ function App() {
 
               <Button onClick={() => setBgcolor("white")}><NavLink to='/journal'>Journal</NavLink></Button>
 
-              <Button className='text-light bg-dark' onClick={() => {
+              <Button onClick={() => {
                 setBgcolor("#00337C")
                 setButtonGroupBg("white")
               }

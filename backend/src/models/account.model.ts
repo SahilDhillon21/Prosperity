@@ -6,7 +6,7 @@ const accountSchema = new mongoose.Schema({
         ref: 'User'
     },
 
-    accountNumber: {
+    accountId: {
         type: String,
         require: true
     },
@@ -14,8 +14,17 @@ const accountSchema = new mongoose.Schema({
     balance: {
         type: Number,
         default: 0
-    }
+    },
+
+    expenseCategories:[{
+        type: String
+    }],
+
+    incomeCategories:[{
+        type: String
+    }],
+
 })
 
-const Account = mongoose.model("Account",accountSchema)
+const Account = mongoose.model("Account", accountSchema)
 export default Account

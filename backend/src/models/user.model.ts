@@ -39,6 +39,11 @@ const userSchema = new mongoose.Schema({
         }
     ],
 
+    acccountId: {
+        type: String,
+        require: true
+    }
+
 }, {timestamps: true})
 
 const User = mongoose.model("User",userSchema)

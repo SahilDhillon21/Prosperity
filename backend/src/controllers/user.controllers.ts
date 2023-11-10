@@ -2,6 +2,8 @@ import { RequestHandler } from "express";
 import UserModel from "../models/user.model";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
+import generateUniqueAccountId from "../util/generateUniqueAccountId";
+import Account from "../models/account.model";
 
 export const getAuthenticatedUser: RequestHandler = async (req,res) =>{
     const authenticatedUserId = req.session.userId
@@ -63,10 +65,18 @@ export const handleUserSignup: RequestHandler<unknown, unknown, SignupBody, unkn
 
         const passwordHashed = await bcrypt.hash(passwordRaw!, 10);
 
+        const acccountId = generateUniqueAccountId(username)
+
         const newUser = await UserModel.create({
             username: username,
             email: email,
-            password: passwordHashed
+            password: passwordHashed,
+            acccountId: acccountId
+        })
+
+        await Account.create({
+            accountId: acccountId,
+            user: newUser._id
         })
 
         req.session.userId = newUser._id
