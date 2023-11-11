@@ -11,7 +11,7 @@ export const getBalance = async (accountId: string) => {
 
 export const setBalance = async (accountId: string, amount: number) => {
     try {
-        const response = await axios.post('/setBalance', { "amount": amount })
+        const response = await axios.post('finances/setBalance', { "amount": amount, "accountId": accountId })
         return response.data
     } catch (error) {
         console.log(error);

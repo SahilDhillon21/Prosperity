@@ -43,6 +43,10 @@ a.active{
   background-color: var(--blue3);
 }
 
+.text-green{
+  color: #03C988;
+}
+
 .finance{
   color: white;
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
@@ -50,4 +54,13 @@ a.active{
 
 .finance span{
   color: #03C988;
+}
+
+/* Edit balance buttons */
+.hover-green :hover{
+  background-color: #03C988;
+}
+
+.hover-red :hover{
+  background-color: #c90303;
 }

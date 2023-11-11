@@ -9,8 +9,6 @@ export const getBalance: RequestHandler = async (req, res) => {
     try {
         const account = await Account.findOne({ accountId: accountId })
 
-        console.log("account id: "+accountId);
-
         if (!account) {
             console.log("account with ID: " + accountId + " doesn't exist");
             return
@@ -27,24 +25,30 @@ export const getBalance: RequestHandler = async (req, res) => {
 export const setBalance: RequestHandler = async (req, res) => {
     const amount = req.body.amount
     const accountId = req.body.accountId
-
+    
     try {
-        await Account.updateOne({ accountNumber: accountId }, {
+        const updateBalance = {
             $set: {
-                balance: amount
-            }
-        })
+                "balance": amount
+            },
+        };
 
-        const newTransaction = await Transaction.create({
-            category: "Update balance",
-            accountId: accountId,
-            type: "Update",
-            amount: amount,
-            transactionId: generateUniqueTransactionId
-        })
+        const acc = await Account.updateOne({ accountId: accountId }, updateBalance)
 
+        console.log("account: "+JSON.stringify(acc));
+        
 
-        res.status(200).json(newTransaction)
+        // const newTransaction = await Transaction.create({
+        //     category: "Update balance",
+        //     accountId: accountId,
+        //     type: "Update",
+        //     amount: amount,
+        //     transactionId: generateUniqueTransactionId
+        // })
+
+        // res.status(200).json(newTransaction)
+        res.sendStatus(200)
+
     } catch (error) {
         console.log(error);
     }
