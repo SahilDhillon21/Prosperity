@@ -6,6 +6,8 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useRef, useState, useEffect } from 'react';
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
+import Transaction from '../models/transaction.model';
+import * as FinanceControllers from '../network/finance.network'
 
 const TransactionCard = () => {
     // Copy to clipboard part
@@ -14,24 +16,41 @@ const TransactionCard = () => {
 
     const handleCopyTransactionId = () => {
         navigator.clipboard.writeText(copiedTransactionId.current)
-        enqueueSnackbar('Copied: '+copiedTransactionId.current, { variant: 'success' })
+        enqueueSnackbar('Copied: ' + copiedTransactionId.current, { variant: 'success' })
     }
 
     // Transactions useState
-    const [transactions, setTransactions] = useState<Transacti
+    const [transactions, setTransactions] = useState<Transaction[]>([])
 
     useEffect(() => {
-      const getAllTransactions = async () => {
+        const getAllTransactions = async () => {
+            try {
+                const alltransactions = await FinanceControllers.getAllTransactions()
+                setTransactions(alltransactions)
+            } catch (error) {
+                console.log(error);
+            }
+        }
 
-      }
-      
+        getAllTransactions()
+
     }, [])
-    
+
 
     return (
         <>
             <Col xs={12} md={12} lg={12} className='p-3 my-auto align-items-center bg-dark text-light '>
                 <Row className='mt-3'>
+
+                    {transactions.map((T) => (
+                        <h5>
+                            {T.accountId} <br />
+                            {T.amount} <br />
+                            {T.category} <br />
+                            {T.transactionId} <br />
+                            {T.type} <br />
+                        </h5>
+                    ))}
 
                     <Col sm={1} md={1} lg={1} className='my-auto align-items-center text-center'>
                         <RestaurantIcon style={{ fontSize: '55px', color: 'red' }} />
@@ -47,7 +66,7 @@ const TransactionCard = () => {
                     </Col>
 
                     <Col sm={2} md={2} lg={2} className='my-auto align-items-center text-center'>
-                        <h5 className='m-0 text-danger'><RemoveIcon fontSize='small'/> ₹560<ArrowDropDownIcon fontSize='large' /></h5>
+                        <h5 className='m-0 text-danger'><RemoveIcon fontSize='small' /> ₹560<ArrowDropDownIcon fontSize='large' /></h5>
                     </Col>
 
                     <Col sm={3} md={3} lg={3} className='my-auto align-items-center text-center'>

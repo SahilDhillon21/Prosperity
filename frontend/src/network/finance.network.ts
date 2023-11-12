@@ -17,3 +17,12 @@ export const setBalance = async (accountId: string, amount: number) => {
         console.log(error);
     }
 }
+
+export const getAllTransactions = async () => {
+    try {
+        const response = await axios.get('/finances/getAllTransactions')
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}

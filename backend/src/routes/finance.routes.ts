@@ -7,4 +7,6 @@ router.get('/getBalance/:accountId', FinanceControllers.getBalance)
 
 router.post('/setBalance', FinanceControllers.setBalance)
 
+router.get('/getAllTransactions', FinanceControllers.getAllTransactions)
+
 export default router

@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
         }
     ],
 
-    acccountId: {
+    accountId: {
         type: String,
         require: true
     }
