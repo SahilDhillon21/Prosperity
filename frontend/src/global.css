@@ -40,11 +40,39 @@ a.active{
 }
 
 .bg-blue3{
-  background-color: var(--blue3);
+  background-color: #1c81ada2;
+}
+
+.bg-fadeWhite{
+  background-color: rgba(245, 245, 245, 0.755);
+}
+
+.text-blue1{
+  color: #13005A
+}
+
+.text-blue2{
+  color: #00337C
+}
+
+.text-blue3{
+  color: #1C82AD
 }
 
 .text-green{
   color: #03C988;
+}
+
+.text-red{
+  color: #c90303;
+}
+
+.text-lightWhite{
+  color: rgba(245, 245, 245, 0.685);
+}
+
+.shadow{
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .finance{

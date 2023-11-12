@@ -35,9 +35,6 @@ export const setBalance: RequestHandler = async (req, res) => {
 
         const acc = await Account.updateOne({ accountId: accountId }, updateBalance)
 
-        console.log("account: "+JSON.stringify(acc));
-        
-
         // const newTransaction = await Transaction.create({
         //     category: "Update balance",
         //     accountId: accountId,

@@ -6,6 +6,8 @@ import SaveAsIcon from '@mui/icons-material/SaveAs';
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useForm } from 'react-hook-form';
+import TransactionCard from './TransactionCard';
+import { SnackbarProvider } from 'notistack';
 
 interface FinanceProps {
   user: User | null
@@ -70,8 +72,8 @@ function Finances({ user }: FinanceProps) {
 
       <span>
 
-        <Button  disabled={isSubmitting}
-        className='bg-transparent hover-red border-0 p-1' onClick={() => setShowEditBalanceBox(false)}>
+        <Button disabled={isSubmitting}
+          className='bg-transparent hover-red border-0 p-1' onClick={() => setShowEditBalanceBox(false)}>
           <ClearIcon />
         </Button>
 
@@ -94,36 +96,49 @@ function Finances({ user }: FinanceProps) {
 
   return (
     <Container className='mt-5 px-5 finance'>
-      {user ?
-        <>
-          <Row className='mb-1'>
-            <Col xs={7} md={7} lg={7}>
-              <h4 className='text-uppercase'>{user.username}'s account</h4>
-            </Col>
+      <SnackbarProvider maxSnack={3}>
+        {user ?
+          <>
+            <Row className='mb-1'>
+              <Col xs={7} md={7} lg={7}>
+                <h4 className='text-uppercase'>{user.username}'s account</h4>
+              </Col>
 
-            <Col xs={5} md={5} lg={5}
+              <Col xs={5} md={5} lg={5}
 
-            >
-              <h4 className='align-middle m-0'>Balance:
-                {showEditBalanceBox ?
+              >
+                <h4 className='align-middle m-0'>Balance:
+                  {showEditBalanceBox ?
 
-                  setBalanceForm :
-                  balanceArea
-                }
-              </h4>
+                    setBalanceForm :
+                    balanceArea
+                  }
+                </h4>
 
-            </Col>
-          </Row>
+              </Col>
+            </Row>
 
-          <Row className='bg-blue1 p-3 '>
-            <Col xs={12} md={12} lg={12}>
-              <h4 className='text-center'>My Expenses</h4>
-            </Col>
-          </Row>
-        </>
-        :
-        <h5>Log in now to start tracking your finances!</h5>
-      }
+            <Row className='bg-blue1 p-3 '>
+              <Col xs={12} md={12} lg={12}>
+                <h4 className='text-center'>My Expenses</h4>
+              </Col>
+            </Row>
+
+            <Row className='mt-4'>
+              <h3>All transactions</h3>
+              <hr className=' m-0' />
+
+              <TransactionCard />
+
+
+            </Row>
+          </>
+          :
+          <h5>Log in now to start tracking your finances!</h5>
+        }
+      </SnackbarProvider>
+
+
     </Container>
   )
 }
