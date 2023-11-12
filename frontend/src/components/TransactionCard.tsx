@@ -4,10 +4,11 @@ import Badge from 'react-bootstrap/Badge';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 
 const TransactionCard = () => {
+    // Copy to clipboard part
     const copiedTransactionId = useRef("")
     const { enqueueSnackbar } = useSnackbar();
 
@@ -15,6 +16,17 @@ const TransactionCard = () => {
         navigator.clipboard.writeText(copiedTransactionId.current)
         enqueueSnackbar('Copied: '+copiedTransactionId.current, { variant: 'success' })
     }
+
+    // Transactions useState
+    const [transactions, setTransactions] = useState<Transacti
+
+    useEffect(() => {
+      const getAllTransactions = async () => {
+
+      }
+      
+    }, [])
+    
 
     return (
         <>

@@ -17,11 +17,13 @@ const accountSchema = new mongoose.Schema({
     },
 
     expenseCategories:[{
-        type: String
+        name: String,
+        image: String,
     }],
 
     incomeCategories:[{
-        type: String
+        name: String,
+        image: String,
     }],
 
 })
