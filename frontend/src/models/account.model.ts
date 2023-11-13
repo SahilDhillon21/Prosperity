@@ -1,14 +1,15 @@
-export default interface Account{
+
+export default interface Account {
     _id: string,
     user: string,
     accountId: string,
     balance: number,
-    expenseCategories : {
+    expenseCategories: {
         name: string,
-        image: string,
+        url: string,
     }
-    incomeCategories : {
+    incomeCategories: {
         name: string,
-        image: string,
+        url: string,
     }
 }

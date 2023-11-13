@@ -36,56 +36,51 @@ const TransactionCard = () => {
 
     }, [])
 
-
     return (
         <>
             <Col xs={12} md={12} lg={12} className='p-3 my-auto align-items-center bg-dark text-light '>
-                <Row className='mt-3'>
 
-                    {transactions.map((T) => (
-                        <h5>
-                            {T.accountId} <br />
-                            {T.amount} <br />
-                            {T.category} <br />
-                            {T.transactionId} <br />
-                            {T.type} <br />
-                        </h5>
-                    ))}
+                {transactions.map((T) => (
+                    <>
+                        <Row className='mt-3'>
 
-                    <Col sm={1} md={1} lg={1} className='my-auto align-items-center text-center'>
-                        <RestaurantIcon style={{ fontSize: '55px', color: 'red' }} />
-                    </Col>
 
-                    <Col sm={3} md={3} lg={3} className='my-auto align-items-center'>
-                        <h5 className='align-items-center'>Food and groceries</h5>
-                        <p className='text-lightWhite m-0 p-0'>November 12, 2023, 8:36 AM</p>
-                    </Col>
+                            <Col sm={1} md={1} lg={1} className='my-auto align-items-center text-center'>
+                                <RestaurantIcon style={{ fontSize: '55px', color: 'red' }} />
+                            </Col>
 
-                    <Col sm={2} md={2} lg={2} className='my-auto align-items-center text-center'>
-                        <h5><Badge bg="danger text-white mt-1"> Deducted </Badge></h5>
-                    </Col>
+                            <Col sm={3} md={3} lg={3} className='my-auto align-items-center'>
+                                <h5 className='align-items-center'>Food and groceries</h5>
+                                <p className='text-lightWhite m-0 p-0'>November 12, 2023, 8:36 AM</p>
+                            </Col>
 
-                    <Col sm={2} md={2} lg={2} className='my-auto align-items-center text-center'>
-                        <h5 className='m-0 text-danger'><RemoveIcon fontSize='small' /> ₹560<ArrowDropDownIcon fontSize='large' /></h5>
-                    </Col>
+                            <Col sm={2} md={2} lg={2} className='my-auto align-items-center text-center'>
+                                <h5><Badge bg="danger text-white mt-1"> Deducted </Badge></h5>
+                            </Col>
 
-                    <Col sm={3} md={3} lg={3} className='my-auto align-items-center text-center'>
-                        <h5 className='m-0'>Id: 100283902318</h5>
-                    </Col>
+                            <Col sm={2} md={2} lg={2} className='my-auto align-items-center text-center'>
+                                <h5 className='m-0 text-danger'><RemoveIcon fontSize='small' /> ₹560<ArrowDropDownIcon fontSize='large' /></h5>
+                            </Col>
 
-                    <Col xs={1} md={1} lg={1} className='my-auto mx-0'
-                        onClick={
-                            () => {
-                                copiedTransactionId.current = "192381923"
-                                // copy the transaction.id from the object
-                                handleCopyTransactionId()
-                            }}
-                    >
-                        <ContentCopyIcon sx={{ cursor: 'pointer' }} />
-                    </Col>
+                            <Col sm={3} md={3} lg={3} className='my-auto align-items-center text-center'>
+                                <h5 className='m-0'>Id: 100283902318</h5>
+                            </Col>
 
-                </Row>
-                <hr />
+                            <Col xs={1} md={1} lg={1} className='my-auto mx-0'
+                                onClick={
+                                    () => {
+                                        copiedTransactionId.current = "192381923"
+                                        // copy the transaction.id from the object
+                                        handleCopyTransactionId()
+                                    }}
+                            >
+                                <ContentCopyIcon sx={{ cursor: 'pointer' }} />
+                            </Col>
+
+                        </Row>
+                        <hr />
+                    </>
+                ))}
 
 
             </Col>

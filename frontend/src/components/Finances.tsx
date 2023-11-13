@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Row, Spinner } from 'react-bootstrap'
 import User from '../models/user.model'
 import * as FinanceNetwork from '../network/finance.network'
@@ -8,6 +8,9 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useForm } from 'react-hook-form';
 import TransactionCard from './TransactionCard';
 import { SnackbarProvider } from 'notistack';
+import { baseExpenseCategories } from '../constants';
+
+import Account from '../models/account.model';
 
 interface FinanceProps {
   user: User | null
@@ -17,6 +20,17 @@ function Finances({ user }: FinanceProps) {
 
   const [balance, setBalance] = useState(0)
   const [showEditBalanceBox, setShowEditBalanceBox] = useState(false)
+
+  const [account, setAccount] = useState<Account>();
+
+  useEffect(() => {
+    const getAccount = async () => {
+      const acc = await FinanceNetwork.getCurrentAccount()
+      setAccount(acc)
+    }
+
+    getAccount()
+  }, [])
 
   document.body.style.backgroundColor = "#00337C"
 
@@ -58,6 +72,22 @@ function Finances({ user }: FinanceProps) {
     }
   }
 
+  // Expense categories
+
+  const [eCategories, setECategories] = useState(baseExpenseCategories)
+
+  useEffect(() => {
+    const addCategories = () => {
+      const expcategories = account?.expenseCategories
+      if (expcategories) {
+        setECategories([...eCategories, expcategories])
+      }
+    }
+
+    addCategories()
+
+  }, [])
+
   const form = useForm()
   const { register, handleSubmit, formState: { isSubmitting } } = form
 
@@ -96,6 +126,11 @@ function Finances({ user }: FinanceProps) {
 
   return (
     <Container className='mt-5 px-5 finance'>
+      {eCategories && eCategories.map((c) => (
+        <h6>
+          {c.name}
+        </h6>
+      ))}
       <SnackbarProvider maxSnack={3}>
         {user ?
           <>

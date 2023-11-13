@@ -52,6 +52,37 @@ export const setBalance: RequestHandler = async (req, res) => {
     }
 }
 
+export const getCurrentAccount: RequestHandler = async (req, res) => {
+    const userId = req.session.userId
+
+    try {
+        if (!userId) {
+            console.log("user not authenticated");
+            res.sendStatus(401)
+            return
+        }
+
+        const user = await User.findById(userId)
+
+        if (!user) {
+            console.log("user doesn't exist");
+            return
+        }
+
+        const acc = await Account.find({ accountId: user.accountId })
+
+        if(!acc){
+            console.log("account for this user not found");
+            return
+        }
+
+        res.status(200).json(acc)
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const getAllTransactions: RequestHandler = async (req, res) => {
     try {
         const userId = req.session.userId
@@ -67,7 +98,7 @@ export const getAllTransactions: RequestHandler = async (req, res) => {
             console.log("user doesn't exist");
             return
         }
-        
+
         const accountId = user.accountId
 
         if (!accountId) {
@@ -76,7 +107,7 @@ export const getAllTransactions: RequestHandler = async (req, res) => {
         }
 
         const allTransactions = await Transaction.find({ accountId: accountId })
-        
+
         res.status(200).json(allTransactions)
     } catch (error) {
         console.log(error);

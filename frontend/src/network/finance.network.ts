@@ -18,6 +18,15 @@ export const setBalance = async (accountId: string, amount: number) => {
     }
 }
 
+export const getCurrentAccount = async () => {
+    try {
+        const response = await axios.get('/finances/getCurrentAccount')
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const getAllTransactions = async () => {
     try {
         const response = await axios.get('/finances/getAllTransactions')
