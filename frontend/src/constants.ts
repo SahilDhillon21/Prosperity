@@ -2,57 +2,57 @@
 export const baseExpenseCategories = [
     {
         name: "Food and groceries",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Medical and healthcare",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Transportation",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Entertainment",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Utilities/Bills",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Household",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Debt",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Insurance",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Education",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Savings",
-        url: "b"
+        image: "b"
     },
 
     {
         name: "Gifts and donations",
-        url: "b"
+        image: "b"
     },
 
 ]

@@ -6,10 +6,10 @@ export default interface Account {
     balance: number,
     expenseCategories: {
         name: string,
-        url: string,
+        image: string,
     }
     incomeCategories: {
         name: string,
-        url: string,
+        image: string,
     }
 }

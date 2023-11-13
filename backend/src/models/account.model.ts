@@ -16,14 +16,34 @@ const accountSchema = new mongoose.Schema({
         default: 0
     },
 
-    expenseCategories:[{
+    expenseCategories: [{
         name: String,
-        image: String,
+        image: {
+            public_id: {
+                type: String,
+                require: true,
+            },
+
+            url: {
+                type: String,
+                require: true,
+            }
+        }
     }],
 
-    incomeCategories:[{
+    incomeCategories: [{
         name: String,
-        image: String,
+        image: {
+            public_id: {
+                type: String,
+                require: true,
+            },
+
+            url: {
+                type: String,
+                require: true,
+            }
+        }
     }],
 
 })

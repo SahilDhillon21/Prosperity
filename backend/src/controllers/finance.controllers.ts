@@ -3,6 +3,7 @@ import Account from "../models/account.model";
 import Transaction from "../models/transaction.model";
 import generateUniqueTransactionId from "../util/generateUniqueTransactionId";
 import User from "../models/user.model";
+import cloudinary from "../util/cloudinary";
 
 export const getBalance: RequestHandler = async (req, res) => {
     const accountId = req.params.accountId
@@ -71,7 +72,7 @@ export const getCurrentAccount: RequestHandler = async (req, res) => {
 
         const acc = await Account.find({ accountId: user.accountId })
 
-        if(!acc){
+        if (!acc) {
             console.log("account for this user not found");
             return
         }
@@ -111,5 +112,31 @@ export const getAllTransactions: RequestHandler = async (req, res) => {
         res.status(200).json(allTransactions)
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const addIncomeExpenseCategory: RequestHandler = async (req, res, next) => {
+    const { name, image, accountId } = req.body
+
+    try {
+        const result = await cloudinary.uploader.upload(image, {
+            folder: 'transaction_category_images',
+        })
+
+        await Account.updateOne({ accountId: accountId }, {
+            $push: {
+                expenseCategories: {
+                    name: name,
+                    image: {
+                        public_id: result.public_id,
+                        url: result.secure_url
+                    }
+                }
+            }
+        })
+
+    } catch (error) {
+        console.log(error);
+        next(error)
     }
 }

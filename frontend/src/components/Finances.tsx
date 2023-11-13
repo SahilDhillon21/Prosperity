@@ -9,8 +9,9 @@ import { useForm } from 'react-hook-form';
 import TransactionCard from './TransactionCard';
 import { SnackbarProvider } from 'notistack';
 import { baseExpenseCategories } from '../constants';
-
+import { Routes, Route, NavLink, Outlet } from 'react-router-dom'
 import Account from '../models/account.model';
+import AddTransactionCategory from './AddTransactionCategory';
 
 interface FinanceProps {
   user: User | null
@@ -131,6 +132,7 @@ function Finances({ user }: FinanceProps) {
           {c.name}
         </h6>
       ))}
+
       <SnackbarProvider maxSnack={3}>
         {user ?
           <>
@@ -159,12 +161,42 @@ function Finances({ user }: FinanceProps) {
               </Col>
             </Row>
 
+            <Row>
+              {/* <Col xs={12} md={} */}
+            </Row>
+
+            <Outlet />
+
             <Row className='mt-4'>
-              <h3>All transactions</h3>
+              <Col xs={12} md={7} lg={7}>
+                <h3>All transactions</h3>
+              </Col>
+              <Col xs={6} md={3} lg={3} className='m-0 text-end'>
+
+                <Button variant='light' className='rounded-0'>
+
+                  <NavLink to='addTransaction'>
+                    Add expense/income
+                  </NavLink>
+
+                </Button>
+
+              </Col>
+
+              <Col xs={6} md={2} lg={2}>
+
+                <Button className='rounded-0 text-light' variant=''>
+
+                  <NavLink to='addTransactionCategory'>
+                    + New category
+                  </NavLink>
+
+                </Button>
+
+              </Col>
+
               <hr className=' m-0' />
-
               <TransactionCard />
-
 
             </Row>
           </>
@@ -172,7 +204,6 @@ function Finances({ user }: FinanceProps) {
           <h5>Log in now to start tracking your finances!</h5>
         }
       </SnackbarProvider>
-
 
     </Container>
   )

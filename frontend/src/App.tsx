@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, NavLink } from 'react-router-dom'
+import { Routes, Route, NavLink, Outlet  } from 'react-router-dom'
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import { AddNoteDialog } from './components/AddNoteDialog';
 import { NotesDisplay } from './components/NotesDisplay';
@@ -18,6 +18,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import { Habits } from './components/Habits';
 import Finances from './components/Finances';
 import Productivity from './components/Productivity';
+import AddTransactionCategory from './components/AddTransactionCategory';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -226,7 +227,11 @@ function App() {
 
         <Route path='habits' element={<Habits />} />
 
-        <Route path='finances' element={<Finances user={loggedInUser} />} />
+        <Route path='finances' element={<Finances user={loggedInUser} />}>
+
+          <Route path='addTransactionCategory' element={<AddTransactionCategory />} />
+
+        </Route>
 
         <Route path='productivity' element={<Productivity />} />
 
