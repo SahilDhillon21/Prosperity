@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Col, Container, Row, Spinner } from 'react-bootstrap'
-import User from '../models/user.model'
-import * as FinanceNetwork from '../network/finance.network'
-import SaveAsIcon from '@mui/icons-material/SaveAs';
-import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useForm } from 'react-hook-form';
-import TransactionCard from './TransactionCard';
+import DoneIcon from '@mui/icons-material/Done';
+import SaveAsIcon from '@mui/icons-material/SaveAs';
 import { SnackbarProvider } from 'notistack';
+import { useEffect, useState } from 'react';
+import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { baseExpenseCategories } from '../constants';
-import { Routes, Route, NavLink, Outlet } from 'react-router-dom'
 import Account from '../models/account.model';
-import AddTransactionCategory from './AddTransactionCategory';
+import User from '../models/user.model';
+import * as FinanceNetwork from '../network/finance.network';
+import TransactionCard from './TransactionCard';
 
 interface FinanceProps {
   user: User | null
@@ -23,6 +22,8 @@ function Finances({ user }: FinanceProps) {
   const [showEditBalanceBox, setShowEditBalanceBox] = useState(false)
 
   const [account, setAccount] = useState<Account>();
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const getAccount = async () => {
@@ -70,6 +71,7 @@ function Finances({ user }: FinanceProps) {
       setBalance(amt)
       setShowEditBalanceBox(false)
       // logic to add this transaction to the transaction list live
+      
     }
   }
 

@@ -1,9 +1,8 @@
 import { RequestHandler } from "express";
 import Account from "../models/account.model";
 import Transaction from "../models/transaction.model";
-import generateUniqueTransactionId from "../util/generateUniqueTransactionId";
 import User from "../models/user.model";
-import cloudinary from "../util/cloudinary";
+import generateUniqueTransactionId from "../util/generateUniqueTransactionId";
 
 export const getBalance: RequestHandler = async (req, res) => {
     const accountId = req.params.accountId
@@ -116,25 +115,47 @@ export const getAllTransactions: RequestHandler = async (req, res) => {
 }
 
 export const addIncomeExpenseCategory: RequestHandler = async (req, res, next) => {
-    const { name, image, accountId } = req.body
+    const { name, category, imgURL } = req.body
 
     try {
-        const result = await cloudinary.uploader.upload(image, {
-            folder: 'transaction_category_images',
-        })
+        const userId = req.session.userId
 
-        await Account.updateOne({ accountId: accountId }, {
-            $push: {
-                expenseCategories: {
-                    name: name,
-                    image: {
-                        public_id: result.public_id,
-                        url: result.secure_url
+        if (!userId) {
+            res.sendStatus(401)
+            return
+        }
+
+        const user = await User.findById(userId)
+
+        if (!user) {
+            console.log("user doesn't exist");
+            return
+        }
+
+        const accountId = user.accountId
+
+        if (category === 'Expense') {
+            await Account.updateOne({ accountId: accountId }, {
+                $push: {
+                    expenseCategories: {
+                        name: name,
+                        image: imgURL,
                     }
                 }
-            }
-        })
+            })
+        } else {
+            await Account.updateOne({ accountId: accountId }, {
+                $push: {
+                    incomeCategories: {
+                        name: name,
+                        image: imgURL,
+                    }
+                }
+            })
+        }
 
+        res.sendStatus(200)
+        
     } catch (error) {
         console.log(error);
         next(error)

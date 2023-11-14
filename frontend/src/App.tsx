@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, NavLink, Outlet  } from 'react-router-dom'
+import { Routes, Route, NavLink, Outlet } from 'react-router-dom'
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import { AddNoteDialog } from './components/AddNoteDialog';
 import { NotesDisplay } from './components/NotesDisplay';
@@ -19,6 +19,7 @@ import { Habits } from './components/Habits';
 import Finances from './components/Finances';
 import Productivity from './components/Productivity';
 import AddTransactionCategory from './components/AddTransactionCategory';
+import { SnackbarProvider } from 'notistack';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -170,72 +171,76 @@ function App() {
 
   return (
     <div>
-      <MainNavbar
-        loggedInUser={loggedInUser}
-        onLoginClicked={() => setShowLoginModal(true)}
-        onSignupClicked={() => setShowSignupModal(true)}
-        onLogoutClicked={() => handleUserLogout()}
-      />
+      <SnackbarProvider maxSnack={3}>
 
-      {showLoginModal &&
-        <LoginDialog
-          onDismiss={() => setShowLoginModal(false)}
-          onUserLogin={(user) => {
-            setLoggedInUser(user)
-            setShowLoginModal(false)
-          }}
+        <MainNavbar
+          loggedInUser={loggedInUser}
+          onLoginClicked={() => setShowLoginModal(true)}
+          onSignupClicked={() => setShowSignupModal(true)}
+          onLogoutClicked={() => handleUserLogout()}
         />
-      }
 
-      {showSignUpModal &&
-        <SignupDialog
-          onDismiss={() => setShowSignupModal(false)}
-          onUserSignup={(newUser) => setLoggedInUser(newUser)}
-        />
-      }
+        {showLoginModal &&
+          <LoginDialog
+            onDismiss={() => setShowLoginModal(false)}
+            onUserLogin={(user) => {
+              setLoggedInUser(user)
+              setShowLoginModal(false)
+            }}
+          />
+        }
 
-      <Container className='mt-3'>
-        <Row >
-          <Col className='text-center'>
-            <ButtonGroup variant="contained" color='success'>
+        {showSignUpModal &&
+          <SignupDialog
+            onDismiss={() => setShowSignupModal(false)}
+            onUserSignup={(newUser) => setLoggedInUser(newUser)}
+          />
+        }
 
-              <Button onClick={() => setBgcolor("white")}><NavLink to='/'>Home</NavLink></Button>
+        <Container className='mt-3'>
+          <Row >
+            <Col className='text-center'>
+              <ButtonGroup variant="contained" color='success'>
 
-              <Button onClick={() => setBgcolor("white")}><NavLink to='/habits'>Habits</NavLink></Button>
+                <Button onClick={() => setBgcolor("white")}><NavLink to='/'>Home</NavLink></Button>
 
-              <Button onClick={() => setBgcolor("white")}><NavLink to='/productivity'>Productivity</NavLink></Button>
+                <Button onClick={() => setBgcolor("white")}><NavLink to='/habits'>Habits</NavLink></Button>
 
-              <Button onClick={() => setBgcolor("white")}><NavLink to='/journal'>Journal</NavLink></Button>
+                <Button onClick={() => setBgcolor("white")}><NavLink to='/productivity'>Productivity</NavLink></Button>
 
-              <Button onClick={() => {
-                setBgcolor("#00337C")
-                setButtonGroupBg("white")
-              }
-              }>
-                <NavLink to='/finances'>Finances</NavLink>
-              </Button>
+                <Button onClick={() => setBgcolor("white")}><NavLink to='/journal'>Journal</NavLink></Button>
 
-            </ButtonGroup>
-          </Col>
-        </Row>
-      </Container>
+                <Button onClick={() => {
+                  setBgcolor("#00337C")
+                  setButtonGroupBg("white")
+                }
+                }>
+                  <NavLink to='/finances'>Finances</NavLink>
+                </Button>
+
+              </ButtonGroup>
+            </Col>
+          </Row>
+        </Container>
 
 
-      <Routes>
+        <Routes>
 
-        <Route path='/' element={home} />
+          <Route path='/' element={home} />
 
-        <Route path='habits' element={<Habits />} />
+          <Route path='habits' element={<Habits />} />
 
-        <Route path='finances' element={<Finances user={loggedInUser} />}>
+          <Route path='finances' element={<Finances user={loggedInUser} />}>
 
-          <Route path='addTransactionCategory' element={<AddTransactionCategory />} />
+            <Route path='addTransactionCategory' element={<AddTransactionCategory />} />
 
-        </Route>
+          </Route>
 
-        <Route path='productivity' element={<Productivity />} />
+          <Route path='productivity' element={<Productivity />} />
 
-      </Routes>
+        </Routes>
+
+      </SnackbarProvider>
 
     </div>
   );

@@ -35,3 +35,17 @@ export const getAllTransactions = async () => {
         console.log(error)
     }
 }
+
+interface AddCategoryProps {
+    name: string,
+    category: string,
+    imgURL: string,
+}
+
+export const addCategory = async (data: AddCategoryProps) => {
+    try {
+        await axios.post('/finances/addCategory', data)
+    } catch (error) {
+        console.log(error)
+    }
+}
