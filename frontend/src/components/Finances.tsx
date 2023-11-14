@@ -21,7 +21,7 @@ function Finances({ user }: FinanceProps) {
   const [balance, setBalance] = useState(0)
   const [showEditBalanceBox, setShowEditBalanceBox] = useState(false)
 
-  const [account, setAccount] = useState<Account>();
+  const [account, setAccount] = useState<Account | null>(null);
 
   useEffect(() => {
     const getAccount = async () => {
@@ -69,25 +69,36 @@ function Finances({ user }: FinanceProps) {
       setBalance(amt)
       setShowEditBalanceBox(false)
       // logic to add this transaction to the transaction list live
-      
+
     }
   }
 
   // Expense categories
 
-  const [eCategories, setECategories] = useState(baseExpenseCategories)
+  const [eCategories, setECategories] = useState<Account["expenseCategories"]>([])
 
   useEffect(() => {
     const addCategories = () => {
       const expcategories = account?.expenseCategories
-      if (expcategories) {
-        setECategories([...eCategories, expcategories])
+
+      var finalECategories: Account["expenseCategories"] = []
+
+      for (let i = 0; i < baseExpenseCategories.length; i++) {
+        finalECategories.push(baseExpenseCategories[i])
       }
+
+      if (expcategories) {
+        for (let i = 0; i < expcategories.length; i++) {
+          finalECategories.push(expcategories[i])
+        }
+      }
+
+      setECategories(finalECategories)
     }
+      addCategories()
 
-    addCategories()
 
-  }, [])
+  }, [account])
 
   const form = useForm()
   const { register, handleSubmit, formState: { isSubmitting } } = form
@@ -130,7 +141,7 @@ function Finances({ user }: FinanceProps) {
       {eCategories && eCategories.map((c) => (
         <h6>
           {c.name}
-          <img src={c.image} width="64" height="64"  alt={c.name.substring(0,10) + "..."} />
+          <img src={c.image} width="64" height="64" alt={c.name.substring(0, 10) + "..."} />
         </h6>
       ))}
 

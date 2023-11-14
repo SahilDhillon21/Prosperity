@@ -59,7 +59,7 @@ const AddTransactionCategory = () => {
 
             const preText = category === 'Income' ? "New source of income " : "New expense category "
 
-            enqueueSnackbar(preText + name + " was added successfully", { variant: 'info' })
+            enqueueSnackbar(preText + name + " was added ", { variant: 'info' })
 
             navigate('/finances', { replace: true })
         } catch (error) {
@@ -114,7 +114,7 @@ const AddTransactionCategory = () => {
                         </Row>
 
                         <Row>
-                            <Col xs={12} md={12} lg={12}>
+                            <Col xs={12} md={12} lg={12} className='text-center'>
                                 {loading ?
                                     <ThreeDots
                                         height="80"
@@ -128,7 +128,7 @@ const AddTransactionCategory = () => {
                                         visible={true}
                                     />
                                     :
-                                    <Button type='submit'>Add</Button>
+                                    <Button type='submit' className='w-100' variant='contained' color='success'>Add</Button>
                                 }
                             </Col>
                         </Row>

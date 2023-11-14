@@ -69,7 +69,7 @@ export const getCurrentAccount: RequestHandler = async (req, res) => {
             return
         }
 
-        const acc = await Account.find({ accountId: user.accountId })
+        const acc = await Account.findOne({ accountId: user.accountId })
 
         if (!acc) {
             console.log("account for this user not found");
@@ -134,6 +134,8 @@ export const addIncomeExpenseCategory: RequestHandler = async (req, res, next) =
 
         const accountId = user.accountId
 
+        console.log("image urL: "+imgURL)
+
         if (category === 'Expense') {
             await Account.updateOne({ accountId: accountId }, {
                 $push: {
@@ -153,9 +155,11 @@ export const addIncomeExpenseCategory: RequestHandler = async (req, res, next) =
                 }
             })
         }
+        console.log("img url: "+imgURL);
+
 
         res.sendStatus(200)
-        
+
     } catch (error) {
         console.log(error);
         next(error)

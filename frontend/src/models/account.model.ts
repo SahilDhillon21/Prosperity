@@ -7,9 +7,10 @@ export default interface Account {
     expenseCategories: {
         name: string,
         image: string,
-    }
+    }[],
+
     incomeCategories: {
         name: string,
         image: string,
-    }
+    }[],
 }

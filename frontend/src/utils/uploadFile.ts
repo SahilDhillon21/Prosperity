@@ -6,7 +6,7 @@ export const uploadFile = async (file: File, uploadPreset: string) => {
     data.append('upload_preset', uploadPreset)
 
     try {
-        let cloudName = process.env.CLOUD_NAME
+        let cloudName = process.env.REACT_APP_CLOUD_NAME
         console.log("cloud name: " + cloudName);
 
         let resource_type = 'image'
