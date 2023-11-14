@@ -23,8 +23,6 @@ function Finances({ user }: FinanceProps) {
 
   const [account, setAccount] = useState<Account>();
 
-  const navigate = useNavigate()
-
   useEffect(() => {
     const getAccount = async () => {
       const acc = await FinanceNetwork.getCurrentAccount()
@@ -132,6 +130,7 @@ function Finances({ user }: FinanceProps) {
       {eCategories && eCategories.map((c) => (
         <h6>
           {c.name}
+          <img src={c.image} width="64" height="64"  alt={c.name.substring(0,10) + "..."} />
         </h6>
       ))}
 
