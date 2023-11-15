@@ -6,6 +6,8 @@ const transactionSchema = new mongoose.Schema({
         require: true
     },
 
+    firstAccounUsername: String,
+
     transactionId: {
         type: String,
         require: true
@@ -22,6 +24,8 @@ const transactionSchema = new mongoose.Schema({
     },
 
     secondAccount: String,
+    
+    secondAccountUsername: String,
 
     category: {
         type: String,

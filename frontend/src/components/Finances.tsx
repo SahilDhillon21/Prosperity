@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { baseExpenseCategories } from '../constants';
+import { baseExpenseCategories, baseIncomeCategories } from '../constants';
 import Account from '../models/account.model';
 import User from '../models/user.model';
 import * as FinanceNetwork from '../network/finance.network';
@@ -75,27 +75,44 @@ function Finances({ user }: FinanceProps) {
 
   // Expense categories
 
-  const [eCategories, setECategories] = useState<Account["expenseCategories"]>([])
+  const [eCategories, setECategories] = useState<Map<string, string>>(new Map())
+  const [iCategories, setICategories] = useState<Map<string, string>>(new Map())
 
   useEffect(() => {
     const addCategories = () => {
       const expcategories = account?.expenseCategories
+      const incomecategories = account?.incomeCategories
 
-      var finalECategories: Account["expenseCategories"] = []
+      let finalECategories: Map<string, string> = new Map()
 
-      for (let i = 0; i < baseExpenseCategories.length; i++) {
-        finalECategories.push(baseExpenseCategories[i])
-      }
+      baseExpenseCategories.forEach((value, key) => {
+        finalECategories.set(key, value)
+      })
 
       if (expcategories) {
         for (let i = 0; i < expcategories.length; i++) {
-          finalECategories.push(expcategories[i])
+          finalECategories.set(expcategories[i].name, expcategories[i].image)
         }
       }
 
       setECategories(finalECategories)
+
+      let finalICategories: Map<string, string> = new Map()
+
+      baseIncomeCategories.forEach((value, key) => {
+        finalICategories.set(key, value)
+      })
+
+      if (incomecategories) {
+        for (let i = 0; i < incomecategories.length; i++) {
+          finalICategories.set(incomecategories[i].name, incomecategories[i].image)
+        }
+      }
+
+      setICategories(finalICategories)
     }
-      addCategories()
+
+    addCategories()
 
 
   }, [account])
@@ -138,11 +155,19 @@ function Finances({ user }: FinanceProps) {
 
   return (
     <Container className='mt-5 px-5 finance'>
-      {eCategories && eCategories.map((c) => (
-        <h6>
-          {c.name}
-          <img src={c.image} width="64" height="64" alt={c.name.substring(0, 10) + "..."} />
-        </h6>
+
+      {Array.from(eCategories.entries()).map(([key, value]) => (
+        <div key={key}>
+          <h6>{key}</h6>
+          <img src={value} width="64" height="64" alt={value} />
+        </div>
+      ))}
+
+      {Array.from(iCategories.entries()).map(([key, value]) => (
+        <div key={key}>
+          <h6>{key}</h6>
+          <img src={value} width="64" height="64" alt={key} />
+        </div>
       ))}
 
       <SnackbarProvider maxSnack={3}>
@@ -208,7 +233,7 @@ function Finances({ user }: FinanceProps) {
               </Col>
 
               <hr className=' m-0' />
-              <TransactionCard />
+              <TransactionCard accountId={account?.accountId} eCategories={eCategories} iCategories={iCategories} />
 
             </Row>
           </>

@@ -27,6 +27,15 @@ export const getCurrentAccount = async () => {
     }
 }
 
+export const getUsernameFromAccountId = async (accountId: string) => {
+    try {
+        const response = await axios.get(`/finances/getUsernameFromAccountId/${accountId}`)
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const getAllTransactions = async () => {
     try {
         const response = await axios.get('/finances/getAllTransactions')

@@ -1,53 +1,33 @@
 
-export const baseExpenseCategories = [
-    {
-        name: "Food and groceries",
-        image: "https://img.icons8.com/arcade/64/grocery-bag.png"
-    },
+export const baseExpenseCategories = new Map([
+    ["Food and groceries", "https://img.icons8.com/arcade/64/grocery-bag.png"],
 
-    {
-        name: "Medical and healthcare",
-        image: "https://img.icons8.com/stickers/100/clinic.png"
-    },
+    ["Medical and healthcare", "https://img.icons8.com/stickers/100/clinic.png"],
 
-    {
-        name: "Transportation",
-        image: "https://img.icons8.com/stickers/100/transportation.png"
-    },
+    ["Transportation", "https://img.icons8.com/stickers/100/transportation.png"],
 
-    {
-        name: "Entertainment",
-        image: "https://img.icons8.com/stickers/100/retro-tv.png"
-    },
+    ["Entertainment", "https://img.icons8.com/stickers/100/retro-tv.png"],
 
-    {
-        name: "Household",
-        image: "https://img.icons8.com/fluency/96/appliances.png"
-    },
+    ["Household", "https://img.icons8.com/fluency/96/appliances.png"],
 
-    {
-        name: "Debt",
-        image: "https://img.icons8.com/external-xnimrodx-lineal-color-xnimrodx/64/external-debt-economy-xnimrodx-lineal-color-xnimrodx.png"
-    },
+    ["Debt", "https://img.icons8.com/external-xnimrodx-lineal-color-xnimrodx/64/external-debt-economy-xnimrodx-lineal-color-xnimrodx.png"],
 
-    {
-        name: "Insurance",
-        image: "https://img.icons8.com/external-flaticons-flat-flat-icons/64/external-insurance-rage-room-flaticons-flat-flat-icons.png"
-    },
+    ["Insurance", "https://img.icons8.com/external-flaticons-flat-flat-icons/64/external-insurance-rage-room-flaticons-flat-flat-icons.png"],
 
-    {
-        name: "Education",
-        image: "https://img.icons8.com/color/96/teaching.png"
-    },
+    ["Education", "https://img.icons8.com/color/96/teaching.png"],
 
-    {
-        name: "Savings",
-        image: "https://img.icons8.com/color/96/get-cash.png"
-    },  
+    ["Savings", "https://img.icons8.com/color/96/get-cash.png"],
 
-    {
-        name: "Gifts and donations",
-        image: "https://img.icons8.com/fluency/96/gift--v1.png"
-    },
+    ["Gifts and donations", "https://img.icons8.com/fluency/96/gift--v1.png"]
 
-]
+])
+
+export const baseIncomeCategories = new Map([
+    ["Salary", "https://img.icons8.com/3d-fluency/94/money-transfer.png"],
+
+    ["Rental income", "https://img.icons8.com/external-ddara-lineal-color-ddara/64/external-rental-real-estate-ddara-lineal-color-ddara.png"],
+])
+
+export const updateImage = "https://cdn4.iconfinder.com/data/icons/usa-dollar-4/512/xxx039-512.png"
+
+export const transferImage = "https://img.icons8.com/color/96/transaction.png"

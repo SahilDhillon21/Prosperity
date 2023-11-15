@@ -244,8 +244,6 @@ export const addIncomeExpenseCategory: RequestHandler = async (req, res, next) =
                 }
             })
         }
-        console.log("img url: " + imgURL);
-
 
         res.sendStatus(200)
 

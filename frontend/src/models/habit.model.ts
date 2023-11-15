@@ -7,5 +7,5 @@ export default interface Habit {
     time?: string,
     completedDays: dayWithReflection[],
     createdAt: string,
-    updatedAt: string
+    updatedAt: string,
 }
