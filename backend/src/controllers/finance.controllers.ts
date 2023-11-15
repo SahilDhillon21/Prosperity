@@ -106,11 +106,100 @@ export const getAllTransactions: RequestHandler = async (req, res) => {
             return
         }
 
-        const allTransactions = await Transaction.find({ accountId: accountId })
+        const allTransactions = await Transaction.find({
+            $or: [{ accountId: accountId }, { secondAccount: accountId }]
+        }).sort({ createdAt: -1 })
 
         res.status(200).json(allTransactions)
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const createTransaction: RequestHandler = async (req, res) => {
+    const { amount, type, secondAccount, category, note } = req.body
+
+    try {
+        const userId = req.session.userId
+
+        if (!userId) {
+            res.sendStatus(401)
+            return
+        }
+
+        const user = await User.findById(userId)
+
+        if (!user) {
+            console.log("user doesn't exist");
+            return
+        }
+
+        const accountId = user.accountId
+
+        if (!accountId) {
+            console.log("no account associated with this user");
+            return
+        }
+
+        const account = await Account.findById(accountId)
+
+        if (!account) {
+            console.log("no account associated with this account ID");
+            return
+        }
+
+        if (type === 'Debit') {
+            if (account.balance < amount) {
+                console.log("Not enough balance!");
+                return
+            }
+
+            account.balance = account.balance - amount
+            await account.save()
+
+        } else if (type === 'Credit') {
+
+            account.balance = account.balance + amount
+            await account.save()
+
+        } else {
+            // type == transfer
+            if (account.balance < amount) {
+                console.log("Not enough balance to transfer!");
+                return
+            }
+
+            account.balance = account.balance - amount
+            await account.save()
+
+            const receivingAccount = await Account.findById(secondAccount)
+
+
+            if (!receivingAccount) {
+                console.log("receiving account doesn't exist");
+                return
+            }
+
+            receivingAccount.balance = receivingAccount.balance + amount
+            await receivingAccount.save()
+
+        }
+
+        const newTransaction = await Transaction.create({
+            accountId: accountId,
+            type: type,
+            transactionId: generateUniqueTransactionId,
+            secondAccount: secondAccount,
+            amount: amount,
+            category: category,
+            note: note
+        })
+
+        res.status(200).json(newTransaction)
+        return
+
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -134,7 +223,7 @@ export const addIncomeExpenseCategory: RequestHandler = async (req, res, next) =
 
         const accountId = user.accountId
 
-        console.log("image urL: "+imgURL)
+        console.log("image urL: " + imgURL)
 
         if (category === 'Expense') {
             await Account.updateOne({ accountId: accountId }, {
@@ -155,7 +244,7 @@ export const addIncomeExpenseCategory: RequestHandler = async (req, res, next) =
                 }
             })
         }
-        console.log("img url: "+imgURL);
+        console.log("img url: " + imgURL);
 
 
         res.sendStatus(200)

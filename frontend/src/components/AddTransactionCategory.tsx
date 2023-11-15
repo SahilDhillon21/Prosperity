@@ -2,7 +2,7 @@ import { Button, Stack, TextField } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { FormEvent, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { CloseButton, Col, Row } from 'react-bootstrap';
 import * as FinanceNetwork from '../network/finance.network';
 import { uploadFile } from '../utils/uploadFile';
 import { ThreeDots } from 'react-bootstrap-icons';
@@ -71,7 +71,14 @@ const AddTransactionCategory = () => {
 
         <Row className='text-white p-3 justify-content-center'>
             <Col xs={8} md={8} lg={8} className='bg-blue3 p-3 m-1'>
-                <h4 className='text-center p-2'>Add new category</h4>
+                <Row>
+                    <Col className='offset-1' xs={10} md={10} lg={10} >
+                        <h4 className='text-center'>Add new category</h4>
+                    </Col>
+                    <Col xs={1} md={1} lg={1}>
+                        <CloseButton onClick={() => navigate('/finances', { replace: true })} />
+                    </Col>
+                </Row>
                 <form onSubmit={(e) => handleSubmit(e)}>
 
                     <Stack gap={3}>

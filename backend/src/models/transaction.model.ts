@@ -23,7 +23,12 @@ const transactionSchema = new mongoose.Schema({
 
     secondAccount: String,
 
-    category: String,
+    category: {
+        type: String,
+        require: true
+    },
+
+    note: String,
 
 }, { timestamps: true })
 
