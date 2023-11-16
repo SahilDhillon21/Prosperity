@@ -1,7 +1,7 @@
-import { uuid } from "uuidv4"
+import  uuid = require('uuid');
 
 const generateUniqueTransactionId = () => {
-    return uuid().toString()
+    return uuid.v4()
 }
 
-export default generateUniqueTransactionId()
+export default generateUniqueTransactionId

@@ -147,6 +147,8 @@ function Finances({ user }: FinanceProps) {
     </form>
 
 
+  const [fetchBalance, setFetchBalance] = useState(false)
+
   useEffect(() => {
     const getDetails = async () => {
       if (user) {
@@ -157,7 +159,7 @@ function Finances({ user }: FinanceProps) {
 
     getDetails()
 
-  }, [user])
+  }, [user, fetchBalance])
 
   return (
     <Container className='mt-5 px-5 finance'>
@@ -213,6 +215,7 @@ function Finances({ user }: FinanceProps) {
                   onTransactionCreated={() => {
                     enqueueSnackbar("Transaction added successfully!", { variant: 'success' })
                     setReRenderTransactionCard(!reRenderTransactionCard)
+                    setFetchBalance(!fetchBalance)
                   }}
                   balance={balance}
                   eCategories={eCategories}

@@ -1,16 +1,16 @@
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import AddIcon from '@mui/icons-material/Add';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RemoveIcon from '@mui/icons-material/Remove';
+import SystemSecurityUpdateGoodIcon from '@mui/icons-material/SystemSecurityUpdateGood';
 import { useSnackbar } from 'notistack';
 import { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
+import { Blocks } from 'react-loader-spinner';
+import { transferImage, updateImage } from '../constants';
 import Transaction from '../models/transaction.model';
 import * as FinanceNetwork from '../network/finance.network';
-import { updateImage, transferImage } from '../constants';
 import { formatDate } from '../utils/formateDate';
-import SystemSecurityUpdateGoodIcon from '@mui/icons-material/SystemSecurityUpdateGood';
-import { Blocks } from 'react-loader-spinner';
 
 interface TransactionCardProps {
     eCategories: Map<string, string>,
@@ -39,9 +39,12 @@ const TransactionCard = ({ eCategories, iCategories, accountId, render }: Transa
         const getAllTransactions = async () => {
             try {
                 setShowLoader(true)
-                const alltransactions = await FinanceNetwork.getAllTransactions()
-                setTransactions(alltransactions)
-                setShowLoader(false)
+                setTimeout(async () => {
+                    const alltransactions = await FinanceNetwork.getAllTransactions()
+                    setTransactions(alltransactions)
+                    setShowLoader(false)
+                }, 1000)
+
             } catch (error) {
                 console.log(error);
             }
@@ -107,11 +110,20 @@ const TransactionCard = ({ eCategories, iCategories, accountId, render }: Transa
                             }
                         }
 
-                        else if (T.type === "Debit") {
+                        else if (T.type === "Expense") {
                             img = eCategories.get(T.category)
                             badge = <Badge bg="danger text-white mt-1"> Debited </Badge>
+                            amountBadge = <h5 className='m-0 text-red'>
+                                <RemoveIcon fontSize='small' className='mb-1' /> ₹{T.amount}
+                            </h5>
                         }
-                        else img = iCategories.get(T.category)
+                        else {
+                            img = iCategories.get(T.category)
+                            badge = <Badge bg="success text-white mt-1"> Credited </Badge>
+                            amountBadge = <h5 className='m-0 text-success'>
+                                <AddIcon fontSize='small' className='mb-1' /> ₹{T.amount}
+                            </h5>
+                        }
 
                         return (
                             <>

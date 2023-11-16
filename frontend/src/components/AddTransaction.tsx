@@ -119,7 +119,7 @@ const AddTransaction = ({ eCategories, iCategories, balance, onTransactionCreate
                 navigate('/finances', {
                     replace: true
                 })
-            }, 5000)
+            }, 2000)
 
         } catch (error) {
             console.log(error)

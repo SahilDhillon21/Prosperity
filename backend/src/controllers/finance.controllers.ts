@@ -41,7 +41,7 @@ export const setBalance: RequestHandler = async (req, res) => {
             accountId: accountId,
             type: "Update",
             amount: amount,
-            transactionId: generateUniqueTransactionId
+            transactionId: generateUniqueTransactionId()
         })
 
         res.status(200).json(newTransaction)
@@ -188,7 +188,7 @@ export const createTransaction: RequestHandler = async (req, res) => {
         const newTransaction = await Transaction.create({
             accountId: accountId,
             type: type,
-            transactionId: generateUniqueTransactionId,
+            transactionId: generateUniqueTransactionId(),
             secondAccount: secondAccount,
             amount: amount,
             category: category,
