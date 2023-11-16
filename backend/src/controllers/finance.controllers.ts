@@ -141,14 +141,14 @@ export const createTransaction: RequestHandler = async (req, res) => {
             return
         }
 
-        const account = await Account.findById(accountId)
+        const account = await Account.findOne({ accountId: accountId })
 
         if (!account) {
             console.log("no account associated with this account ID");
             return
         }
 
-        if (type === 'Debit') {
+        if (type === 'Expense') {
             if (account.balance < amount) {
                 console.log("Not enough balance!");
                 return
@@ -157,7 +157,7 @@ export const createTransaction: RequestHandler = async (req, res) => {
             account.balance = account.balance - amount
             await account.save()
 
-        } else if (type === 'Credit') {
+        } else if (type === 'Income') {
 
             account.balance = account.balance + amount
             await account.save()

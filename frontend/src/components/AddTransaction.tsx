@@ -109,6 +109,7 @@ const AddTransaction = ({ eCategories, iCategories, balance, onTransactionCreate
             setLoading(true)
 
             setTimeout(async () => {
+
                 await FinanceController.createTransaction({ amount, type, category, defaultNoteValue })
 
                 setLoading(false)
@@ -118,7 +119,7 @@ const AddTransaction = ({ eCategories, iCategories, balance, onTransactionCreate
                 navigate('/finances', {
                     replace: true
                 })
-            }, 3000)
+            }, 5000)
 
         } catch (error) {
             console.log(error)

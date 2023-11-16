@@ -45,7 +45,12 @@ interface CreateTransactionProps {
 }
 
 export const createTransaction = async (data: CreateTransactionProps) => {
-    
+    try {
+        const response = await axios.post('/finances/createTransaction', data)
+        return response.data
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export const getAllTransactions = async () => {
