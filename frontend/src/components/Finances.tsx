@@ -1,18 +1,18 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
-import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { BrowserRouter, NavLink, Outlet, Route, Router, Routes, useNavigate } from 'react-router-dom';
+import { NavLink, Route, Routes } from 'react-router-dom';
 import { baseExpenseCategories, baseIncomeCategories } from '../constants';
 import Account from '../models/account.model';
 import User from '../models/user.model';
 import * as FinanceNetwork from '../network/finance.network';
-import TransactionCard from './TransactionCard';
 import AddTransaction from './AddTransaction';
 import AddTransactionCategory from './AddTransactionCategory';
+import TransactionCard from './TransactionCard';
 
 interface FinanceProps {
   user: User | null
@@ -162,15 +162,6 @@ function Finances({ user }: FinanceProps) {
   return (
     <Container className='mt-5 px-5 finance'>
 
-
-      <Routes>
-
-        <Route path='addTransactionCategory' element={<AddTransactionCategory />} />
-
-        <Route path='addTransaction' element={<AddTransaction eCategories={eCategories} iCategories={iCategories} />}></Route>
-
-      </Routes>
-
       {/* {Array.from(eCategories.entries()).map(([key, value]) => (
         <div key={key}>
           <h6>{key}</h6>
@@ -213,7 +204,22 @@ function Finances({ user }: FinanceProps) {
               </Col>
             </Row>
 
-            <Outlet />
+            <Routes>
+
+              <Route path='addTransactionCategory' element={<AddTransactionCategory />} />
+
+              <Route path='addTransaction'
+                element={<AddTransaction
+                  onTransactionCreated={() => {
+                    enqueueSnackbar("Transaction added successfully!", { variant: 'success' })
+                    setReRenderTransactionCard(!reRenderTransactionCard)
+                  }}
+                  balance={balance}
+                  eCategories={eCategories}
+                  iCategories={iCategories} />}>
+              </Route>
+
+            </Routes>
 
             <Row className='mt-4'>
               <Col xs={12} md={7} lg={7}>

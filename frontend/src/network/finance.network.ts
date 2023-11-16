@@ -36,6 +36,18 @@ export const getUsernameFromAccountId = async (accountId: string) => {
     }
 }
 
+interface CreateTransactionProps {
+    type: string,
+    amount: number,
+    secondAccount?: string,
+    category: string,
+    defaultNoteValue: string,
+}
+
+export const createTransaction = async (data: CreateTransactionProps) => {
+    
+}
+
 export const getAllTransactions = async () => {
     try {
         const response = await axios.get('/finances/getAllTransactions')
