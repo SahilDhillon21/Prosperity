@@ -10,14 +10,16 @@ import * as FinanceNetwork from '../network/finance.network';
 import { updateImage, transferImage } from '../constants';
 import { formatDate } from '../utils/formateDate';
 import SystemSecurityUpdateGoodIcon from '@mui/icons-material/SystemSecurityUpdateGood';
+import { Blocks } from 'react-loader-spinner';
 
 interface TransactionCardProps {
     eCategories: Map<string, string>,
     iCategories: Map<string, string>,
     accountId: string | undefined,
+    render: Boolean,
 }
 
-const TransactionCard = ({ eCategories, iCategories, accountId }: TransactionCardProps) => {
+const TransactionCard = ({ eCategories, iCategories, accountId, render }: TransactionCardProps) => {
     // Copy to clipboard part
     const copiedTransactionId = useRef("")
     const { enqueueSnackbar } = useSnackbar();
@@ -27,14 +29,19 @@ const TransactionCard = ({ eCategories, iCategories, accountId }: TransactionCar
         enqueueSnackbar('Copied: ' + copiedTransactionId.current, { variant: 'success' })
     }
 
+    // Blocks loader
+    const [showLoader, setShowLoader] = useState(false)
+
     // Transactions useState
     const [transactions, setTransactions] = useState<Transaction[]>([])
 
     useEffect(() => {
         const getAllTransactions = async () => {
             try {
+                setShowLoader(true)
                 const alltransactions = await FinanceNetwork.getAllTransactions()
                 setTransactions(alltransactions)
+                setShowLoader(false)
             } catch (error) {
                 console.log(error);
             }
@@ -42,100 +49,116 @@ const TransactionCard = ({ eCategories, iCategories, accountId }: TransactionCar
 
         getAllTransactions()
 
-    }, [])
+    }, [render])
 
     return (
         <>
             <Col xs={12} md={12} lg={12} className='p-3 my-auto align-items-center bg-dark text-light '>
 
-                {transactions.map((T) => {
+                {showLoader ?
+                    <Row className='justify-content-center'>
+                        <Col md={12} xs={12} lg={12} className='text-center'>
+                            <Blocks
+                                visible={true}
+                                height="80"
+                                width="80"
+                                ariaLabel="blocks-loading"
+                                wrapperStyle={{}}
+                                wrapperClass="blocks-wrapper"
+                            />
+                        </Col>
+                    </Row>
 
-                    var badge
-                    var img
-                    var amountBadge
-                    var category = T.category
+                    :
 
-                    // Adjust category badge in case of transfer
-                    // In case of transfer, category should show 'To <person name>'
-                    // If this was the sending account, we need to fetch account name for secondAccount,
-                    // and if it was receiving account, then we need to fetch firstAccount (accountId) username
+                    transactions.map((T) => {
+
+                        var badge
+                        var img
+                        var amountBadge
+                        var category = T.category
+
+                        // Adjust category badge in case of transfer
+                        // In case of transfer, category should show 'To <person name>'
+                        // If this was the sending account, we need to fetch account name for secondAccount,
+                        // and if it was receiving account, then we need to fetch firstAccount (accountId) username
 
 
-                    if (T.type === "Update") {
-                        img = updateImage
-                        badge = <Badge className='text-white mt-1'> Balance update </Badge>
-                        amountBadge =
-                            <h5 className='m-0 text-blue3'>
-                                <SystemSecurityUpdateGoodIcon fontSize='small' className='mb-1' /> ₹{T.amount}
-                        </h5>
+                        if (T.type === "Update") {
+                            img = updateImage
+                            badge = <Badge className='text-white mt-1'> Balance update </Badge>
+                            amountBadge =
+                                <h5 className='m-0 text-blue3'>
+                                    <SystemSecurityUpdateGoodIcon fontSize='small' className='mb-1' /> ₹{T.amount}
+                                </h5>
 
-                        category = "Balance set to ₹"+T.amount
-                    }
-
-                    else if (T.type === "Transfer") {
-                        img = transferImage
-                        badge = <Badge className='text-dark bg-light mt-1'> Transfer </Badge>
-                        if (T.accountId === accountId) {
-                            amountBadge = <Badge className='text-light bg-danger mt-1'> Sent ₹{T.amount}</Badge>
-                            category = T.secondAccountUsername
-                        } else {
-                            amountBadge = <Badge className='text-light bg-success mt-1'> Received ₹{T.amount}</Badge>
-                            category = T.firstAccounUsername
+                            category = "Balance set to ₹" + T.amount
                         }
-                    }
 
-                    else if (T.type === "Debit") {
-                        img = eCategories.get(T.category)
-                        badge = <Badge bg="danger text-white mt-1"> Debited </Badge>
-                    }
-                    else img = iCategories.get(T.category)
+                        else if (T.type === "Transfer") {
+                            img = transferImage
+                            badge = <Badge className='text-dark bg-light mt-1'> Transfer </Badge>
+                            if (T.accountId === accountId) {
+                                amountBadge = <Badge className='text-light bg-danger mt-1'> Sent ₹{T.amount}</Badge>
+                                category = T.secondAccountUsername
+                            } else {
+                                amountBadge = <Badge className='text-light bg-success mt-1'> Received ₹{T.amount}</Badge>
+                                category = T.firstAccounUsername
+                            }
+                        }
 
-                    return (
-                        <>
-                            <Row className='mt-3'>
+                        else if (T.type === "Debit") {
+                            img = eCategories.get(T.category)
+                            badge = <Badge bg="danger text-white mt-1"> Debited </Badge>
+                        }
+                        else img = iCategories.get(T.category)
 
-                                <p>
+                        return (
+                            <>
+                                <Row className='mt-3 min-vh-50' key={T.transactionId} >
+
+                                    {/* <p>
                                     {JSON.stringify(T)}
-                                </p> <hr />
+                                </p> <hr /> */}
 
 
-                                <Col sm={1} md={1} lg={1} className='my-auto align-items-center text-center'>
-                                    <img src={img} alt={T.category} height="64px" width="64px" />
-                                </Col>
+                                    <Col sm={1} md={1} lg={1} className='my-auto align-items-center text-center py-1'>
+                                        <img src={img} alt={T.category} height="64px" width="64px" />
+                                    </Col>
 
-                                <Col sm={3} md={3} lg={3} className='my-auto align-items-center'>
-                                    <h5 className='align-items-center'>{category}</h5>
-                                    <p className='text-lightWhite m-0 p-0'>{formatDate(T.createdAt)}</p>
-                                </Col>
+                                    <Col sm={3} md={3} lg={3} className='my-auto align-items-center py-1'>
+                                        <h5 className='align-items-center'>{category}</h5>
+                                        <p className='text-lightWhite m-0 p-0'>{formatDate(T.createdAt)}</p>
+                                    </Col>
 
-                                <Col sm={2} md={2} lg={2} className='my-auto align-items-center text-center'>
-                                    <h5>{badge}</h5>
-                                </Col>
+                                    <Col sm={2} md={2} lg={2} className='my-auto align-items-center text-center py-1'>
+                                        <h5>{badge}</h5>
+                                    </Col>
 
-                                <Col sm={2} md={2} lg={2} className='my-auto align-items-center text-center'>
-                                    {amountBadge}
-                                </Col>
+                                    <Col sm={2} md={2} lg={2} className='my-auto align-items-center text-center py-1'>
+                                        {amountBadge}
+                                    </Col>
 
-                                <Col sm={3} md={3} lg={3} className='my-auto align-items-center text-center'>
-                                    <h6 className='m-0'>Id: {T.transactionId.substring(0, 18) + "..."}</h6>
-                                </Col>
+                                    <Col sm={3} md={3} lg={3} className='my-auto align-items-center text-center py-1'>
+                                        <h6 className='m-0'>Id: {T.transactionId.substring(0, 18) + "..."}</h6>
+                                    </Col>
 
-                                <Col xs={1} md={1} lg={1} className='my-auto mx-0'
-                                    onClick={
-                                        () => {
-                                            copiedTransactionId.current = T.transactionId
-                                            // copy the transaction.id from the object
-                                            handleCopyTransactionId()
-                                        }}
-                                >
-                                    <ContentCopyIcon sx={{ cursor: 'pointer' }} />
-                                </Col>
+                                    <Col xs={1} md={1} lg={1} className='my-auto mx-0 py-1'
+                                        onClick={
+                                            () => {
+                                                copiedTransactionId.current = T.transactionId
+                                                // copy the transaction.id from the object
+                                                handleCopyTransactionId()
+                                            }}
+                                    >
+                                        <ContentCopyIcon sx={{ cursor: 'pointer' }} />
+                                    </Col>
 
-                            </Row>
-                            <hr />
-                        </>
-                    )
-                })}
+                                </Row>
+                                <hr />
+                            </>
+                        )
+                    })}
 
 
             </Col>

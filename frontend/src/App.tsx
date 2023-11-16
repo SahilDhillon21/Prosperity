@@ -20,6 +20,7 @@ import Finances from './components/Finances';
 import Productivity from './components/Productivity';
 import AddTransactionCategory from './components/AddTransactionCategory';
 import { SnackbarProvider } from 'notistack';
+import AddTransaction from './components/AddTransaction';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -92,6 +93,10 @@ function App() {
     getLoggedInUser()
 
   }, [])
+
+  useEffect(() => {
+    // async function 
+  })
 
   const home = (
     <>
@@ -230,9 +235,11 @@ function App() {
 
           <Route path='habits' element={<Habits />} />
 
-          <Route path='finances' element={<Finances user={loggedInUser} />}>
+          <Route path='finances/*' element={<Finances user={loggedInUser} />}>
 
-            <Route path='addTransactionCategory' element={<AddTransactionCategory />} />
+            {/* <Route path='addTransactionCategory' element={<AddTransactionCategory />} /> */}
+
+            {/* <Route path='addTransaction' element={<AddTransaction />} /> */}
 
           </Route>
 

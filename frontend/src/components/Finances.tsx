@@ -5,12 +5,14 @@ import { SnackbarProvider } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { BrowserRouter, NavLink, Outlet, Route, Router, Routes, useNavigate } from 'react-router-dom';
 import { baseExpenseCategories, baseIncomeCategories } from '../constants';
 import Account from '../models/account.model';
 import User from '../models/user.model';
 import * as FinanceNetwork from '../network/finance.network';
 import TransactionCard from './TransactionCard';
+import AddTransaction from './AddTransaction';
+import AddTransactionCategory from './AddTransactionCategory';
 
 interface FinanceProps {
   user: User | null
@@ -58,6 +60,10 @@ function Finances({ user }: FinanceProps) {
 
   // BALANCE FORM VARIABLE 
 
+
+  const [reRenderTransactionCard, setReRenderTransactionCard] = useState(false)
+  // Whenever this value changes, we want to re render the transaction card to include the latest transaction
+
   const handleSetBalance = async (data: any) => {
     const { amt } = data
     if (user) {
@@ -65,13 +71,13 @@ function Finances({ user }: FinanceProps) {
         alert("Amount can't be less than zero!")
         return
       }
-      const transaction = await FinanceNetwork.setBalance(user.accountId, amt)
+      await FinanceNetwork.setBalance(user.accountId, amt)
       setBalance(amt)
       setShowEditBalanceBox(false)
-      // logic to add this transaction to the transaction list live
-
+      setReRenderTransactionCard(!reRenderTransactionCard)
     }
   }
+
 
   // Expense categories
 
@@ -156,7 +162,16 @@ function Finances({ user }: FinanceProps) {
   return (
     <Container className='mt-5 px-5 finance'>
 
-      {Array.from(eCategories.entries()).map(([key, value]) => (
+
+      <Routes>
+
+        <Route path='addTransactionCategory' element={<AddTransactionCategory />} />
+
+        <Route path='addTransaction' element={<AddTransaction eCategories={eCategories} iCategories={iCategories} />}></Route>
+
+      </Routes>
+
+      {/* {Array.from(eCategories.entries()).map(([key, value]) => (
         <div key={key}>
           <h6>{key}</h6>
           <img src={value} width="64" height="64" alt={value} />
@@ -168,7 +183,7 @@ function Finances({ user }: FinanceProps) {
           <h6>{key}</h6>
           <img src={value} width="64" height="64" alt={key} />
         </div>
-      ))}
+      ))} */}
 
       <SnackbarProvider maxSnack={3}>
         {user ?
@@ -196,10 +211,6 @@ function Finances({ user }: FinanceProps) {
               <Col xs={12} md={12} lg={12}>
                 <h4 className='text-center'>My Expenses</h4>
               </Col>
-            </Row>
-
-            <Row>
-              {/* <Col xs={12} md={} */}
             </Row>
 
             <Outlet />
@@ -233,7 +244,7 @@ function Finances({ user }: FinanceProps) {
               </Col>
 
               <hr className=' m-0' />
-              <TransactionCard accountId={account?.accountId} eCategories={eCategories} iCategories={iCategories} />
+              <TransactionCard accountId={account?.accountId} render={reRenderTransactionCard} eCategories={eCategories} iCategories={iCategories} />
 
             </Row>
           </>
@@ -241,6 +252,7 @@ function Finances({ user }: FinanceProps) {
           <h5>Log in now to start tracking your finances!</h5>
         }
       </SnackbarProvider>
+
 
     </Container>
   )
