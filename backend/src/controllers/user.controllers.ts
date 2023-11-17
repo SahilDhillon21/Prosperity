@@ -5,12 +5,12 @@ import bcrypt from "bcrypt";
 import generateUniqueAccountId from "../util/generateUniqueAccountId";
 import Account from "../models/account.model";
 
-export const getAuthenticatedUser: RequestHandler = async (req,res) =>{
+export const getAuthenticatedUser: RequestHandler = async (req, res) => {
     const authenticatedUserId = req.session.userId
 
     try {
 
-        if(!authenticatedUserId) {
+        if (!authenticatedUserId) {
             res.json(null)
             return;
         }
@@ -24,9 +24,9 @@ export const getAuthenticatedUser: RequestHandler = async (req,res) =>{
     }
 }
 
-export const logout: RequestHandler =  (req,res) => {
+export const logout: RequestHandler = (req, res) => {
     req.session.destroy(err => {
-        if(err){
+        if (err) {
             console.log(err)
         } else {
             res.sendStatus(200)
@@ -41,7 +41,7 @@ interface SignupBody {
     password?: string
 }
 
-export const handleUserSignup: RequestHandler<unknown, unknown, SignupBody, unknown> = async (req, res,next) => {
+export const handleUserSignup: RequestHandler<unknown, unknown, SignupBody, unknown> = async (req, res, next) => {
     const username = req.body.username
     const email = req.body.email
     const passwordRaw = req.body.password
@@ -88,9 +88,9 @@ export const handleUserSignup: RequestHandler<unknown, unknown, SignupBody, unkn
     }
 }
 
-interface LoginBody{
+interface LoginBody {
     username?: string,
-    password? : string
+    password?: string
 }
 
 export const handleUserLogin: RequestHandler<unknown, unknown, LoginBody, unknown> = async (req, res) => {
@@ -98,23 +98,50 @@ export const handleUserLogin: RequestHandler<unknown, unknown, LoginBody, unknow
     const password = req.body.password
 
     try {
-        if(!username || !password) throw createHttpError(400,"Parameters missing")
+        if (!username || !password) throw createHttpError(400, "Parameters missing")
 
-        const user = await UserModel.findOne({username: username}).select("+password").exec()
+        const user = await UserModel.findOne({ username: username }).select("+password").exec()
 
-        if(!user){
+        if (!user) {
             res.status(200).json({})
             return 401
         }
 
-        const passwordMatch = await bcrypt.compare(password,user.password)  
+        const passwordMatch = await bcrypt.compare(password, user.password)
 
-        if(!passwordMatch) throw createHttpError(401,"Invalid credentials")
+        if (!passwordMatch) throw createHttpError(401, "Invalid credentials")
 
         req.session.userId = user._id
         res.status(201).json(user)
 
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const getAllUsers: RequestHandler = async (req, res) => {
+    try {
+        const userId = req.session.userId
+
+        if (!userId) {
+            res.sendStatus(401)
+            return
+        }
+
+        const user = await UserModel.findById(userId)
+
+        if (!user) {
+            console.log("user doesn't exist");
+            return
+        }
+
+        const accountId = user.accountId
+
+        const allUsers = await UserModel.find({ accountId: { $not: { accountId: accountId } } })
+
+        res.status(200).json(allUsers)
+
+    } catch (error) {
+        console.log(error)
     }
 }
