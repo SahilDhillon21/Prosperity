@@ -2,7 +2,7 @@ import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { MenuItem, Paper, Select, SelectChangeEvent, TextField } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import { FormEvent, useEffect, useState } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, CloseButton, Col, Row } from 'react-bootstrap';
 import { RotatingSquare } from 'react-loader-spinner';
 import * as FinanceController from '../network/finance.network';
 import { useNavigate } from 'react-router-dom';
@@ -140,7 +140,17 @@ const AddTransaction = ({ eCategories, iCategories, balance, onTransactionCreate
 
                         <form onSubmit={(e) => handleCreateTransaction(e)} className='text-white'>
 
-                            <h3 className='py-2'>Add transaction</h3>
+                            <Row className='py-4'>
+                                <Col className='offset-2 text-center' md={8}>
+                                    <h3 >Add transaction</h3>
+                                </Col>
+                                <Col>
+                                    <CloseButton
+                                        className='bg-light'
+                                        onClick={() => navigate('/finances', { replace: true })}
+                                    />
+                                </Col>
+                            </Row>
 
                             <Row className='pb-4'>
                                 <Col md={8} xs={12} lg={8} >
