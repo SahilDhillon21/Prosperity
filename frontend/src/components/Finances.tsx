@@ -13,6 +13,7 @@ import * as FinanceNetwork from '../network/finance.network';
 import AddTransaction from './AddTransaction';
 import AddTransactionCategory from './AddTransactionCategory';
 import TransactionCard from './TransactionCard';
+import MoneyTransfer from './MoneyTransfer';
 
 interface FinanceProps {
   user: User | null
@@ -222,25 +223,33 @@ function Finances({ user }: FinanceProps) {
                   iCategories={iCategories} />}>
               </Route>
 
+              <Route path='transfer' element={< MoneyTransfer />} />
+
             </Routes>
 
             <Row className='mt-4'>
-              <Col xs={12} md={7} lg={7}>
+              <Col xs={12} md={5} lg={5}>
                 <h3>All transactions</h3>
               </Col>
-              <Col xs={6} md={3} lg={3} className='m-0 text-end'>
 
-                <Button variant='light' className='rounded-0'>
+              <Col xs={6} md={7} lg={7} className='m-0 text-end mb-2'>
+
+                <Button variant='light' className='rounded-0 mx-1'>
 
                   <NavLink to='addTransaction'>
-                    Add expense/income
+                    <img width="20" height="20" className='mb-1' src="https://img.icons8.com/color/96/left-handed.png" alt="left-handed" />
+                    &nbsp; Add expense/income
                   </NavLink>
 
                 </Button>
 
-              </Col>
+                <Button variant='light' className='rounded-0 mx-1'>
 
-              <Col xs={6} md={2} lg={2}>
+                  <NavLink to='transfer'>
+                    <img width="20" className='mb-1' height="20" src="https://img.icons8.com/material-outlined/24/initiate-money-transfer.png" alt="initiate-money-transfer" />
+                    &nbsp; Transfer money
+                  </NavLink>
+                </Button>
 
                 <Button className='rounded-0 text-light' variant=''>
 
@@ -251,6 +260,7 @@ function Finances({ user }: FinanceProps) {
                 </Button>
 
               </Col>
+
 
               <hr className=' m-0' />
               <TransactionCard accountId={account?.accountId} render={reRenderTransactionCard} eCategories={eCategories} iCategories={iCategories} />
