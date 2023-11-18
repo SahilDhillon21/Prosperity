@@ -8,20 +8,21 @@ import { FormEvent, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Autocomplete from '@mui/material/Autocomplete';
 import * as UserNetwork from '../network/user.network'
+import * as FinanceNetwork from '../network/finance.network'
 import User from '../models/user.model';
 
 interface MoneyTransferProps {
   balance: number,
-  onMoneyTransferred: () => void,
+  onMoneyTransferred: (reciever: string, amount: number) => void,
 }
 
-const MoneyTransfer = () => {
+const MoneyTransfer = ({ balance, onMoneyTransferred }: MoneyTransferProps) => {
 
   const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
 
-  const [userValue, setUserValue] = useState<User|null>(null)
+  const [userValue, setUserValue] = useState<User | null>(null)
 
   const [allUsers, setAllUsers] = useState<User[]>([])
 
@@ -32,6 +33,8 @@ const MoneyTransfer = () => {
   const handleAmountChange = (event: any) => {
     setAmount(event.target.value)
   }
+
+  const [defaultNoteValue, setDefaultNoteValue] = useState("")
 
   const transactionLoader =
 
@@ -49,6 +52,51 @@ const MoneyTransfer = () => {
 
   const handleTransferMoney = (e: FormEvent) => {
     e.preventDefault()
+    var hasError = false
+
+    if(!userValue) return
+
+    try {
+      if (amount <= 0) {
+        hasError = true
+        setAmountError(true)
+        setAmountErrorText("Amount must be greater than 0")
+        return
+      }
+
+      if (amount > balance) {
+        hasError = true
+        setAmountError(true)
+        setAmountErrorText("Not enough balance!")
+      }
+
+      if (hasError) return
+
+      setLoading(true)
+
+      setTimeout(async () => {
+
+        await FinanceNetwork.createTransaction({
+          amount,
+          type: "Transfer",
+          category: "Transfer",
+          defaultNoteValue,
+          secondAccount: userValue.accountId
+        })
+
+        setLoading(false)
+
+        onMoneyTransferred(userValue.username, amount);
+
+        navigate('/finances', {
+          replace: true
+        })
+      }, 2000)
+
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
   useEffect(() => {
@@ -90,7 +138,7 @@ const MoneyTransfer = () => {
               </Row>
 
               <Row className='pb-4'>
-                <Col md={5} xs={5} lg={5} className='offset-1'>
+                <Col md={4} xs={4} lg={4} className='offset-1'>
                   <h6>Amount</h6>
                   <TextField
                     type='number'
@@ -114,7 +162,7 @@ const MoneyTransfer = () => {
                   </TextField>
                 </Col>
 
-                <Col md={5} xs={5} lg={5} className='text-center'>
+                <Col md={6} xs={6} lg={6} className='text-center'>
                   <h6>To</h6>
                   <Autocomplete
                     id="country-select-demo"
@@ -128,16 +176,42 @@ const MoneyTransfer = () => {
 
                     getOptionLabel={(user) => user.username}
                     renderOption={(props, user) => (
-                      <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                        <img
-                          loading="lazy"
-                          width="20"
-                          // src={user.image}
-                          alt=""
-                        />
-                        {user.username} <hr />
-                        {user.accountId}
+                      <Box component='span' {...props}>
+                        <Row>
+                          <Col md={2} lg={2} xs={2} className='m-0 text-start align-middle'>
+                            <img
+                              height="45"
+                              // src={user.image}
+                              src='https://img.icons8.com/color/96/transaction.png'
+                              alt=""
+                              className='mt-1 ml-0 p-0' />
+                          </Col>
+
+                          <Col md={8} lg={8} xs={8} className='ms-2'>
+                            <h4 className='m-0'>{user.username}</h4>
+                            <span className='text-muted'><small>{user.accountId}</small></span>
+                          </Col>
+
+                        </Row>
                       </Box>
+                      // <Row className='m-0' style={{ overflowX: 'hidden' }} {...props}>
+                      //   <Col md={2} lg={2} xs={2} className='m-0'>
+                      //     <img
+                      //       loading="lazy"
+                      //       height="40"
+                      //       // src={user.image}
+                      //       src='https://img.icons8.com/color/96/transaction.png'
+                      //       alt=""
+                      //       className='m-0 p-0'
+                      //     />
+                      //   </Col>
+                      //   <Col md={8} lg={8} className='m-0'>
+                      //     <h4 className='m-0'>{user.username}</h4>
+                      //     <span className='text-muted'><small>{user.accountId}</small></span>
+
+                      //   </Col>
+
+                      // </Row>
                     )}
 
                     renderInput={(params) => (
@@ -163,6 +237,8 @@ const MoneyTransfer = () => {
                     className='w-75 '
                     sx={{ backgroundColor: 'white' }}
                     minRows={3}
+                    value={defaultNoteValue}
+                    onChange={(e) => setDefaultNoteValue(e.target.value)}
                   />
                 </Col>
               </Row>

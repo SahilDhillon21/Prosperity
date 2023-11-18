@@ -86,10 +86,9 @@ const TransactionCard = ({ eCategories, iCategories, accountId, render }: Transa
                         // If this was the sending account, we need to fetch account name for secondAccount,
                         // and if it was receiving account, then we need to fetch firstAccount (accountId) username
 
-
                         if (T.type === "Update") {
                             img = updateImage
-                            badge = <Badge className='text-white mt-1'> Balance update </Badge>
+                            badge = <Badge className='text-white mt-2'> Balance update </Badge>
                             amountBadge =
                                 <h5 className='m-0 text-blue3'>
                                     <SystemSecurityUpdateGoodIcon fontSize='small' className='mb-1' /> ₹{T.amount}
@@ -100,26 +99,26 @@ const TransactionCard = ({ eCategories, iCategories, accountId, render }: Transa
 
                         else if (T.type === "Transfer") {
                             img = transferImage
-                            badge = <Badge className='text-dark bg-light mt-1'> Transfer </Badge>
+                            badge = <Badge className='text-dark bg-light mt-2'> Transfer </Badge>
                             if (T.accountId === accountId) {
-                                amountBadge = <Badge className='text-light bg-danger mt-1'> Sent ₹{T.amount}</Badge>
-                                category = T.secondAccountUsername
+                                amountBadge = <h5 className='text-danger mt-1'> Sent ₹{T.amount}</h5>
+                                category = "To " + T.secondAccountUsername
                             } else {
-                                amountBadge = <Badge className='text-light bg-success mt-1'> Received ₹{T.amount}</Badge>
-                                category = T.firstAccounUsername
+                                amountBadge = <h5 className='text-success mt-1'> Received ₹{T.amount}</h5>
+                                category = "From "+T.firstAccounUsername
                             }
                         }
 
                         else if (T.type === "Expense") {
                             img = eCategories.get(T.category)
-                            badge = <Badge bg="danger text-white mt-1"> Debited </Badge>
+                            badge = <Badge bg="danger text-white mt-2"> Debited </Badge>
                             amountBadge = <h5 className='m-0 text-red'>
                                 <RemoveIcon fontSize='small' className='mb-1' /> ₹{T.amount}
                             </h5>
                         }
                         else {
                             img = iCategories.get(T.category)
-                            badge = <Badge bg="success text-white mt-1"> Credited </Badge>
+                            badge = <Badge bg="success text-white mt-2"> Credited </Badge>
                             amountBadge = <h5 className='m-0 text-success'>
                                 <AddIcon fontSize='small' className='mb-1' /> ₹{T.amount}
                             </h5>

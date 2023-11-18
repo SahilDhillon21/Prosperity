@@ -125,6 +125,20 @@ function Finances({ user }: FinanceProps) {
 
   }, [account])
 
+  const [fetchBalance, setFetchBalance] = useState(false)
+
+  useEffect(() => {
+    const getDetails = async () => {
+      if (user) {
+        const accountBalance = await FinanceNetwork.getBalance(user.accountId)
+        setBalance(accountBalance)
+      }
+    }
+
+    getDetails()
+
+  }, [user, fetchBalance])
+
   const form = useForm()
   const { register, handleSubmit, formState: { isSubmitting } } = form
 
@@ -147,21 +161,6 @@ function Finances({ user }: FinanceProps) {
       </span>
 
     </form>
-
-
-  const [fetchBalance, setFetchBalance] = useState(false)
-
-  useEffect(() => {
-    const getDetails = async () => {
-      if (user) {
-        const accountBalance = await FinanceNetwork.getBalance(user.accountId)
-        setBalance(accountBalance)
-      }
-    }
-
-    getDetails()
-
-  }, [user, fetchBalance])
 
   return (
     <Container className='mt-5 px-5 finance'>
@@ -224,7 +223,15 @@ function Finances({ user }: FinanceProps) {
                   iCategories={iCategories} />}>
               </Route>
 
-              <Route path='transfer' element={< MoneyTransfer />} />
+              <Route path='transfer'
+                element=
+                {< MoneyTransfer
+                  balance={balance}
+                  onMoneyTransferred={(reciever: string, amount: number) => {
+                    enqueueSnackbar("Tranferred ₹" + amount + " to " + reciever + " successfully", { variant: 'success' })
+                    setReRenderTransactionCard(!reRenderTransactionCard)
+                    setFetchBalance(!fetchBalance)
+                  }} />} />
 
             </Routes>
 

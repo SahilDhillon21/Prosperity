@@ -141,7 +141,7 @@ export const createTransaction: RequestHandler = async (req, res) => {
             return
         }
 
-        const account = await Account.findOne({ accountId: accountId })
+        const account = await Account.findOne({ accountId: accountId }).populate('user')
 
         if (!account) {
             console.log("no account associated with this account ID");
@@ -172,7 +172,9 @@ export const createTransaction: RequestHandler = async (req, res) => {
             account.balance = account.balance - amount
             await account.save()
 
-            const receivingAccount = await Account.findById(secondAccount)
+            console.log("sender's balance: "+account.balance);
+
+            const receivingAccount = await Account.findOne({ accountId: secondAccount })
 
 
             if (!receivingAccount) {
@@ -180,9 +182,27 @@ export const createTransaction: RequestHandler = async (req, res) => {
                 return
             }
 
-            receivingAccount.balance = receivingAccount.balance + amount
+            const receivingUser = await User.findById(receivingAccount.user)
+
+            receivingAccount.balance = Number(receivingAccount.balance) + Number(amount)
             await receivingAccount.save()
 
+            console.log("receiver's balance: "+receivingAccount.balance);
+            
+            const newTransaction = await Transaction.create({
+                accountId: accountId,
+                type: type,
+                transactionId: generateUniqueTransactionId(),
+                secondAccount: secondAccount,
+                secondAccountUsername: receivingUser?.username,
+                amount: amount,
+                firstAccounUsername: user.username,
+                category: category,
+                note: note
+            })
+
+            res.status(200).json(newTransaction)
+            return
         }
 
         const newTransaction = await Transaction.create({

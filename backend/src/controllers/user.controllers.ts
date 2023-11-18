@@ -142,7 +142,7 @@ export const getAllUsers: RequestHandler = async (req, res) => {
 
         const accountId = user.accountId
 
-        const allUsers = await UserModel.find({ accountId: { $not: { accountId: accountId } } })
+        const allUsers = await UserModel.find({ accountId: { $ne: accountId } })
 
         res.status(200).json(allUsers)
 

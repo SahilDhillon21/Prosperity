@@ -38,7 +38,7 @@ const AddTransaction = ({ eCategories, iCategories, balance, onTransactionCreate
         setAmount(event.target.value)
     }
 
-    const [defaultNoteValue, setDefaultNoteValue] = useState("erer")
+    const [defaultNoteValue, setDefaultNoteValue] = useState("")
 
     const [categoryDisplayList, setCategoryDisplayList] = useState(new Map())
 
