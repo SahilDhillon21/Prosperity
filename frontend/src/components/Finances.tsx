@@ -21,7 +21,7 @@ interface FinanceProps {
 
 function Finances({ user }: FinanceProps) {
 
-  const [balance, setBalance] = useState(0)
+  const [balance, setBalance] = useState(-1)
   const [showEditBalanceBox, setShowEditBalanceBox] = useState(false)
 
   const [account, setAccount] = useState<Account | null>(null);
@@ -30,6 +30,7 @@ function Finances({ user }: FinanceProps) {
     const getAccount = async () => {
       const acc = await FinanceNetwork.getCurrentAccount()
       setAccount(acc)
+      setBalance(acc.balance)
     }
 
     getAccount()
@@ -46,7 +47,7 @@ function Finances({ user }: FinanceProps) {
 
     >
 
-      ₹{balance === 0 ?
+      ₹{balance === -1 ?
 
         <Spinner animation="grow" className='mx-2 my-1' size="sm" variant="success" /> :
         balance?.toString()

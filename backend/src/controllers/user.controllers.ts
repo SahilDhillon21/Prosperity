@@ -65,18 +65,23 @@ export const handleUserSignup: RequestHandler<unknown, unknown, SignupBody, unkn
 
         const passwordHashed = await bcrypt.hash(passwordRaw!, 10);
 
-        const acccountId = generateUniqueAccountId(username)
+        const accountId = generateUniqueAccountId(username)
 
+        console.log(accountId);
+        
         const newUser = await UserModel.create({
             username: username,
             email: email,
             password: passwordHashed,
-            acccountId: acccountId
+            accountId: accountId,
         })
 
         await Account.create({
-            accountId: acccountId,
-            user: newUser._id
+            accountId: accountId,
+            user: newUser._id,
+            balance: -1,
+            expenseCategories: [],
+            incomeCategories: [],
         })
 
         req.session.userId = newUser._id

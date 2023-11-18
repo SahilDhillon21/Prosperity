@@ -198,7 +198,10 @@ function App() {
         {showSignUpModal &&
           <SignupDialog
             onDismiss={() => setShowSignupModal(false)}
-            onUserSignup={(newUser) => setLoggedInUser(newUser)}
+            onUserSignup={(newUser) => {
+              setLoggedInUser(newUser)
+              setShowSignupModal(false)
+            }}
           />
         }
 
