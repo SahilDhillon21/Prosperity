@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
+import { defaultUserImage } from "../constants";
 
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
     },
 
     email: {
@@ -15,7 +17,13 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        select: false
+        select: false,
+    },
+
+    image: {
+        type: String,
+        require: true,
+        default: defaultUserImage,
     },
 
     notes: [

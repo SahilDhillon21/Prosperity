@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import { Container, Nav, Navbar, Row } from "react-bootstrap"
+import { Container, Nav, Navbar } from "react-bootstrap"
 import User from "../models/user.model"
 import ButtonStyles from "../styles/button.module.css"
 
@@ -26,11 +26,11 @@ const MainNavbar = ({ loggedInUser, onLoginClicked, onSignupClicked, onLogoutCli
                         {loggedInUser ?
 
                             <>
-                                <Navbar.Text className = {`${ButtonStyles.whiteText} `}>
-                                    <h5>{loggedInUser.username}</h5>
+                                <Navbar.Text className={`${ButtonStyles.whiteText} `}>
+                                    <h5><a href={`/profile/${loggedInUser.username}`}>{loggedInUser.username}</a></h5>
                                 </Navbar.Text>
 
-                                <Button size="large" style={{color: "red"}} className={`mb-1 me-2 `} onClick={onLogoutClicked}>
+                                <Button size="large" style={{ color: "red" }} className={`mb-1 me-2 `} onClick={onLogoutClicked}>
                                     Logout
                                 </Button>
                             </>
@@ -38,11 +38,11 @@ const MainNavbar = ({ loggedInUser, onLoginClicked, onSignupClicked, onLogoutCli
                             :
 
                             <>
-                                <Button style={{color: "white"}} onClick={onSignupClicked}>
+                                <Button style={{ color: "white" }} onClick={onSignupClicked}>
                                     Sign up
                                 </Button>
 
-                                <Button style={{color: "white"}} onClick={onLoginClicked}>
+                                <Button style={{ color: "white" }} onClick={onLoginClicked}>
                                     Log in
                                 </Button>
                             </>

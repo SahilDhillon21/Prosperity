@@ -1,26 +1,25 @@
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import { SnackbarProvider } from 'notistack';
 import { useEffect, useState } from 'react';
-import { Routes, Route, NavLink, Outlet } from 'react-router-dom'
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
+import { NavLink, Route, Routes } from 'react-router-dom';
 import { AddNoteDialog } from './components/AddNoteDialog';
+import Finances from './components/Finances';
+import { Habits } from './components/Habits';
+import { LoginDialog } from './components/LoginDialog';
+import MainNavbar from './components/MainNavbar';
 import { NotesDisplay } from './components/NotesDisplay';
+import Productivity from './components/Productivity';
+import { SignupDialog } from './components/SignupDialog';
+import Todo from "./components/Todo";
+import UserProfile from './components/UserProfile';
 import './global.css';
 import NoteModel from './models/note.model';
+import User from './models/user.model';
 import * as NoteNetwork from './network/note.network';
 import * as UserNetwork from './network/user.network';
 import NoteModuleStyles from './styles/NotesPage.module.css';
-import { SignupDialog } from './components/SignupDialog';
-import User from './models/user.model';
-import MainNavbar from './components/MainNavbar';
-import { LoginDialog } from './components/LoginDialog';
-import Todo from "./components/Todo"
-import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import { Habits } from './components/Habits';
-import Finances from './components/Finances';
-import Productivity from './components/Productivity';
-import AddTransactionCategory from './components/AddTransactionCategory';
-import { SnackbarProvider } from 'notistack';
-import AddTransaction from './components/AddTransaction';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([])
@@ -247,6 +246,8 @@ function App() {
           </Route>
 
           <Route path='productivity' element={<Productivity />} />
+
+          <Route path='profile/:username' element={<UserProfile />} />
 
         </Routes>
 

@@ -12,83 +12,101 @@ code {
     monospace;
 }
 
-a{
+a {
   text-decoration: none;
   color: inherit;
 }
 
-a.active{
+a.active {
   text-decoration: none;
   font-weight: bold;
   color: inherit;
   text-shadow: 1.5px 1px #000000;
 }
 
-:root{
+:root {
   --blue1: #13005A;
   --blue2: #00337C;
   --blue3: #1C82AD;
   --light-green: #03C988;
 }
 
-.bg-blue1{
+.bg-blue1 {
   background-color: var(--blue1);
 }
 
-.bg-blue2{
+.bg-blue2 {
   background-color: var(--blue2);
 }
 
-.bg-blue3{
+.bg-blue3 {
   background-color: #1c81ad;
 }
 
-.bg-fadeWhite{
+.bg-fadeWhite {
   background-color: rgba(245, 245, 245, 0.755);
 }
 
-.text-blue1{
+.text-blue1 {
   color: #13005A
 }
 
-.text-blue2{
+.text-blue2 {
   color: #00337C
 }
 
-.text-blue3{
+.text-blue3 {
   color: #1C82AD
 }
 
-.text-green{
+.text-green {
   color: #03C988;
 }
 
-.text-red{
+.text-red {
   color: #c90303;
 }
 
-.text-lightWhite{
+.text-lightWhite {
   color: rgba(245, 245, 245, 0.685);
 }
 
-.shadow{
+.shadow {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
-.finance{
+.finance {
   color: white;
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
 
-.finance span{
+.finance span {
   color: #03C988;
 }
 
 /* Edit balance buttons */
-.hover-green :hover{
+.hover-green :hover {
   background-color: #03C988;
 }
 
-.hover-red :hover{
+.hover-red :hover {
   background-color: #c90303;
+}
+
+/* User profile */
+.profile-head {
+  transform: translateY(5rem)
+}
+
+.cover {
+  background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
+  background-size: cover;
+  background-repeat: no-repeat
+}
+
+.body-profile {
+  background: #654ea3;
+  background: linear-gradient(to right, #e96443, #904e95);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
