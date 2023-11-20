@@ -11,6 +11,8 @@ router.post('/login', UserController.handleUserLogin)
 
 router.post('/logout', UserController.logout)
 
+router.get('/:username', UserController.getProfileDetails)
+
 router.get('/getAllUsers', UserController.getAllUsers)
 
 export default router

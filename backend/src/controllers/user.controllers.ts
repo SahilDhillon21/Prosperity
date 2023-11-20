@@ -68,7 +68,7 @@ export const handleUserSignup: RequestHandler<unknown, unknown, SignupBody, unkn
         const accountId = generateUniqueAccountId(username)
 
         console.log(accountId);
-        
+
         const newUser = await UserModel.create({
             username: username,
             email: email,
@@ -121,6 +121,23 @@ export const handleUserLogin: RequestHandler<unknown, unknown, LoginBody, unknow
 
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const getProfileDetails: RequestHandler = async (req, res) => {
+    const username = req.params.username
+    try {
+        const user = await UserModel.findOne({ username: username })
+
+        if(!user){
+            console.log("user doesn't exist");
+            return
+        }
+
+        res.status(200).json(user)
+
+    } catch (error) {
+        console.log(error)
     }
 }
 

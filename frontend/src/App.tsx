@@ -247,7 +247,7 @@ function App() {
 
           <Route path='productivity' element={<Productivity />} />
 
-          <Route path='profile/:username' element={<UserProfile />} />
+          <Route path='users/:username' element={<UserProfile loggedInUser={loggedInUser} />} />
 
         </Routes>
 
