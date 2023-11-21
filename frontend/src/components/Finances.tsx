@@ -14,6 +14,7 @@ import AddTransaction from './AddTransaction';
 import AddTransactionCategory from './AddTransactionCategory';
 import TransactionCard from './TransactionCard';
 import MoneyTransfer from './MoneyTransfer';
+import Groups from './Groups';
 
 interface FinanceProps {
   user: User | null
@@ -234,6 +235,12 @@ function Finances({ user }: FinanceProps) {
                   }} />} />
 
             </Routes>
+
+            <Row className='mt-4'>
+              <Col xs={12} md={5} lg={5}>
+                <Groups />
+              </Col>
+            </Row>
 
             <Row className='mt-4'>
               <Col xs={12} md={5} lg={5}>

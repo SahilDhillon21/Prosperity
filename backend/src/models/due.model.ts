@@ -6,11 +6,13 @@ const dueSchema = new mongoose.Schema({
         ref: 'User',
         require: true,
     },
+    
     borrower: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
         require: true,
     },
+
     amount: {
         type: Number,
         require: true,
@@ -21,7 +23,7 @@ const dueSchema = new mongoose.Schema({
         ref: 'Group'
     },
 
-    date: Date,
+    dueDate: Date,
 
 }, { timestamps: true })
 
