@@ -27,7 +27,7 @@ const MainNavbar = ({ loggedInUser, onLoginClicked, onSignupClicked, onLogoutCli
 
                             <>
                                 <Navbar.Text className={`${ButtonStyles.whiteText} `}>
-                                    <h5><a href={`/profile/${loggedInUser.username}`}>{loggedInUser.username}</a></h5>
+                                    <h5><a href={`/users/${loggedInUser.username}`}>{loggedInUser.username}</a></h5>
                                 </Navbar.Text>
 
                                 <Button size="large" style={{ color: "red" }} className={`mb-1 me-2 `} onClick={onLogoutClicked}>
