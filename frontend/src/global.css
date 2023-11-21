@@ -24,6 +24,10 @@ a.active {
   text-shadow: 1.5px 1px #000000;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 :root {
   --blue1: #13005A;
   --blue2: #00337C;

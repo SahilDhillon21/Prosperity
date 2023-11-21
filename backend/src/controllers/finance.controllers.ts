@@ -3,6 +3,7 @@ import Account from "../models/account.model";
 import Transaction from "../models/transaction.model";
 import User from "../models/user.model";
 import generateUniqueTransactionId from "../util/generateUniqueTransactionId";
+import Group from "../models/financeGroup";
 
 export const getBalance: RequestHandler = async (req, res) => {
     const accountId = req.params.accountId
@@ -172,7 +173,7 @@ export const createTransaction: RequestHandler = async (req, res) => {
             account.balance = account.balance - amount
             await account.save()
 
-            console.log("sender's balance: "+account.balance);
+            console.log("sender's balance: " + account.balance);
 
             const receivingAccount = await Account.findOne({ accountId: secondAccount })
 
@@ -187,8 +188,8 @@ export const createTransaction: RequestHandler = async (req, res) => {
             receivingAccount.balance = Number(receivingAccount.balance) + Number(amount)
             await receivingAccount.save()
 
-            console.log("receiver's balance: "+receivingAccount.balance);
-            
+            console.log("receiver's balance: " + receivingAccount.balance);
+
             const newTransaction = await Transaction.create({
                 accountId: accountId,
                 type: type,
@@ -270,5 +271,37 @@ export const addIncomeExpenseCategory: RequestHandler = async (req, res, next) =
     } catch (error) {
         console.log(error);
         next(error)
+    }
+}
+
+export const getUserGroups: RequestHandler = async (req, res) => {
+    const userId = req.session.userId
+    try {
+        if (!userId) {
+            console.log("not logged in");
+            return
+        }
+
+        const user = await User.findById(userId)
+
+        if (!user) {
+            console.log("user doesn't exist");
+            return
+        }
+
+        const groups = await Group.find({ members: userId })
+            .populate({
+                path: 'dues',
+                model: 'Due',
+            })
+            .populate({
+                path: 'members',
+                model: 'User'
+            })
+
+        res.status(200).json(groups)
+
+    } catch (error) {
+        console.log(error)
     }
 }

@@ -75,3 +75,12 @@ export const addCategory = async (data: AddCategoryProps) => {
         console.log(error)
     }
 }
+
+export const getUserGroups = async () => {
+    try {
+        const response = await axios.get('/finances/getUserGroups')
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
