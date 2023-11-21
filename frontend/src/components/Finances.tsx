@@ -5,7 +5,7 @@ import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { baseExpenseCategories, baseIncomeCategories } from '../constants';
 import Account from '../models/account.model';
 import User from '../models/user.model';
@@ -15,12 +15,33 @@ import AddTransactionCategory from './AddTransactionCategory';
 import TransactionCard from './TransactionCard';
 import MoneyTransfer from './MoneyTransfer';
 import Groups from './Groups';
+import { CiSquarePlus } from 'react-icons/ci';
+import CreateGroup from './CreateGroup';
+import * as UserNetwork from '../network/user.network'
+
 
 interface FinanceProps {
   user: User | null
 }
 
 function Finances({ user }: FinanceProps) {
+  const navigate = useNavigate()
+
+  const [allUsers, setAllUsers] = useState<User[]>([])
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const users = await UserNetwork.getAllUsers()
+        alert("users: "+JSON.stringify(users))
+        setAllUsers(users)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getAllUsers()
+  }, [])
 
   const [balance, setBalance] = useState(-1)
   const [showEditBalanceBox, setShowEditBalanceBox] = useState(false)
@@ -228,16 +249,24 @@ function Finances({ user }: FinanceProps) {
                 element=
                 {< MoneyTransfer
                   balance={balance}
+                  allUsers={allUsers}
                   onMoneyTransferred={(reciever: string, amount: number) => {
                     enqueueSnackbar("Tranferred ₹" + amount + " to " + reciever + " successfully", { variant: 'success' })
                     setReRenderTransactionCard(!reRenderTransactionCard)
                     setFetchBalance(!fetchBalance)
                   }} />} />
 
+              <Route path='createGroup'
+                element={<CreateGroup allUsers={allUsers} />}
+              />
+
             </Routes>
 
             <Row className='mt-4'>
               <Col xs={12} md={5} lg={5}>
+                <h3>Groups
+                  <CiSquarePlus className="my-auto cursor-pointer" onClick={() => { navigate('createGroup', { replace: true }) }} />
+                </h3>
                 <Groups />
               </Col>
             </Row>

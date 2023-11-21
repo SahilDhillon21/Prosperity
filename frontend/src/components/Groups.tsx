@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react"
-import Group from "../models/group.model"
-import * as FinanceNetwork from '../network/finance.network'
-import { CiSquarePlus } from "react-icons/ci";
+import { useEffect, useState } from "react";
+import Group from "../models/group.model";
+import * as FinanceNetwork from '../network/finance.network';
 
 const Groups = () => {
 
@@ -18,15 +17,17 @@ const Groups = () => {
 
   return (
     <>
-      <h3>Groups
-        <CiSquarePlus className="my-auto cursor-pointer" onClick={() => { }} />
-      </h3>
 
       {groups.length === 0 ? <h5>You are currently not part of any groups.</h5>
         :
-        
-        <h3>My groups</h3>
-        
+
+        <>
+          <h3>My groups</h3>
+          <h6>
+            {groups.map((group) => (JSON.stringify(group)))}
+          </h6>
+        </>
+
       }
     </>
   )

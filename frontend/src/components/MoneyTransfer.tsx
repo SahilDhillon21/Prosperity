@@ -1,30 +1,28 @@
-import { Button, CloseButton, Col, Row } from 'react-bootstrap';
-import { Paper, Select, SelectChangeEvent, TextField } from '@mui/material';
-import InputAdornment from '@mui/material/InputAdornment';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import { useNavigate } from 'react-router-dom';
-import { FallingLines } from 'react-loader-spinner';
-import { FormEvent, useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
+import { Paper, TextField } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
-import * as UserNetwork from '../network/user.network'
-import * as FinanceNetwork from '../network/finance.network'
+import Box from '@mui/material/Box';
+import InputAdornment from '@mui/material/InputAdornment';
+import { FormEvent, useState } from 'react';
+import { Button, CloseButton, Col, Row } from 'react-bootstrap';
+import { FallingLines } from 'react-loader-spinner';
+import { useNavigate } from 'react-router-dom';
 import User from '../models/user.model';
+import * as FinanceNetwork from '../network/finance.network';
 
 interface MoneyTransferProps {
   balance: number,
   onMoneyTransferred: (reciever: string, amount: number) => void,
+  allUsers: User[],
 }
 
-const MoneyTransfer = ({ balance, onMoneyTransferred }: MoneyTransferProps) => {
+const MoneyTransfer = ({ balance, onMoneyTransferred, allUsers }: MoneyTransferProps) => {
 
   const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
 
   const [userValue, setUserValue] = useState<User | null>(null)
-
-  const [allUsers, setAllUsers] = useState<User[]>([])
 
   const [amount, setAmount] = useState<number>(1)
   const [amountError, setAmountError] = useState(false)
@@ -99,21 +97,9 @@ const MoneyTransfer = ({ balance, onMoneyTransferred }: MoneyTransferProps) => {
 
   }
 
-  useEffect(() => {
-    const getAllUsers = async () => {
-      try {
-        const users = await UserNetwork.getAllUsers()
-        setAllUsers(users)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    getAllUsers()
-  }, [])
-
   return (
     <Row className='justify-content-center'>
+      {JSON.stringify(allUsers)}
 
       <Col xs={6} md={6} lg={6} className='text-center p-3 m-1'>
         <Paper elevation={1} className='bg-dark text-light text-center'>
