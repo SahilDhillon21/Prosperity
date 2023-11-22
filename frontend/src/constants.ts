@@ -31,3 +31,5 @@ export const baseIncomeCategories = new Map([
 export const updateImage = "https://cdn4.iconfinder.com/data/icons/usa-dollar-4/512/xxx039-512.png"
 
 export const transferImage = "https://img.icons8.com/color/96/transaction.png"
+
+export const groupImage = "https://img.icons8.com/stickers/100/group-foreground-selected.png"

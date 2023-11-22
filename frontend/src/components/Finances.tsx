@@ -87,6 +87,8 @@ function Finances({ user }: FinanceProps) {
   const [reRenderTransactionCard, setReRenderTransactionCard] = useState(false)
   // Whenever this value changes, we want to re render the transaction card to include the latest transaction
 
+  const [reRenderGroups, setReRenderGroups] = useState(false)
+
   const handleSetBalance = async (data: any) => {
     const { amt } = data
     if (user) {
@@ -256,7 +258,15 @@ function Finances({ user }: FinanceProps) {
                   }} />} />
 
               <Route path='createGroup'
-                element={<CreateGroup allUsers={allUsers} />}
+                element={
+                <CreateGroup allUsers={allUsers} 
+                onGroupCreated={(msg) => {
+                  enqueueSnackbar(msg, {variant: "info"})
+                  setReRenderGroups(!reRenderGroups)
+                }}
+                render={reRenderGroups}
+                
+                />}
               />
 
             </Routes>

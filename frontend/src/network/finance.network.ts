@@ -1,4 +1,5 @@
 import axios from "axios"
+import User from "../models/user.model";
 
 export const getBalance = async (accountId: string) => {
     try {
@@ -79,6 +80,21 @@ export const addCategory = async (data: AddCategoryProps) => {
 export const getUserGroups = async () => {
     try {
         const response = await axios.get('/finances/getUserGroups')
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+interface CreateGroupProps {
+    groupName: string,
+    selectedUsers: User[],
+    defaultDescriptionValue: string,
+}
+
+export const createGroup = async (data: CreateGroupProps) => {
+    try {
+        const response = await axios.post('/finances/createGroup', data)
         return response.data
     } catch (error) {
         console.log(error)
