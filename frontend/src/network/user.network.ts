@@ -13,7 +13,7 @@ export const getAllUsers = async () => {
 
 export const getProfileDetails = async (username: string) => {
     try {
-        const response = await axios.get(`/users/${username}`)
+        const response = await axios.get(`/users/profiles/${username}`)
         return response.data
     } catch (error) {
         console.log(error)

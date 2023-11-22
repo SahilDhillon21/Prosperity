@@ -99,8 +99,6 @@ const MoneyTransfer = ({ balance, onMoneyTransferred, allUsers }: MoneyTransferP
 
   return (
     <Row className='justify-content-center'>
-      {JSON.stringify(allUsers)}
-
       <Col xs={6} md={6} lg={6} className='text-center p-3 m-1'>
         <Paper elevation={1} className='bg-dark text-light text-center'>
 
@@ -168,7 +166,7 @@ const MoneyTransfer = ({ balance, onMoneyTransferred, allUsers }: MoneyTransferP
                             <img
                               height="45"
                               // src={user.image}
-                              src='https://img.icons8.com/color/96/transaction.png'
+                              src={user.image}
                               alt=""
                               className='mt-1 ml-0 p-0' />
                           </Col>

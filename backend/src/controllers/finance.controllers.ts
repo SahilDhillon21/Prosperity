@@ -66,7 +66,7 @@ export const getCurrentAccount: RequestHandler = async (req, res) => {
         const user = await User.findById(userId)
 
         if (!user) {
-            console.log("user doesn't exist");
+            console.log("get current account: user doesn't exist");
             return
         }
 
@@ -96,7 +96,7 @@ export const getAllTransactions: RequestHandler = async (req, res) => {
         const user = await User.findById(userId)
 
         if (!user) {
-            console.log("user doesn't exist");
+            console.log("get all transactions: user doesn't exist");
             return
         }
 
@@ -131,7 +131,7 @@ export const createTransaction: RequestHandler = async (req, res) => {
         const user = await User.findById(userId)
 
         if (!user) {
-            console.log("user doesn't exist");
+            console.log("create transaction: user doesn't exist");
             return
         }
 
@@ -238,7 +238,7 @@ export const addIncomeExpenseCategory: RequestHandler = async (req, res, next) =
         const user = await User.findById(userId)
 
         if (!user) {
-            console.log("user doesn't exist");
+            console.log("income expense: user doesn't exist");
             return
         }
 
@@ -285,7 +285,7 @@ export const getUserGroups: RequestHandler = async (req, res) => {
         const user = await User.findById(userId)
 
         if (!user) {
-            console.log("user doesn't exist");
+            console.log("user groups: user doesn't exist");
             return
         }
 

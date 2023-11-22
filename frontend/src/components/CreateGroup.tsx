@@ -1,8 +1,9 @@
 import { Button, CloseButton, Col, Row } from "react-bootstrap";
 import User from "../models/user.model"
-import { Autocomplete, Box, Paper, Stack, TextField, Chip } from "@mui/material";
+import { Autocomplete, Box, Paper, Stack, TextField, Chip, ListItem, ListItemAvatar, ListItemText, Avatar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { FormEvent, useState } from 'react';
+import Typography from '@mui/material/Typography';
 
 
 interface CreateGroupProps {
@@ -41,22 +42,38 @@ const CreateGroup = ({ allUsers }: CreateGroupProps) => {
                         </Row>
 
                         <Stack gap={1} spacing={1} className="mb-4 text-center">
-                            <h6 className="m-0 p-0">Name</h6>
+                            <h6 className="m-0 p-0">Group name</h6>
                             <TextField
-                                sx={{ width: "50%", alignSelf: 'center', background: "white", border: "none" }}
+                                sx={{ width: "80%", alignSelf: 'center', background: "white", border: "none" }}
                             />
 
-                            <h6 className="m-0 p-0">Add members</h6>
+                            <h6 className="">Add members</h6>
                             <Autocomplete
                                 multiple
                                 id="tags-standard"
                                 options={allUsers}
+                                size="medium"
+                                sx={{backgroundColor: 'white', width: '80%', alignSelf: 'center'}}
                                 getOptionLabel={(option) => option.username}
+                                renderOption={(props, option) => (
+                                    <ListItem {...props}>
+                                        <ListItemAvatar>
+                                            <Avatar alt={option.username} src={option.image} />
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={
+                                                <Typography variant="subtitle1" fontWeight="bold">
+                                                    {option.username}
+                                                </Typography>
+                                            }
+                                            secondary={`${option.accountId}`}
+                                        />
+                                    </ListItem>
+                                )}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        variant="standard"
-                                        placeholder="Favorites"
+                                        placeholder="Username"
                                     />
                                 )}
                             />
@@ -68,8 +85,7 @@ const CreateGroup = ({ allUsers }: CreateGroupProps) => {
                                 <h6>Group description</h6>
                                 <TextField
                                     multiline
-                                    className='w-75'
-                                    sx={{ backgroundColor: 'white' }}
+                                    sx={{ backgroundColor: 'white', width: "80%" }}
                                     minRows={3}
                                     value={defaultDescriptionValue}
                                     onChange={(e) => setDefaultDescriptionValue(e.target.value)}

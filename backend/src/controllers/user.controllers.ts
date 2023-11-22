@@ -130,7 +130,7 @@ export const getProfileDetails: RequestHandler = async (req, res) => {
         const user = await UserModel.findOne({ username: username })
 
         if(!user){
-            console.log("user doesn't exist");
+            console.log("profile details: user doesn't exist");
             return
         }
 
@@ -153,7 +153,7 @@ export const getAllUsers: RequestHandler = async (req, res) => {
         const user = await UserModel.findById(userId)
 
         if (!user) {
-            console.log("user doesn't exist");
+            console.log("get all users: user doesn't exist");
             return
         }
 

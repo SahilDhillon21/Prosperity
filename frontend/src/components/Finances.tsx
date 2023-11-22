@@ -33,7 +33,6 @@ function Finances({ user }: FinanceProps) {
     const getAllUsers = async () => {
       try {
         const users = await UserNetwork.getAllUsers()
-        alert("users: "+JSON.stringify(users))
         setAllUsers(users)
       } catch (error) {
         console.log(error)
