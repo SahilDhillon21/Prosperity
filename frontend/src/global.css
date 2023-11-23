@@ -30,6 +30,11 @@ a.active {
   cursor: pointer;
 }
 
+.hover-enlarge :hover{
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
 :root {
   --blue1: #13005A;
   --blue2: #00337C;
@@ -88,6 +93,10 @@ a.active {
 
 .finance span {
   color: #03C988;
+}
+
+.blue-gradient-bg {
+  background: linear-gradient(290.7deg, rgb(36, 253, 40) 2.3%, rgb(0, 124, 249) 100.2%);
 }
 
 /* Edit balance buttons */

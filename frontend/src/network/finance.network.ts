@@ -89,7 +89,7 @@ export const getUserGroups = async () => {
 interface CreateGroupProps {
     groupName: string,
     selectedUsers: User[],
-    defaultDescriptionValue: string,
+    descriptionValue: string,
 }
 
 export const createGroup = async (data: CreateGroupProps) => {

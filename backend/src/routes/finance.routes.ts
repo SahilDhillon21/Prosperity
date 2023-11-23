@@ -17,4 +17,6 @@ router.post('/addCategory', FinanceControllers.addIncomeExpenseCategory)
 
 router.get('/getUserGroups', FinanceControllers.getUserGroups)
 
+router.post('/createGroup', FinanceControllers.createGroup)
+
 export default router

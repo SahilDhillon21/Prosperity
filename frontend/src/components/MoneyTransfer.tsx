@@ -1,5 +1,5 @@
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import { Paper, TextField } from '@mui/material';
+import { Avatar, ListItem, ListItemAvatar, ListItemText, Paper, TextField, Typography } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -52,7 +52,7 @@ const MoneyTransfer = ({ balance, onMoneyTransferred, allUsers }: MoneyTransferP
     e.preventDefault()
     var hasError = false
 
-    if(!userValue) return
+    if (!userValue) return
 
     try {
       if (amount <= 0) {
@@ -160,42 +160,19 @@ const MoneyTransfer = ({ balance, onMoneyTransferred, allUsers }: MoneyTransferP
 
                     getOptionLabel={(user) => user.username}
                     renderOption={(props, user) => (
-                      <Box component='span' {...props}>
-                        <Row>
-                          <Col md={2} lg={2} xs={2} className='m-0 text-start align-middle'>
-                            <img
-                              height="45"
-                              // src={user.image}
-                              src={user.image}
-                              alt=""
-                              className='mt-1 ml-0 p-0' />
-                          </Col>
-
-                          <Col md={8} lg={8} xs={8} className='ms-2'>
-                            <h4 className='m-0'>{user.username}</h4>
-                            <span className='text-muted'><small>{user.accountId}</small></span>
-                          </Col>
-
-                        </Row>
-                      </Box>
-                      // <Row className='m-0' style={{ overflowX: 'hidden' }} {...props}>
-                      //   <Col md={2} lg={2} xs={2} className='m-0'>
-                      //     <img
-                      //       loading="lazy"
-                      //       height="40"
-                      //       // src={user.image}
-                      //       src='https://img.icons8.com/color/96/transaction.png'
-                      //       alt=""
-                      //       className='m-0 p-0'
-                      //     />
-                      //   </Col>
-                      //   <Col md={8} lg={8} className='m-0'>
-                      //     <h4 className='m-0'>{user.username}</h4>
-                      //     <span className='text-muted'><small>{user.accountId}</small></span>
-
-                      //   </Col>
-
-                      // </Row>
+                      <ListItem {...props}>
+                        <ListItemAvatar>
+                          <Avatar alt={user.username} src={user.image} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={
+                            <Typography variant="subtitle1" fontWeight="bold">
+                              {user.username}
+                            </Typography>
+                          }
+                          secondary={`${user.accountId}`}
+                        />
+                      </ListItem>
                     )}
 
                     renderInput={(params) => (

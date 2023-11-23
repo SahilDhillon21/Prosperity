@@ -289,18 +289,51 @@ export const getUserGroups: RequestHandler = async (req, res) => {
             return
         }
 
+        console.log("works till here");
+
+        // remeber to populate dues once it gets registered.
+
         const groups = await Group.find({ members: userId })
-            .populate({
-                path: 'dues',
-                model: 'Due',
-            })
             .populate({
                 path: 'members',
                 model: 'User'
             })
 
+        console.log("groups found: " + groups);
+
+
         res.status(200).json(groups)
 
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const createGroup: RequestHandler = async (req, res) => {
+    const { groupName, selectedUsers, descriptionValue } = req.body
+    const userId = req.session.userId
+    try {
+        if (!userId) {
+            console.log("not logged in");
+            return
+        }
+
+        const user = await User.findById(userId)
+
+        if (!user) {
+            console.log("user groups: user doesn't exist");
+            return
+        }
+
+        const finalUsers = [...selectedUsers, user]
+        const newGroup = await Group.create({
+            name: groupName,
+            members: finalUsers,
+            description: descriptionValue,
+            dues: [],
+        })
+
+        res.status(200).json(newGroup)
     } catch (error) {
         console.log(error)
     }

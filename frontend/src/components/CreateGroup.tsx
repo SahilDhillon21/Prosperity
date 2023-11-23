@@ -11,9 +11,10 @@ interface CreateGroupProps {
     allUsers: User[],
     onGroupCreated: (msg: string) => void,
     render: Boolean,
+    loggedInUser: User | null,
 }
 
-const CreateGroup = ({ allUsers, onGroupCreated, render }: CreateGroupProps) => {
+const CreateGroup = ({ allUsers, onGroupCreated, render, loggedInUser }: CreateGroupProps) => {
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
@@ -28,7 +29,7 @@ const CreateGroup = ({ allUsers, onGroupCreated, render }: CreateGroupProps) => 
         setSelectedUsers(value);
     };
 
-    const [defaultDescriptionValue, setDefaultDescriptionValue] = useState("")
+    const [descriptionValue, setDescriptionValue] = useState("")
 
     const handleCreateGroup = async (e: FormEvent) => {
         e.preventDefault()
@@ -49,7 +50,7 @@ const CreateGroup = ({ allUsers, onGroupCreated, render }: CreateGroupProps) => 
 
         setLoading(true)
         setTimeout(async () => {
-            await createGroup({ groupName, selectedUsers, defaultDescriptionValue })
+            await createGroup({ groupName, selectedUsers, descriptionValue })
             setLoading(false)
             navigate('/finances', { replace: true })
             onGroupCreated("Group " + groupName + " was added")
@@ -143,8 +144,8 @@ const CreateGroup = ({ allUsers, onGroupCreated, render }: CreateGroupProps) => 
                                         multiline
                                         sx={{ backgroundColor: 'white', width: "80%" }}
                                         minRows={3}
-                                        value={defaultDescriptionValue}
-                                        onChange={(e) => setDefaultDescriptionValue(e.target.value)}
+                                        value={descriptionValue}
+                                        onChange={(e) => setDescriptionValue(e.target.value)}
                                     />
                                 </Col>
                             </Row>

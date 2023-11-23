@@ -27,6 +27,6 @@ const dueSchema = new mongoose.Schema({
 
 }, { timestamps: true })
 
-const Due = mongoose.model("Group", dueSchema)
+const Due = mongoose.model("Due", dueSchema)
 
-export default Due
+export default Due 

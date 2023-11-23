@@ -259,14 +259,15 @@ function Finances({ user }: FinanceProps) {
 
               <Route path='createGroup'
                 element={
-                <CreateGroup allUsers={allUsers} 
-                onGroupCreated={(msg) => {
-                  enqueueSnackbar(msg, {variant: "info"})
-                  setReRenderGroups(!reRenderGroups)
-                }}
-                render={reRenderGroups}
-                
-                />}
+                  <CreateGroup allUsers={allUsers}
+                    loggedInUser={user}
+                    onGroupCreated={(msg) => {
+                      enqueueSnackbar(msg, { variant: "info" })
+                      setReRenderGroups(!reRenderGroups)
+                    }}
+                    render={reRenderGroups}
+
+                  />}
               />
 
             </Routes>

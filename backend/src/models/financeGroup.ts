@@ -6,6 +6,8 @@ const financeGroupSchema = new mongoose.Schema({
         require: true,
     },
 
+    description: String,
+
     members: [
         {
             type: mongoose.Types.ObjectId,
