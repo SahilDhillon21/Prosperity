@@ -33,3 +33,29 @@ export const updateImage = "https://cdn4.iconfinder.com/data/icons/usa-dollar-4/
 export const transferImage = "https://img.icons8.com/color/96/transaction.png"
 
 export const groupImage = "https://img.icons8.com/stickers/100/group-foreground-selected.png"
+
+export const actions = [
+    {
+        name: "Add expense/income",
+        link: 'addTransaction',
+        image: "https://img.icons8.com/color/96/left-handed.png"
+    },
+
+    {
+        name: "Transfer money",
+        link: 'transfer',
+        image: "https://img.icons8.com/fluency/96/initiate-money-transfer--v1.png"
+    },
+
+    {
+        name: "New category",
+        link: 'addTransactionCategory',
+        image: "https://img.icons8.com/office/16/plus--v1.png"
+    },
+
+    {
+        name: "Add due",
+        link: 'addDue',
+        image: "https://img.icons8.com/external-flat-geotatah/64/external-due-merger-and-acquisition-flat-flat-geotatah.png"
+    },
+]

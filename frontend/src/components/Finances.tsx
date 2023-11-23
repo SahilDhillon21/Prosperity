@@ -1,23 +1,25 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
+import { actions } from '../constants';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, Row, Spinner } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { NavLink, Route, Routes, useNavigate } from 'react-router-dom';
+import { CiSquarePlus } from 'react-icons/ci';
+import { Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { baseExpenseCategories, baseIncomeCategories } from '../constants';
 import Account from '../models/account.model';
 import User from '../models/user.model';
 import * as FinanceNetwork from '../network/finance.network';
+import * as UserNetwork from '../network/user.network';
 import AddTransaction from './AddTransaction';
 import AddTransactionCategory from './AddTransactionCategory';
-import TransactionCard from './TransactionCard';
-import MoneyTransfer from './MoneyTransfer';
-import Groups from './Groups';
-import { CiSquarePlus } from 'react-icons/ci';
 import CreateGroup from './CreateGroup';
-import * as UserNetwork from '../network/user.network'
+import Groups from './Groups';
+import MoneyTransfer from './MoneyTransfer';
+import TransactionCard from './TransactionCard';
+import { Avatar, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 
 
 interface FinanceProps {
@@ -188,31 +190,15 @@ function Finances({ user }: FinanceProps) {
   return (
     <Container className='mt-5 px-5 finance'>
 
-      {/* {Array.from(eCategories.entries()).map(([key, value]) => (
-        <div key={key}>
-          <h6>{key}</h6>
-          <img src={value} width="64" height="64" alt={value} />
-        </div>
-      ))}
-
-      {Array.from(iCategories.entries()).map(([key, value]) => (
-        <div key={key}>
-          <h6>{key}</h6>
-          <img src={value} width="64" height="64" alt={key} />
-        </div>
-      ))} */}
-
       <SnackbarProvider maxSnack={3}>
         {user ?
           <>
             <Row className='mb-1'>
-              <Col xs={7} md={7} lg={7}>
+              <Col xs={5} md={5} lg={5}>
                 <h4 className='text-uppercase'>{user.username}'s account</h4>
               </Col>
 
-              <Col xs={5} md={5} lg={5}
-
-              >
+              <Col xs={4} md={4} lg={4}>
                 <h4 className='align-middle m-0'>Balance:
                   {showEditBalanceBox ?
 
@@ -220,6 +206,37 @@ function Finances({ user }: FinanceProps) {
                     balanceArea
                   }
                 </h4>
+
+              </Col>
+
+              <Col xs={3} md={3} lg={3} className='text-center'>
+                <Dropdown>
+                  <Dropdown.Toggle variant="light" size='sm' className='w-100'>
+                    <b>Actions</b>
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    {actions.map((action) => (
+                      <Dropdown.Item>
+                        <ListItem>
+                          <ListItemAvatar>
+                            <Link to={`/finances/${action.link}`}>
+                              <Avatar alt={action.name} src={action.image} sx={{ height: '30px', width: '30px', margin: 0, padding: 0 }} />
+                            </Link>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={
+                              <Typography variant="body1" color="black" className='m-0 p-0'>
+                                <Link to={`/finances/${action.link}`}>{action.name}</Link>
+                              </Typography>
+                            }
+                          />
+                        </ListItem>
+                      </Dropdown.Item>
+                    ))}
+
+                  </Dropdown.Menu>
+                </Dropdown>
 
               </Col>
             </Row>
@@ -275,7 +292,7 @@ function Finances({ user }: FinanceProps) {
             <Row className='mt-4'>
               <Col xs={12} md={5} lg={5}>
                 <h3>Groups
-                  <CiSquarePlus className="my-auto cursor-pointer" onClick={() => { navigate('createGroup', { replace: true }) }} />
+                  <CiSquarePlus className="my-auto cursor-pointer" fontSize="medium" onClick={() => { navigate('createGroup', { replace: true }) }} />
                 </h3>
                 <Groups />
               </Col>
@@ -308,7 +325,7 @@ function Finances({ user }: FinanceProps) {
                 <Button className='rounded-0 text-light' variant=''>
 
                   <NavLink to='addTransactionCategory'>
-                    + New category
+                    New category
                   </NavLink>
 
                 </Button>

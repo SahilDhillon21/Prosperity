@@ -1,7 +1,6 @@
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { Avatar, ListItem, ListItemAvatar, ListItemText, Paper, TextField, Typography } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
-import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import { FormEvent, useState } from 'react';
 import { Button, CloseButton, Col, Row } from 'react-bootstrap';

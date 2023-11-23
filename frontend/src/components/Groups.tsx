@@ -27,10 +27,10 @@ const Groups = () => {
         :
 
         <>
-          <h5>My groups</h5>
+          <h5 className="mb-3 mt-3">My groups</h5>
           <h6>
             {groups.map((group) => (
-              <Card variant="outlined" sx={{ marginBottom: 2 }} className="blue-gradient-bg cursor-pointer">
+              <Card variant="outlined" sx={{ marginBottom: 2, background: "#13005A" }} className="cursor-pointer text-white">
                 <CardContent>
                   <Typography variant="h4" component="div" className="text-center">
                     <Link to={`/groups/${group._id}`}>{group.name}</Link>
@@ -38,7 +38,7 @@ const Groups = () => {
 
                   <hr />
 
-                  <Grid container spacing={2} direction="row" className="hover-enlarge">
+                  <Grid container spacing={2} direction="row" className="hover-enlarge mt-2">
                     {group.members.map((member) => (
                       <Col md={6} lg={6} xs={6}>
                         <ListItem key={member._id}>
@@ -47,11 +47,15 @@ const Groups = () => {
                           </ListItemAvatar>
                           <ListItemText
                             primary={
-                              <Typography variant="h5" color="textPrimary">
+                              <Typography variant="h5" color="white">
                                 <Link to={`/users/${member.username}`}>{member.username}</Link>
                               </Typography>
                             }
-                            secondary={member.email}
+                            secondary={
+                              <Typography variant="body2" color="whitesmoke">
+                                {member.email}
+                              </Typography>
+                            }
                           />
                         </ListItem>
                       </Col>
@@ -66,7 +70,7 @@ const Groups = () => {
                       </Typography>
                       {group.dues.map((due) => (
                         <div key={due._id}>
-                          <Typography variant="body2" color="textSecondary">
+                          <Typography variant="body2" color="white">
                             {due.borrower.username}: ${due.amount}
                           </Typography>
                         </div>

@@ -1,10 +1,10 @@
-import { Button, CloseButton, Col, Row } from "react-bootstrap";
-import User from "../models/user.model"
-import { Autocomplete, Box, Paper, Stack, TextField, Chip, ListItem, ListItemAvatar, ListItemText, Avatar, LinearProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { FormEvent, useState } from 'react';
+import { Autocomplete, Avatar, LinearProgress, ListItem, ListItemAvatar, ListItemText, Paper, Stack, TextField } from "@mui/material";
 import Typography from '@mui/material/Typography';
-import { createGroup } from '../network/finance.network'
+import { FormEvent, useState } from 'react';
+import { Button, CloseButton, Col, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import User from "../models/user.model";
+import { createGroup } from '../network/finance.network';
 
 
 interface CreateGroupProps {
