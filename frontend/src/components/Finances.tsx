@@ -20,6 +20,7 @@ import Groups from './Groups';
 import MoneyTransfer from './MoneyTransfer';
 import TransactionCard from './TransactionCard';
 import { Avatar, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
+import CreateDue from './CreateDue';
 
 
 interface FinanceProps {
@@ -250,6 +251,8 @@ function Finances({ user }: FinanceProps) {
             <Routes>
 
               <Route path='addTransactionCategory' element={<AddTransactionCategory />} />
+
+              <Route path='addDue' element={<CreateDue allUsers={allUsers} onDueCreated={() => {}}/>} />
 
               <Route path='addTransaction'
                 element={<AddTransaction

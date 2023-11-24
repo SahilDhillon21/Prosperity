@@ -100,3 +100,19 @@ export const createGroup = async (data: CreateGroupProps) => {
         console.log(error)
     }
 }
+
+interface CreateDueProps {
+    type: String,
+    userValue: User,
+    amount: Number,
+    noteValue: String,
+}
+
+export const createDue = async (data: CreateDueProps) => {
+    try {
+        const response = await axios.post('/finances/createDue', data)
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}

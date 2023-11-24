@@ -19,4 +19,6 @@ router.get('/getUserGroups', FinanceControllers.getUserGroups)
 
 router.post('/createGroup', FinanceControllers.createGroup)
 
+router.post('/createDue', FinanceControllers.createDue)
+
 export default router

@@ -4,6 +4,7 @@ import Transaction from "../models/transaction.model";
 import User from "../models/user.model";
 import generateUniqueTransactionId from "../util/generateUniqueTransactionId";
 import Group from "../models/financeGroup";
+import Due from "../models/due.model";
 
 export const getBalance: RequestHandler = async (req, res) => {
     const accountId = req.params.accountId
@@ -289,8 +290,6 @@ export const getUserGroups: RequestHandler = async (req, res) => {
             return
         }
 
-        console.log("works till here");
-
         // remeber to populate dues once it gets registered.
 
         const groups = await Group.find({ members: userId })
@@ -298,9 +297,6 @@ export const getUserGroups: RequestHandler = async (req, res) => {
                 path: 'members',
                 model: 'User'
             })
-
-        console.log("groups found: " + groups);
-
 
         res.status(200).json(groups)
 
@@ -334,6 +330,45 @@ export const createGroup: RequestHandler = async (req, res) => {
         })
 
         res.status(200).json(newGroup)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const createDue: RequestHandler = async (req, res) => {
+    const { type, userValue, noteValue, amount } = req.body
+    const userId = req.session.userId
+    try {
+        if (!userId) {
+            console.log("not logged in");
+            return
+        }
+
+        const user = await User.findById(userId)
+
+        if (!user) {
+            console.log("user doesn't exist");
+            return
+        }
+
+        let lender, borrower
+
+        if(type === "Borrowed"){
+            lender = userValue
+            borrower = user
+        } else {
+            lender = user
+            borrower = userValue
+        }
+
+        const newDue = await Due.create({
+            lender: lender,
+            borrower: borrower,
+            amount: amount,
+            note: noteValue,
+        })
+
+        res.status(200).json(newDue)
     } catch (error) {
         console.log(error)
     }

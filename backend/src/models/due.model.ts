@@ -23,7 +23,7 @@ const dueSchema = new mongoose.Schema({
         ref: 'Group'
     },
 
-    dueDate: Date,
+    note: String,
 
 }, { timestamps: true })
 
